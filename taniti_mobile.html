@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Taniti Island</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+	/*use me*/
+        @import url(https://fonts.googleapis.com/css?family=Electrolize);
+
+        /* Reset & Body */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:#000 url('images/hero.jpg') center/cover no-repeat fixed;
+            color:#fff;
+            transition: background-color 1.5s ease;
+        }
+
+        /* NEW: Body alert state */
+        body.alert-active {
+            animation: pulse-background 3s infinite;
+        }
+
+        @keyframes pulse-background {
+            0%, 100% { background-color: rgba(100, 0, 0, 0); }
+            50% { background-color: rgba(100, 0, 0, 0.4); }
+        }
+
+        /* Header */
+        /* UPDATED: Reduced padding for a more compact header */
+        .tropical-header {
+            background: linear-gradient(45deg,
+                rgba(0, 198, 255, 0.4),
+                rgba(0, 114, 255, 0.4));
+            backdrop-filter: blur(8px);
+            padding: 1.5rem 3rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            width: 123px;
+            height: auto;
+            display: block;
+        }
+
+        .tagline {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            font-size: 1.3rem;
+            font-weight: 777;
+            color: #BCEFDA;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+            white-space: nowrap;
+            text-transform: lowercase;
+            margin-top: -10px;
+            transform: rotate(-3deg);
+            z-index: 11;
+        }
+
+        /* Nav */
+        nav {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* FIX: Darkened the navigation bar background and added a border */
+        #nav-container {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.5);
+            transition: all 0.4s ease;
+        }
+
+        #nav-container:hover {
+            background: rgba(0,0,0,0.3);
+        }
+
+        .nav-button, .dropdown-item {
+            /* UPDATED: Reduced vertical padding to fit the new, smaller header */
+            font-size: 1em;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            padding: 0.75rem 1rem;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            justify-content: center;
+            border-radius: 0;
+        }
+        
+        .nav-button i, .dropdown-item i {
+            color: #ffcc00;
+        }
+        
+        #nav-container > .nav-button-container:first-child .nav-button {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+        #nav-container > .nav-button-container:last-child .nav-button {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .nav-button:hover, .dropdown-item:hover, .nav-button.active {
+            background: rgba(0,0,0,0.2);
+            text-shadow: 0 0 5px #ffe082;
+        }
+        
+        /* New: Class to match dropdowns to the button width */
+        .dropdown-align-to-button {
+            left: 0;
+            transform: none;
+            width: 100%;
+        }
+
+        /* UPDATED: Darker, less transparent, and more blurred dropdown */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            /* NEW: Now aligned with the parent button's width */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            opacity: 0;
+            border-radius: 8px;
+            background: rgba(1, 10, 20, 0.95); /* Deeper, less transparent blue */
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px); /* Increased blur */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            min-width: 150px;
+            z-index: 99; /* Higher z-index to ensure it's on top */
+        }
+
+        .dropdown.visible {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            width: 100%;
+            display: block;
+        }
+
+        .nav-button-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Weather Button specific styles */
+        .weather-li {
+            position: relative;
+            z-index: 3;
+	        margin-left: 20px;
+	        margin-top: 20px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        /* FIX: Set a fixed width for the weather button to match the dropdown */
+        /* UPDATED: Reduced vertical padding to match the new, smaller header */
+        .weather-button {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 1.05rem;
+            line-height: 1.3;
+            padding: 0.75rem 1.35rem;
+            width: 280px; /* Fixed width */
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            text-align: left;
+            position: relative;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .weather-button .status-dot-container {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .weather-button .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Added glow effect */
+        }
+        
+        /* New animations for alert dots */
+        .weather-dot-ok {
+            background-color: #4ade80; /* Brighter green */
+            box-shadow: 0 0 5px #4ade80, 0 0 10px #4ade80;
+            animation: green-glow 2s infinite ease-in-out;
+        }
+
+        .weather-dot-ok.subdued {
+            background-color: #2e5a57; /* A darker, duller green */
+            box-shadow: none;
+            animation: none; /* Turn off glowing animation */
+        }
+        
+        /* UPDATED: Alert dot to match the new dark cherry root beer color */
+        .weather-dot-alert {
+            background-color: #650B0D;
+            opacity: 0.6;
+        }
+        
+        /* UPDATED: Alert dot's blinking color to match the new color */
+        .weather-dot-alert.blinking {
+            background-color: #B01E23;
+            box-shadow: 0 0 8px #B01E23, 0 0 16px #B01E23;
+            opacity: 1;
+            animation: red-blink 2.1s infinite;
+        }
+
+        @keyframes green-glow {
+            0%, 100% {
+                background-color: #4ade80; /* Brighter green */
+                box-shadow: 0 0 5px #4ade80, 0 0 10px #4ade80;
+            }
+            50% {
+                background-color: #22c55e; /* Green */
+                box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e;
+            }
+        }
+        
+        /* UPDATED: The colors for the red-blink animation to match the new color */
+        @keyframes red-blink {
+            0%, 10%, 20% {
+                background-color: #B01E23;
+                box-shadow: 0 0 8px #B01E23, 0 0 16px #B01E23;
+            }
+            15%, 25%, 100% {
+                background-color: #650B0D;
+                box-shadow: none;
+            }
+        }
+
+        .dot-flash {
+            animation: flashDot 1.5s infinite;
+        }
+
+        @keyframes flashDot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.8); }
+            50% { opacity: 0.3; box-shadow: 0 0 5px 2px rgba(255, 0, 0, 0.3); }
+        }
+
+        .weather-button-temp-skies {
+            font-weight: bold;
+        }
+
+        /* FIX: Weather Dropdown Transparency and Size */
+        .weather-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 280px; /* Fixed width to match button */
+            display: flex;
+            flex-direction: column;
+            gap: 0px; /* Removed gap */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 9;
+        }
+        .weather-dropdown.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* UPDATED: Darker, less transparent, and more blurred weather card */
+        .weather-dropdown .weather-card {
+            background: rgba(1, 10, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Alert and Info Card specific styling */
+        /* UPDATED: Changed border color to complement new background */
+        .alert-card {
+            border-color: #650B0D;
+        }
+
+        .weather-dropdown .card-horizontal {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: none;
+        }
+        
+        .weather-dropdown .weather-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        /* Content Wrapper + Cards */
+        .content-wrapper {
+            padding-bottom: 80px;
+            padding-top: 50px;
+            background: transparent;
+        }
+        .card-container { display:flex; flex-direction:column; gap:2rem; padding:2rem; }
+        .card-section { display:flex; flex-direction: column; align-items: center; transition:transform 0.3s ease-out; }
+        .card {
+            display:flex;
+            max-width:850px;
+            width:100%;
+            border-top-left-radius:20px;
+            border-top-right-radius:20px;
+            border-bottom-left-radius:0;
+            border-bottom-right-radius:0;
+            overflow:hidden;
+            box-shadow:0 8px 24px rgba(0,0,0,0.25);
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .card:hover { transform: translateY(-10px); }
+        .card.reverse { flex-direction: row-reverse; }
+        .card.reverse .card-image { flex: 0.7; }
+        .card.reverse .card-content { flex: 1.3; }
+        .card-image { flex:1; background-size: cover; background-position: center; min-height:300px; filter: grayscale(0%); transition: filter 7s ease-in-out; }
+        .card-image:hover { transform: scale(1.02); }
+        .card-content { flex:1; background: rgba(0,50,100,0.65); backdrop-filter: blur(6px); padding:2rem; display:flex; flex-direction:column; justify-content:center; text-align:center; }
+        .card-content h2 { margin-bottom:1rem; font-size:1.8rem; font-weight:bold; text-shadow:1px 1px 4px rgba(0,0,0,0.6); }
+        .card-content p { font-size:1.1rem; line-height:1.4; text-shadow:1px 1px 4px rgba(0,0,0,0.6); }
+
+        /* UPDATED: More squarish "learn more" buttons */
+        .toggle-extension-btn {
+            margin-top: auto;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px; /* Changed from 50px */
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .toggle-extension-btn:hover {
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .toggle-extension-btn i {
+            color: #ffcc00;
+            transition: transform 0.3s ease;
+        }
+
+        /* Card Extension Styles */
+        .card-extension {
+            max-width: 850px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 0 2rem;
+            box-shadow: 0 8-px 24px rgba(0, 0, 0, 0.25);
+            transition: max-height 0.6s ease-out, padding 0.6s ease-out;
+            overflow: hidden;
+            max-height: 0;
+        }
+        .card-extension.visible {
+            padding: 2rem;
+            max-height: 2000px;
+            overflow-y: visible;
+        }
+
+        /* Cuisine Section Specific Styles */
+        .cuisine-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .cuisine-list li:first-child {
+            grid-column: 1 / -1;
+            border: 2px solid #ffe082;
+            box-shadow: 0 0 15px rgba(255, 220, 100, 0.5);
+            position: relative;
+            padding-top: 2.5rem;
+        }
+
+        .cuisine-item.featured h3 {
+            font-size: 1.6rem;
+            color: #ffe082;
+            text-shadow: 0 0 10px rgba(255, 220, 100, 0.8);
+        }
+        .featured-banner {
+            position: absolute;
+            top: 0;
+            left: 1rem;
+            transform: translateY(-50%);
+            background: #ffe082;
+            color: #333;
+            font-weight: bold;
+            padding: 0.3rem 1.5rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        .cuisine-item {
+            /* UPDATED: Slightly darker background for the cards */
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease, opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .cuisine-item.hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .cuisine-item:hover {
+            /* UPDATED: More transparency and a slight blur on hover */
+            transform: translateY(-5px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .cuisine-item h3 {
+            font-size: 1.2rem;
+            color: #ffe082;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+
+        .cuisine-icon {
+            font-size: 1.2em;
+            color: #ADE9c7;
+            margin-right: 5px;
+        }
+
+        .restaurant-category {
+            font-size: 0.9em;
+            color: #BCEFDA;
+            margin-top: -0.2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .cuisine-item p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .cuisine-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            filter: grayscale(0%);
+        }
+        .cuisine-item img:hover {
+            filter: grayscale(0%);
+        }
+
+        .vegan-emblem {
+            font-size: 1.2em;
+            color: limegreen;
+            align-self: flex-end;
+            margin-top: auto;
+        }
+
+        .vegan-legend {
+            text-align: right;
+            font-style: italic;
+            font-size: 0.9em;
+            color: #BCEFDA;
+            margin-bottom: 1rem;
+        }
+        .vegan-legend span {
+            font-weight: bold;
+        }
+
+        .restaurant-filters {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #ffe082;
+            background: transparent;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #ffe082;
+            color: #333;
+        }
+
+        .filter-btn.active {
+            background: #ffe082;
+            color: #333;
+            border-color: #ffe082;
+            box-shadow: 0 0 10px rgba(255, 224, 130, 0.7);
+        }
+
+        /* --- RESTORED HIDDEN-REVEAL SYSTEM --- */
+        .content-page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            width: 100%;
+        }
+        .content-page.active-page {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card-container {
+            flex-grow: 1;
+        }
+        .fade-in { opacity:0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
+        .fade-in.visible { opacity:1; transform: translateY(0); }
+
+        /* Footer Area Content*/
+        .tropical-footer {
+            background: linear-gradient(90deg, rgba(255,126,95,0.8), rgba(254,180,123,0.8), rgba(0,198,255,0.8), rgba(0,114,255,0.8));
+            backdrop-filter: blur(8px);
+            padding:0.4rem 2rem;
+            position:fixed;
+            bottom:0;
+            left:0;
+            right:0;
+            z-index:20;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap: wrap;
+        }
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .contact-info, .sitemap-links, .credits-list {
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9em;
+        }
+
+        .contact-info a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ffcc00;
+        }
+        .contact-info a i {
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .designer-info {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+
+        .center-footer {
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .sitemap-links a, .contact-info a, .footer-section a, .credits-list a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        .sitemap-links a:hover, .contact-info a:hover, .footer-section a:hover, .credits-list a:hover {
+            color: #ffcc00;
+            text-shadow: 0 0 12px rgba(0,0,0,0.8);
+        }
+
+        .contact-info {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sitemap-links li:not(:last-child)::after, .contact-info li:not(:last-child)::after {
+            content: none;
+        }
+
+        .card-horizontal {
+            position:relative;
+            display:flex;
+            width:100%;
+            height: 120px;
+            font-size:0.9rem;
+            cursor: default;
+            border: 3px solid #ffe082;
+            border-top: none;
+            border-radius: 10px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+        .card-horizontal:active {
+            cursor: default;
+        }
+        .weather-image {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            min-width: 70px;
+            position: relative;
+            overflow: hidden;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 0px;
+        }
+
+        .weather-image img.volcano-static-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            transform: none;
+            display: block;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+        .weather-image.volcano-active {
+            background-image: none !important;
+        }
+        .weather-image.volcano-active img.volcano-static-img {
+            opacity: 1;
+        }
+        .weather-normal-img {
+            background-image: url('images/weather.jpg');
+        }
+
+        .weather-content {
+            flex: 2;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(to right, rgba(0,0,0,0.65), rgba(0,0,0,0));
+        }
+
+        .weather-info-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0.5rem;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        /* UPDATED: Alert state styling */
+        .alert-active .weather-info-wrapper {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .alert-active #alert-content-wrapper {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* UPDATED: Fixed width and right alignment for labels to create column alignment */
+        .label {
+            color:#a0d8ff;
+            font-weight:bold;
+            margin-right:2px;
+            min-width: 60px; /* Fixed width to align colons */
+            text-align: right;
+            display: inline-block;
+        }
+        .number { color:#fff; font-weight:bold; }
+
+        #weather-info { font-weight: normal; }
+        
+        /* FIX: Style updates for main weather button text and horizontal rule */
+        .weather-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font-size: 1.2em; /* Adjusted font size */
+        }
+        
+        /* FIX: Corrected weather main data styles for a single line and smaller font */
+        .weather-main-data {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 1em; /* Smaller font size as requested */
+            color: #fff;
+            text-align: center;
+            line-height: 1.2;
+            gap: 5px;
+        }
+        
+        /* UPDATED: Smaller sunrise/sunset text as requested */
+        .weather-sun {
+            display: block;
+            font-size: 0.7em; /* Even smaller font size */
+            text-align: center;
+            width: 100%;
+            margin-top: 5px; /* Spacing from main data */
+            padding-top: 5px; /* Added padding for the horizontal rule effect */
+            border-top: 1px solid rgba(255, 255, 255, 0.2); /* The horizontal rule */
+        }
+        
+        /* FIX: The colors for the sunset/sunrise text */
+        .rusty-text {
+            color: #d76d21; /* Corrected to rusty orange */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Adjusted shadow for new color */
+        }
+        
+        .time-text {
+            color: #aaa; /* New class for the time, set to the requested grey */
+        }
+        
+        /* ADDED: Smooth transition for weather numbers and skies text */
+        .weather-main-data .number {
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* NEW: Smoother fade for skies with a longer duration */
+        /* UPDATED: Changed the transition to 3s as requested */
+        .weather-main-data span#skies {
+            transition: opacity 2s ease-in-out;
+        }
+
+        .moon-info {
+            display: block;
+            font-size: 0.8em;
+            padding-top: 8px;
+            margin-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subdued { color: #aaa; font-size: 0.9em; }
+
+
+        .major-updates-text {
+            color: #ffcc00;
+            text-shadow: 0 0 8px #ffcc00;
+            display: block;
+            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .status-dot-container {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .toggle-extension-btn i {
+            color: #ffcc00;
+            transition: transform 0.3s ease;
+        }
+
+        .american-flag-gradient {
+            background: linear-gradient(to right, #e70000 25%, #ffffff 50%, #002279 75%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 2px #fff, 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* UPDATED: Number styling - Darker, more blurry, less transparent */
+        .restaurant-number {
+            position: absolute;
+            bottom: 0;
+            right: 1rem;
+            transform: translateY(50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.5rem;
+            min-width: 2.2rem;
+            height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 2px solid #ffcc00;
+            text-shadow: 0 0 5px rgba(255, 224, 130, 0.7);
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* NEW: Scanner effect and updated alert card styling */
+        #alert-content-wrapper {
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* UPDATED: Changed the background to a dark cherry root beer gradient with transparency */
+        .alert-card.alert-bg-animation {
+            background: linear-gradient(135deg, rgba(74, 11, 14, 0.85), rgba(105, 17, 21, 0.85));
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* The scanner background itself */
+        .alert-card.alert-bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: scan-pulse 3s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes scan-pulse {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .alert-message-h2 {
+            color: #FF4545;
+            font-size: 1.23em;
+            margin-bottom: 0;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+            text-align: center;
+            margin-top: 0;
+            line-height: 1.3;
+        }
+        .alert-message {
+            color: #BCEFDA;
+            display: block;
+            font-size: 1.01em;
+            text-transform: none;
+            font-weight: normal;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        /* NEW: Small text at the bottom of the weather button */
+        .weather-credit {
+            font-size: 0.4em;
+            color: #888;
+            margin-top: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive Mobile Styles */
+        @media(max-width:768px) {
+            .tropical-header { flex-direction: column; align-items: center; padding:1.5rem 0; }
+            .header-left, .header-right, nav { width: 100%; }
+            .header-left { align-items: center; }
+            .tagline { margin-top: 5px; }
+            .header-right { justify-content: center; margin-top: 1rem; }
+            .weather-button { display: none; }
+            .logo-container img { width: 90px; }
+            .tagline { font-size: 1.2rem; margin-top: 5px; }
+
+            nav { width:100%; margin-top:1rem; }
+            #nav-container { flex-direction: column; height: auto; }
+            .nav-links.show { max-height: 300px; }
+            .hamburger { display:flex; position:absolute; top:-2.5rem; right:1.5rem; }
+
+            .nav-button-container { width: 100%; text-align: center; }
+            .dropdown { position: static; transform: none; width: 100%; }
+            .dropdown-item { text-align: center; }
+
+            .card { flex-direction: column !important; }
+            .card-image { height: 200px; min-height: 0; width: 100%; }
+            .card-horizontal { flex-direction: column; width: 95%; font-size: 0.75rem; }
+            .weather-image { min-width: 60px; min-height: 60px; }
+            .weather-content { padding: 0.3rem; }
+            .tropical-footer {
+                flex-direction: column;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                height: auto;
+            }
+            .footer-section { padding: 0.5rem; }
+
+            .card-extension {
+                max-height: none !important;
+                padding: 2rem !important;
+                display: block !important;
+                overflow: visible !important;
+            }
+            .toggle-extension-btn { display: none !important; }
+
+            .cuisine-list { grid-template-columns: 1fr; }
+            .cuisine-list li:first-child { grid-column: 1 / 1; padding-top: 1rem; }
+            .featured-banner { left: 50%; transform: translate(-50%, -50%); }
+        }
+    </style>
+
+
+<style>
+/* Mobile-friendly overrides */
+@media (max-width: 768px) {
+  .dashboard, .card-container, .content-pages {
+    display: block !important;
+    grid-template-columns: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    gap: 1rem !important;
+  }
+  .card, .card-section, .card.reverse {
+    flex-direction: column !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto !important;
+  }
+  .card-image {
+    aspect-ratio: 16/9 !important;
+    min-height: 160px !important;
+    width: 100% !important;
+    background-size: cover !important;
+  }
+  .card-content { padding: 1rem !important; }
+  .card-content h2 { font-size: 1.25rem !important; }
+  .card-content p { font-size: 0.95rem !important; }
+  .card-extension { padding: 1rem !important; max-height: none !important; overflow: visible !important; }
+  #nav-container, .nav-button-container, .nav-button {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .nav-button { justify-content: center !important; padding: 0.6rem 0.9rem !important; }
+  .dropdown { position: static !important; width: 100% !important; opacity: 1 !important; max-height: none !important; pointer-events: auto !important; }
+  .weather-button { display: none !important; }
+  .header-right { margin-top: 0.5rem !important; }
+  .tropical-footer { flex-direction: column !important; gap: 0.5rem !important; padding: 0.5rem 1rem !important; }
+}
+@media (max-width: 480px) {
+  .logo-container img { width: 70px !important; }
+  .tagline { font-size: 1rem !important; white-space: normal !important; }
+  .card-content h2 { font-size: 1.05rem !important; }
+  .card-content p { font-size: 0.9rem !important; }
+  .cuisine-list { grid-template-columns: 1fr !important; }
+  .featured-banner { left: 50% !important; transform: translate(-50%, -50%) !important; }
+}
+#nav-container.mobile-open { display: block !important; }
+#nav-container.mobile-open .dropdown { position: static !important; opacity: 1 !important; max-height: none !important; }
+.dropdown .dropdown-item { width: 100% !important; box-sizing: border-box !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+</style>
+
+<style>
+@media (max-width: 600px) {
+  .tropical-header {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.5rem 1rem !important;
+  }
+  .logo, .logo-container, .logo-container img {
+    font-size: 1.2rem !important;
+    margin: 0 !important;
+    max-height: 40px !important;
+  }
+  .nav-links {
+    display: none !important; /* hide full nav on mobile */
+  }
+  #hamburger {
+    display: block !important; /* show hamburger icon only */
+  }
+  .tropical-footer {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.8rem !important;
+    flex-direction: column !important;
+    gap: 0.3rem !important;
+  }
+  main.dashboard {
+    margin-top: 1rem !important; /* add breathing room under header */
+  }
+}
+</style>
+
+
+<style>
+/* Hamburger base */
+#hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+}
+#hamburger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+/* Animate to X */
+#hamburger.is-active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+#hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+#hamburger.is-active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile dropdown nav panel */
+@media (max-width: 600px) {
+  #nav-container {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 1rem 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  #nav-container.mobile-open {
+    display: flex !important;
+  }
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  .nav-links a {
+    font-size: 1.1rem;
+    color: #fff;
+  }
+}
+</style>
+
+
+
+
+<style>
+@media (max-width: 600px) {
+  .weather-button, .weather-alert, .weather-capsule {
+    display: none !important;
+  }
+  #nav-container {
+    display: block;
+    width: 100% !important;
+    left: 0 !important;
+    position: absolute !important;
+    top: 100% !important;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+  }
+  #nav-container.mobile-open {
+    max-height: 500px;
+  }
+  .nav-links {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    padding: 1rem 0 !important;
+  }
+  .nav-links a {
+    font-size: 1.1rem !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+.mini-weather-badge {
+  display: none;
+}
+@media (max-width: 600px) {
+  .mini-weather-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+    color: #fff;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+}
+.weather-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.weather-modal.show {
+  display: flex;
+  opacity: 1;
+}
+.weather-modal-content {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #fff;
+  max-width: 300px;
+  text-align: center;
+  position: relative;
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.35s ease;
+}
+.weather-modal.show .weather-modal-content {
+  transform: translateY(0) scale(1);
+}
+.weather-modal .close-btn {
+  position: absolute;
+  top: 0.5rem; right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+</style>
+
+
+</head>
+<body>
+
+    <header class="tropical-header">
+        <div class="header-left">
+            <a href="index.html" aria-label="Taniti home" class="logo-container">
+                <img src="images/taniti-logo.png" alt="Taniti logo" />
+            </a>
+            <span class="tagline">you know you want to...</span>
+        </div>
+        <nav>
+            <div id="hamburger" class="hamburger american-flag-gradient-hamburger"><span></span><span></span><span></span></div>
+            <div id="nav-container">
+                <div class="nav-button-container">
+                    <button class="nav-button" data-target="attractions">
+                        <i class="fas fa-umbrella-beach"></i> Attractions
+                    </button>
+                    <!-- UPDATED: Added class to align dropdown with button -->
+                    <div id="attractions-dropdown" class="dropdown dropdown-align-to-button">
+                        <a href="#" class="dropdown-item" data-target="beaches"><i class="fas fa-umbrella-beach"></i> Beaches</a>
+                        <a href="#" class="dropdown-item" data-target="mountains"><i class="fas fa-mountain"></i> Adventures</a>
+                        <a href="#" class="dropdown-item" data-target="entertainment"><i class="fas fa-cocktail"></i> Entertainment</a>
+                    </div>
+                </div>
+
+                <div class="nav-button-container">
+                    <button class="nav-button" data-target="dining">
+                        <i class="fas fa-utensils"></i> Dining & Shopping
+                    </button>
+                    <!-- UPDATED: Added class to align dropdown with button -->
+                    <div id="dining-dropdown" class="dropdown dropdown-align-to-button">
+                        <a href="#" class="dropdown-item" data-target="cuisine"><i class="fas fa-utensils"></i> Cuisine</a>
+                        <a href="#" class="dropdown-item" data-target="markets"><i class="fas fa-shopping-basket"></i> Markets</a>
+                    </div>
+                </div>
+
+                <div class="nav-button-container">
+                    <button class="nav-button" data-target="services">
+                        <i class="fas fa-bed"></i> Services
+                    </button>
+                    <!-- UPDATED: Added class to align dropdown with button -->
+                    <div id="services-dropdown" class="dropdown dropdown-align-to-button">
+                        <a href="#" class="dropdown-item" data-target="lodging"><i class="fas fa-hotel"></i> Lodging</a>
+                        <a href="#" class="dropdown-item" data-target="transportation"><i class="fas fa-bus"></i> Transportation</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="header-right">
+            <div class="weather-li">
+                <button id="weather-button" class="weather-button" aria-haspopup="true" aria-expanded="false">
+                    <div class="status-dot-container">
+                        <span id="weather-status-dot-ok" class="status-dot weather-dot-ok"></span>
+                        <span id="weather-status-dot-alert" class="status-dot weather-dot-alert"></span>
+                    </div>
+                    <div id="weather-main" class="weather-main">
+                        <!-- Main weather info, each on its own line -->
+                        <span class="weather-main-data">
+                            <!-- UPDATED: Added a consistent label container for vertical alignment -->
+                            <span class="label-container"><span class="label">Temp:</span></span>
+                            <span id="temp" class="number">75</span>°F
+                        </span>
+                        <span class="weather-main-data">
+                            <span class="label-container"><span class="label">Skies:</span></span>
+                            <span id="skies">Sunny</span> <span id="sky-emoji">☀️</span>
+                        </span>
+                        <!-- Smaller sunrise/sunset info -->
+                        <span class="weather-sun">
+                            <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:25 AM</span> |
+                            <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:11 PM</span>
+                        </span>
+                        <!-- NEW: Secretive text at the bottom -->
+                        <span class="weather-credit">weather provided by NeverWrong Weathermen Service™</span>
+                    </div>
+                </button>
+                <!-- UPDATED: Re-structured weather dropdown for two stacked cards -->
+                <div id="weather-dropdown" class="weather-dropdown" role="dialog" aria-hidden="true">
+
+                    <div id="weather-info-card" class="weather-card">
+                         <div id="weather-info-wrapper">
+                            <p id="weather-info">
+                                <span class="label">Temperature:</span> <span id="temp-detail" class="number">75</span>°F<br>
+                                <span class="label">Wind:</span> <span id="wind" class="number">10</span> mph<br>
+                                <span class="label">Humidity:</span> <span id="humidity" class="number">50</span>%<br>
+                                <span class="label">Skies:</span> <span id="skies-detail">Sunny</span> <span id="sky-emoji-detail">☀️</span>
+                            </p>
+                            <div class="moon-info">
+                                <span class="subdued"><i class="fas fa-moon rusty-text"></i> Moon Phase:</span>
+                                <span id="moon-phase" class="time-text">Full Moon</span><br>
+                                <span class="subdued">Illumination:</span>
+                                <span id="moon-illumination" class="time-text">100%</span>
+                            </div><!-- end moon info-->
+                        </div><!-- end weather info wrapper -->
+                    </div><!-- end weather info card -->
+                    <div id="alert-card" class="weather-card alert-card" style="display:none;">
+                        <!-- NEW: Moved scanner effect to the alert card -->
+                        <div id="alert-content-wrapper">
+                            <h2 id="alert-title" class="alert-message-h2">Volcano Alert!</h2>
+                            <p id="alert-message" class="alert-message">All island residents and visitors must follow emergency evacuation protocol.</p>
+                            <span class="major-updates-text">>>> MAJOR UPDATES <<<</span>
+                        </div>
+                    </div>                    
+                </div><!-- end weather dropdown -->
+            </div>
+        </div>
+    
+    
+    <span class="mini-weather-badge" onclick="toggleWeatherModal()">82°F ☀</span>
+
+    <div id="weather-modal" class="weather-modal">
+      <div class="weather-modal-content">
+        <button class="close-btn" onclick="toggleWeatherModal()">✕</button>
+        <h2>Weather in Taniti</h2>
+        <p>82°F, Sunny</p>
+        <p>Sunrise: 6:12 AM | Sunset: 7:45 PM</p>
+        <p>Alerts: None</p>
+      </div>
+    </div>
+    
+
+</header>
+
+    <div class="content-wrapper">
+        <main class="card-container content-pages">
+            <section id="beaches" class="card-section content-page active-page">
+                <div class="card reverse">
+                    <div class="card-image beaches-img"></div>
+                    <div class="card-content">
+                        <h2>Pristine Beaches</h2>
+                        <p>Relax on beautiful beaches with clear waters and white sand.</p>
+                        <button class="toggle-extension-btn">
+                            Discover Our Beaches <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <h3>Top 3 Beaches on Taniti</h3>
+                    <ol class="list-disc list-inside space-y-4 text-left p-4">
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Coral Cove:</strong> Tucked away in a secluded bay, this beach is a snorkeler's paradise. The calm, crystal-clear water reveals vibrant coral reefs teeming with exotic marine life.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Sunset Strand:</strong> The most popular beach on the island, known for its golden sand and breathtaking sunsets. Perfect for a leisurely stroll or building sandcastles with the family.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Palm Point:</strong> A tranquil beach lined with swaying palm trees, offering plenty of shade for an afternoon nap or a picnic. It's an ideal spot for reading a book or enjoying a peaceful moment.
+                        </li>
+                    </ol>
+                    <p>
+                        All beaches are patrolled by trained lifeguards and offer amenities like restrooms, changing rooms, and snack stands. Snorkeling gear is available for rent at all major beach access points.
+                    </p>
+                </div>
+            </section>
+            <section id="cuisine" class="card-section content-page">
+                <div class="card">
+                    <div class="card-image cuisine-img"></div>
+                    <div class="card-content">
+                        <h2>Local Cuisine</h2>
+                        <p>Experience the unique flavors of Taniti's local cuisine.</p>
+                        <button class="toggle-extension-btn">
+                            Savor Local Flavors <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <p class="vegan-legend">**Vegan options available <span>🌱</span>**</p>
+                    <div class="restaurant-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="Pan-Asian">Pan-Asian</button>
+                        <button class="filter-btn" data-filter="American-Style">American-Style</button>
+                        <button class="filter-btn" data-filter="Taniti-Style">Taniti-Style</button>
+                        <button class="filter-btn" data-filter="Vegan">Vegan</button>
+                    </div>
+                    <ul class="cuisine-list">
+                        <li class="cuisine-item" data-category="American-Style">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-burger cuisine-icon american-flag-gradient"></i> The Salty Sea Dog Grill</h3>
+                            <span class="restaurant-category">Seafood & Grill</span>
+                            <p>A classic beachfront spot known for its fresh-caught fish, coconut shrimp, and grilled island vegetables.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Pan-Asian Vegan">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-pepper-hot cuisine-icon"></i> Isle of Spice Eatery</h3>
+                            <span class="restaurant-category">Caribbean Fusion</span>
+                            <p>A vibrant, flavorful restaurant that blends Caribbean spices with local ingredients. Offers many vegan options. <span class="vegan-emblem">🌱</span></p>
+                        </li>
+                        <li class="cuisine-item" data-category="American-Style">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-burger cuisine-icon american-flag-gradient"></i> Bamboo Cafe</h3>
+                            <span class="restaurant-category">Casual Dining</span>
+                            <p>The go-to spot for a quick and delicious meal. Their Tanitian tacos and tropical fruit smoothies are a must-try.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="American-Style">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-burger cuisine-icon american-flag-gradient"></i> Volcano's Edge Steakhouse</h3>
+                            <span class="restaurant-category">Fine Dining</span>
+                            <p>Offering breathtaking views and the finest cuts of meat, this restaurant is perfect for a special occasion.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Taniti-Style Vegan">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-seedling cuisine-icon"></i> The Coral Spoon</h3>
+                            <span class="restaurant-category">Farm-to-Table</span>
+                            <p>Focusing on locally sourced, sustainable ingredients, The Coral Spoon crafts creative dishes with a fresh twist. <span class="vegan-emblem">🌱</span></p>
+                        </li>
+                        <li class="cuisine-item" data-category="Taniti-Style">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-pizza-slice cuisine-icon"></i> Sunset Pizza & Pasta</h3>
+                            <span class="restaurant-category">Italian</span>
+                            <p>Enjoy classic Italian fare with a Tanitian sunset backdrop. Known for their wood-fired pizzas and homemade pasta.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="American-Style">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-burger cuisine-icon american-flag-gradient"></i> Tiki Hut Burgers</h3>
+                            <span class="restaurant-category">Diner</span>
+                            <p>A fun, retro-style diner serving up juicy burgers, crispy fries, and thick milkshakes. A family favorite.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Pan-Asian Vegan">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-bread-slice cuisine-icon"></i> Palm Grove Bistro</h3>
+                            <span class="restaurant-category">French-Inspired</span>
+                            <p>An elegant bistro with a menu that changes daily, focusing on seasonal ingredients and classic French techniques. <span class="vegan-emblem">🌱</span></p>
+                        </li>
+                        <li class="cuisine-item" data-category="Taniti-Style">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-glass-martini cuisine-icon"></i> The Drunken Parrot</h3>
+                            <span class="restaurant-category">Bar & Pub</span>
+                            <p>A lively pub with a great selection of local beers, tropical cocktails, and a simple but delicious menu of pub classics.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Taniti-Style Vegan">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-bread-slice cuisine-icon"></i> Mango Breeze Cafe</h3>
+                            <span class="restaurant-category">Bakery & Cafe</span>
+                            <p>The perfect place to start your day with fresh-baked pastries, artisan coffee, and a selection of vegan-friendly treats. <span class="vegan-emblem">🌱</span></p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section id="markets" class="card-section content-page">
+                <div class="card reverse">
+                    <div class="card-image market-img"></div>
+                    <div class="card-content">
+                        <h2>Fresh Marketplaces</h2>
+                        <p>Discover handmade crafts and local produce in vibrant markets.</p>
+                        <button class="toggle-extension-btn">
+                            Shop Local Crafts <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <div class="restaurant-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="Supermarket">Supermarkets</button>
+                        <button class="filter-btn" data-filter="Grocery-Store">Grocery Stores</button>
+                        <button class="filter-btn" data-filter="Convenience-Store">24-Hour Stores</button>
+                    </div>
+                    <ul class="cuisine-list">
+                        <li class="cuisine-item" data-category="Supermarket">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-cart-shopping cuisine-icon"></i> Taniti Mega Mart</h3>
+                            <span class="restaurant-category">Largest Supermarket</span>
+                            <p>The island's largest store, offering a huge selection of imported goods, fresh produce, and a bakery. It's your one-stop shop for everything you might need.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Supermarket">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-basket-shopping cuisine-icon"></i> Island Fresh Grocers</h3>
+                            <span class="restaurant-category">Organic & Local</span>
+                            <p>Focused on quality, this supermarket specializes in organic, locally-sourced produce, meats, and dairy. Perfect for health-conscious shoppers.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Grocery-Store">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-store cuisine-icon"></i> Jungle Provisions</h3>
+                            <span class="restaurant-category">Neighborhood Market</span>
+                            <p>A small, family-run grocery store located inland. It stocks all the local essentials and fresh catches from the morning's fishing boats.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Grocery-Store">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-store-slash cuisine-icon"></i> Coastal Corner Mart</h3>
+                            <span class="restaurant-category">Beachside Stop</span>
+                            <p>Conveniently located near the main beaches, this is the go-to spot for sunscreen, snacks, drinks, and beach gear. Open from 7 AM to 9 PM.</p>
+                        </li>
+                        <li class="cuisine-item" data-category="Convenience-Store">
+                            <span class="restaurant-number"></span>
+                            <h3><i class="fa-solid fa-clock-rotate-left cuisine-icon"></i> The Night Owl</h3>
+                            <span class="restaurant-category">24/7 Convenience</span>
+                            <p>The island's only 24-hour convenience store. It's the perfect spot for late-night snacks, drinks, and any essentials you might have forgotten.</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section id="lodging" class="card-section content-page">
+                <div class="card">
+                    <div class="card-image lodging-img"></div>
+                    <div class="card-content">
+                        <h2>Lodging</h2>
+                        <p>Find the perfect place to stay, from luxurious resorts to cozy beach bungalows.</p>
+                        <button class="toggle-extension-btn">
+                            Explore Your Options <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <h3>Accommodations for Every Traveler</h3>
+                    <ul class="list-disc list-inside space-y-4 text-left p-4">
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Taniti Resort & Spa:</strong> A five-star luxury resort with ocean-view suites, an infinity pool, and a full-service spa. Perfect for those seeking a pampered, relaxing holiday.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">The Bamboo Bungalows:</strong> Charming, rustic bungalows nestled in the jungle. Each one is a private oasis, ideal for a quiet and intimate getaway.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Seaside Inn:</strong> A budget-friendly hotel with clean, comfortable rooms located just a short walk from the beach. A great option for families or backpackers.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Eco-Camp Taniti:</strong> For the adventurous traveler, this is a unique camping experience with pre-pitched tents and shared amenities, offering a chance to connect with nature.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section id="mountains" class="card-section content-page">
+                <div class="card reverse">
+                    <div class="card-image mountains-img"></div>
+                    <div class="card-content">
+                        <h2>Memorable Adventures</h2>
+                        <p>Hike scenic trails and enjoy breathtaking mountain views.</p>
+                        <button class="toggle-extension-btn">
+                            Trek the Trails <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <h3>Explore Taniti's Highlands</h3>
+                    <ul class="list-disc list-inside space-y-4 text-left p-4">
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">The Ridge Trail:</strong> A moderate 3-mile loop trail that takes you along a scenic ridge with stunning views of the coast. Perfect for a morning hike.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Volcano Peak Climb:</strong> A challenging 5-mile trek to the summit of Taniti's dormant volcano. This difficult hike rewards you with a panoramic view of the entire island from above the clouds. Guided tours are highly recommended.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Hidden Falls Trail:</strong> An easy 1.5-mile trail through a lush, tropical forest that leads to a beautiful hidden waterfall. The pool at the base is perfect for a refreshing swim.
+                        </li>
+                    </ol>
+                    <p class="mt-4">
+                        All trails are clearly marked, and maps are available at the main visitor center. Remember to wear appropriate footwear and bring plenty of water.
+                    </p>
+                </div>
+            </section>
+            <section id="transportation" class="card-section content-page">
+                <div class="card">
+                    <div class="card-image transportation-img"></div>
+                    <div class="card-content">
+                        <h2>Transportation</h2>
+                        <p>Discover the best ways to get around the island, including bus, taxi, and rental options.</p>
+                        <button class="toggle-extension-btn">
+                            See Your Travel Options <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <h3>Getting Around Taniti</h3>
+                    <ul class="list-disc list-inside space-y-4 text-left p-4">
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Public Bus System:</strong> The island's bus system is an affordable and efficient way to get around. Buses run every 30 minutes from 6 AM to 10 PM.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Taxis & Shuttles:</strong> Taxis are widely available and can be hailed on the street or booked via a phone app. Many resorts offer free shuttle services to the main town and airport.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Car & Scooter Rentals:</strong> For those who want to explore at their own pace, several agencies offer car and scooter rentals. An international driver's license is required.
+                        </li>
+                    </ul>
+                    <p class="mt-4">
+                        All main roads on the island are paved, but be aware that some smaller roads may be unpaved and bumpy. Please drive carefully.
+                    </p>
+                </div>
+            </section>
+            <section id="entertainment" class="card-section content-page">
+                <div class="card reverse">
+                    <div class="card-image entertainment-img"></div>
+                    <div class="card-content">
+                        <h2>Entertainment</h2>
+                        <p>From live music and theater to vibrant nightlife, find your fun on Taniti.</p>
+                        <button class="toggle-extension-btn">
+                            Find Your Fun <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-extension">
+                    <h3>Nightlife & Cultural Events</h3>
+                    <ul class="list-disc list-inside space-y-4 text-left p-4">
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">The Tiki Bar:</strong> The most famous bar on the island, known for its strong tropical cocktails and live music performances by local bands every night.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Taniti Theater:</strong> A small theater that hosts a variety of cultural performances, from traditional dance troupes to modern plays. Check the local listings for the show schedule.
+                        </li>
+                        <li>
+                            <strong class="text-lg text-[#ffe082]">Moonlight Cinema:</strong> An open-air cinema on the beach that shows classic movies under the stars. Grab a blanket and some popcorn for a unique movie night experience.
+                        </li>
+                    </ul>
+                    <p class="mt-4">
+                        Most venues require a valid ID and are open until late. The atmosphere is generally laid-back and friendly, so feel free to mingle with the locals.
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="tropical-footer">
+        <div class="footer-section">
+            <ul class="contact-info">
+                <li><a href="tel:+689-404-72738"><i class="fa-solid fa-phone"></i>+689.40.472738</a></li>
+                <li><a href="mailto:travel@taniti.gov"><i class="fa-solid fa-envelope"></i>travel@taniti.gov</a></li>
+            </ul>
+        </div>
+        <div class="footer-section center-footer">
+            <p>logo by <a href="https://www.canva.com">Canva</a> AI</p>
+            <p>graphics/imagery courtesy <a href="https://www.unsplash.com">Unsplash</a></p>
+        </div>
+        <div class="footer-section">
+            <p>&copy; 2025 Taniti Corp</p>
+            <p class="designer-info">Site Designer: <a href="mailto:jp@fbi.gov">jp@fbi.gov</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Load images
+        async function loadImages() {
+            try {
+                document.querySelector('.beaches-img').style.backgroundImage = `url('images/beach.jpg')`;
+                document.querySelector('.cuisine-img').style.backgroundImage = `url('images/cuisine.jpg')`;
+                document.querySelector('.markets-img').style.backgroundImage = `url('images/market.jpg')`;
+                document.querySelector('.lodging-img').style.backgroundImage = `url('images/lodging.jpg')`;
+                document.querySelector('.mountains-img').style.backgroundImage = `url('images/mountain.jpg')`;
+                document.querySelector('.transportation-img').style.backgroundImage = `url('images/transportation.jpg')`;
+                document.querySelector('.entertainment-img').style.backgroundImage = `url('images/entertainment.jpg')`;
+                document.body.style.backgroundImage = `url('images/hero.jpg')`;
+            } catch {
+                console.log('Using fallback images');
+            }
+        }
+        loadImages();
+
+        const allContentPages = document.querySelectorAll('.content-page');
+        const hamburger = document.getElementById('hamburger');
+
+        // Toggle card extensions & continuous chevron rotation
+        document.querySelectorAll('.toggle-extension-btn').forEach(button => {
+            button.dataset.rotation = 0; // Initialize rotation state
+            button.addEventListener('click', () => {
+                const extension = button.closest('.card-section').querySelector('.card-extension');
+                extension.classList.toggle('visible');
+
+                const icon = button.querySelector('i');
+                let currentRotation = parseInt(button.dataset.rotation);
+                if (isNaN(currentRotation)) currentRotation = 0;
+                currentRotation += 180;
+                icon.style.transform = `rotate(${currentRotation}deg)`;
+                button.dataset.rotation = currentRotation;
+            });
+        });
+
+        function showPage(pageId) {
+            allContentPages.forEach(page => {
+                page.classList.remove('active-page');
+            });
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active-page');
+            }
+        }
+
+        const navContainer = document.getElementById('nav-container');
+        const navButtonContainers = document.querySelectorAll('.nav-button-container');
+
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            navButtonContainers.forEach(container => {
+                container.querySelector('.nav-button').classList.remove('active');
+                container.querySelector('.dropdown').classList.remove('visible');
+            });
+        }
+
+        navButtonContainers.forEach(container => {
+            const button = container.querySelector('.nav-button');
+            const dropdown = container.querySelector('.dropdown');
+
+            button.addEventListener('click', (e) => {
+                const isAlreadyActive = button.classList.contains('active');
+                closeAllDropdowns();
+                if (!isAlreadyActive) {
+                    button.classList.add('active');
+                    dropdown.classList.add('visible');
+                    // Set dropdown width to match the button
+                    const buttonWidth = button.offsetWidth;
+                    dropdown.style.width = `${buttonWidth}px`;
+                }
+                e.stopPropagation();
+            });
+        });
+
+        navContainer.querySelectorAll('.dropdown-item').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                if (targetId) {
+                    showPage(targetId);
+                }
+                closeAllDropdowns();
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!navContainer.contains(event.target)) {
+                closeAllDropdowns();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('beaches');
+            updateFilterCounts();
+            // Update numbering for all sections on load
+            document.querySelectorAll('.card-extension').forEach(section => {
+                updateRestaurantNumbering(section);
+            });
+        });
+
+        let colorTriggered = false;
+        function triggerColor() {
+            if (!colorTriggered) {
+                document.querySelectorAll('.card-image').forEach(img => img.style.filter = "grayscale(0%)");
+                colorTriggered = true;
+            }
+        }
+        window.addEventListener('mousemove', triggerColor, { once: true });
+        window.addEventListener('keydown', triggerColor, { once: true });
+
+        // --- REWORKED WEATHER & ALERT LOGIC ---
+        const weatherButton = document.getElementById('weather-button');
+        const weatherDropdown = document.getElementById('weather-dropdown');
+        const weatherStatusDotOk = document.getElementById('weather-status-dot-ok');
+        const weatherStatusDotAlert = document.getElementById('weather-status-dot-alert');
+        const body = document.body;
+        const alertCard = document.getElementById('alert-card');
+
+        const skiesOptions = ["Sunny", "Cloudy", "Rainy"];
+        const snowSkiesOptions = ["Snowing", "Blizzard"]; // New options for the Easter egg
+        const emojiMap = { "Sunny": "☀️", "Cloudy": "☁️", "Rainy": "🌧️" };
+        const snowEmojiMap = { "Snowing": "❄️", "Blizzard": "🌬️" }; // New emoji for snow
+        const moonPhases = [
+            'New Moon', 'Waxing Crescent', 'First Quarter',
+            'Waxing Gibbous', 'Full Moon', 'Waning Gibbous',
+            'Third Quarter', 'Waning Crescent'
+        ];
+
+        let isAlertActive = false;
+        let isSnowing = false; // New state variable for the Easter egg
+        let snowTimeout = null; // To store the timeout ID for the snow event
+
+        const possibleAlerts = [
+            {
+                type: 'Volcano',
+                title: '🌋 Volcano Alert!',
+                message: 'Volcanic activity detected. Follow island evacuation protocol immediately.',
+                capsuleText: `<span class="label" style="color:#FF4545">ALERT</span> <span style="font-weight:bold; color:#fff;">Volcano Active</span>
+                                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:15 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:00 PM</span>
+                </span>
+                <span class="weather-credit">weather provided by NeverWrong Weathermen Service™</span>`
+            },
+            {
+                type: 'Tsunami',
+                title: '🌊 Tsunami Warning!',
+                message: 'A tsunami warning is in effect. Move to higher ground immediately.',
+                capsuleText: `<span class="label" style="color:#6495ED">ALERT</span> <span style="font-weight:bold; color:#fff;">Tsunami Watch</span>
+                                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:15 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:00 PM</span>
+                </span>
+                <span class="weather-credit">weather provided by NeverWrong Weathermen Service™</span>`
+            },
+            {
+                type: 'Hurricane',
+                title: '🌀 Hurricane Warning!',
+                message: 'A major hurricane is approaching. Please shelter in place and stay tuned for updates.',
+                capsuleText: `<span class="label" style="color:#FFA500">ALERT</span> <span style="font-weight:bold; color:#fff;">Hurricane Warning</span>
+                                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:15 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:00 PM</span>
+                </span>
+                <span class="weather-credit">weather provided by NeverWrong Weathermen Service™</span>`
+            }
+        ];
+
+        /* FIX: Logic for the alert dots */
+        function updateDotVisibility() {
+            if (isAlertActive) {
+                weatherStatusDotOk.classList.add('subdued');
+                weatherStatusDotAlert.classList.add('blinking');
+            } else {
+                weatherStatusDotOk.classList.remove('subdued');
+                weatherStatusDotAlert.classList.remove('blinking');
+            }
+        }
+
+        function triggerAlert(alertData) {
+            if (isAlertActive) return;
+            isAlertActive = true;
+            console.log(`🚨 ALERT TRIGGERED: ${alertData.type}`);
+
+            body.classList.add('alert-active');
+            updateDotVisibility();
+
+            document.getElementById('alert-title').textContent = alertData.title;
+            document.getElementById('alert-message').textContent = alertData.message;
+            document.getElementById('weather-main').innerHTML = alertData.capsuleText;
+
+            weatherDropdown.classList.add('show');
+            weatherButton.setAttribute('aria-expanded', 'true');
+            
+            // Show the alert card with animation
+            alertCard.style.display = 'block';
+            alertCard.classList.add('alert-bg-animation');
+
+            setTimeout(clearAlert, 20000);
+        }
+
+        function clearAlert() {
+            isAlertActive = false;
+            console.log('✅ ALERT CLEARED');
+
+            body.classList.remove('alert-active');
+            updateDotVisibility();
+
+            // Revert the weather main display back to normal
+            document.getElementById('weather-main').innerHTML = `
+                <span class="weather-main-data">
+                    <span class="label-container"><span class="label">Temp:</span></span>
+                    <span id="temp" class="number"></span>°F
+                </span>
+                <span class="weather-main-data">
+                    <span class="label-container"><span class="label">Skies:</span></span>
+                    <span id="skies"></span> <span id="sky-emoji"></span>
+                </span>
+                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:15 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:00 PM</span>
+                </span>
+                <span class="weather-credit">weather provided by NeverWrong Weathermen Service™</span>`;
+            
+            // Re-run the weather data generation to populate the new elements
+            setTimeout(() => {
+                generateGeneralWeatherData();
+                generateSkiesData();
+            }, 100);
+
+            // Hide the alert card and remove animation
+            alertCard.style.display = 'none';
+            alertCard.classList.remove('alert-bg-animation');
+        }
+
+        setInterval(() => {
+            if (Math.random() < 0.15 && !isAlertActive) {
+                const randomAlert = possibleAlerts[Math.floor(Math.random() * possibleAlerts.length)];
+                triggerAlert(randomAlert);
+            }
+        }, 7000);
+
+        // Easter Egg Logic
+        // Check every 3 minutes for a chance of snow
+        setInterval(() => {
+            if (Math.random() < 0.2 && !isAlertActive && !isSnowing) { // 20% chance to trigger snow
+                isSnowing = true;
+                generateSnowData();
+                snowTimeout = setTimeout(() => {
+                    isSnowing = false;
+                    generateGeneralWeatherData(); // Revert back to normal weather
+                    generateSkiesData();
+                    document.getElementById('weather-credit').textContent = "weather provided by NeverWrong Weathermen Service™";
+                }, 60000); // Snow lasts for 60 seconds
+            }
+        }, 3 * 60 * 1000); // Check every 3 minutes
+
+        function generateSnowData() {
+            if (!isSnowing) return;
+
+            const tempElement = document.getElementById('temp');
+            const tempDetail = document.getElementById('temp-detail');
+            const skiesElement = document.getElementById('skies');
+            const skyEmojiElement = document.getElementById('sky-emoji');
+            const skiesDetail = document.getElementById('skies-detail');
+            const skyEmojiDetail = document.getElementById('sky-emoji-detail');
+
+            const newSkies = snowSkiesOptions[Math.floor(Math.random() * snowSkiesOptions.length)];
+            const newEmoji = snowEmojiMap[newSkies];
+            const newTemp = Math.floor(Math.random() * 5) + 28; // Temps between 28-32°F
+
+            animateValue(tempElement, parseInt(tempElement.textContent), newTemp, 1500);
+            tempDetail.textContent = newTemp;
+
+            // Fade out current text before changing
+            skiesElement.style.opacity = '0';
+            skiesDetail.style.opacity = '0';
+            
+            setTimeout(() => {
+                skiesElement.textContent = newSkies;
+                skyEmojiElement.textContent = newEmoji;
+                skiesDetail.textContent = newSkies;
+                skyEmojiDetail.textContent = newEmoji;
+
+                skiesElement.style.opacity = '1';
+                skiesDetail.style.opacity = '1';
+            }, 3000);
+
+            // Update the secretive credit text
+            document.getElementById('weather-credit').textContent = "A glitch in the system.";
+        }
+
+
+        /* FIX: Re-implemented the number animation and simplified the update logic */
+        function animateValue(obj, start, end, duration) {
+            if (!obj) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function generateSkiesData() {
+            if (isAlertActive || isSnowing) return;
+
+            const skiesElement = document.getElementById('skies');
+            const skyEmojiElement = document.getElementById('sky-emoji');
+            const skiesDetail = document.getElementById('skies-detail');
+            const skyEmojiDetail = document.getElementById('sky-emoji-detail');
+
+            if (!skiesElement || !skyEmojiElement || !skiesDetail || !skyEmojiDetail) {
+                console.error("Sky elements not found in the DOM.");
+                return;
+            }
+
+            const newSkies = skiesOptions[Math.floor(Math.random() * skiesOptions.length)];
+            const newEmoji = emojiMap[newSkies];
+
+            // Fade out the current text
+            skiesElement.style.opacity = '0';
+            skiesDetail.style.opacity = '0';
+
+            // Wait for the fade-out transition to complete (3 seconds)
+            setTimeout(() => {
+                // Update content after fade-out
+                skiesElement.textContent = newSkies;
+                skyEmojiElement.textContent = newEmoji;
+                skiesDetail.textContent = newSkies;
+                skyEmojiDetail.textContent = newEmoji;
+                
+                // Fade content back in
+                skiesElement.style.opacity = '1';
+                skiesDetail.style.opacity = '1';
+            }, 1500);
+        }
+
+        function generateGeneralWeatherData() {
+            if (isAlertActive || isSnowing) return;
+            
+            const tempElement = document.getElementById('temp');
+            const windElement = document.getElementById('wind');
+            const humidityElement = document.getElementById('humidity');
+            const moonPhaseElement = document.getElementById('moon-phase');
+            const moonIlluminationElement = document.getElementById('moon-illumination');
+            const tempDetail = document.getElementById('temp-detail');
+
+            if (!tempElement || !windElement || !humidityElement || !moonPhaseElement || !moonIlluminationElement || !tempDetail) {
+                console.error("Weather elements not found in the DOM.");
+                return;
+            }
+
+            const currentTemp = parseInt(tempElement.textContent) || 75;
+            const currentWind = parseInt(windElement.textContent) || 10;
+            const currentHumidity = parseInt(humidityElement.textContent) || 50;
+
+            const newTemp = Math.floor(Math.random() * 5) + 70;
+            const newWind = Math.floor(Math.random() * 3) + 8;
+            const newHumidity = Math.floor(Math.random() * 5) + 50;
+            const newMoonPhase = moonPhases[Math.floor(Math.random() * moonPhases.length)];
+            const newMoonIllumination = Math.floor(Math.random() * 101);
+
+            // Smoothly update temperature
+            animateValue(tempElement, currentTemp, newTemp, 1500);
+            tempDetail.textContent = newTemp;
+            
+            // Smoothly update other weather info
+            animateValue(windElement, currentWind, newWind, 1500);
+            animateValue(humidityElement, currentHumidity, newHumidity, 1500);
+
+            // Update moon conditions
+            moonPhaseElement.textContent = newMoonPhase;
+            moonIlluminationElement.textContent = `${newMoonIllumination}%`;
+        }
+
+        // Set different update intervals as requested
+        setInterval(generateGeneralWeatherData, 5000); // General weather every 5 seconds
+        setInterval(generateSkiesData, 15000); // Skies data every 15 seconds
+
+        // Initial calls to populate data
+        generateGeneralWeatherData();
+        generateSkiesData();
+        updateDotVisibility();
+
+        // Toggle Dropdown Logic
+        weatherButton.addEventListener('click', (e) => {
+            const isExpanded = weatherButton.getAttribute('aria-expanded') === 'true';
+            if (isExpanded) {
+                weatherDropdown.classList.remove('show');
+                weatherButton.setAttribute('aria-expanded', 'false');
+            } else {
+                weatherDropdown.classList.add('show');
+                weatherButton.setAttribute('aria-expanded', 'true');
+            }
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!weatherButton.contains(e.target) && !weatherDropdown.contains(e.target)) {
+                weatherDropdown.classList.remove('show');
+                weatherButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // NEW: Function to update filter counts with dynamic logic
+        function updateFilterCounts() {
+            // Loop through all sections that have a filter system
+            document.querySelectorAll('.card-extension').forEach(section => {
+                const filters = section.querySelectorAll('.filter-btn');
+                const items = section.querySelectorAll('.cuisine-item');
+
+                // Get the total count and update the "All" button first
+                const allCount = items.length;
+                const allBtn = section.querySelector('[data-filter="all"]');
+                if (allBtn) {
+                    allBtn.textContent = `All (${allCount})`;
+                }
+
+                // Now, loop through the other filter buttons and count their items
+                filters.forEach(btn => {
+                    const filter = btn.getAttribute('data-filter');
+                    // Skip the "All" button since we already handled it
+                    if (filter === 'all') return;
+
+                    let count = 0;
+                    items.forEach(item => {
+                        // Check if the item's categories string contains the filter
+                        if (item.getAttribute('data-category').includes(filter)) {
+                            count++;
+                        }
+                    });
+
+                    // Update the button's text with the category name and count
+                    btn.textContent = `${filter} (${count})`;
+                });
+            });
+        }
+
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const section = btn.closest('.card-extension');
+                const filters = section.querySelectorAll('.filter-btn');
+                const items = section.querySelectorAll('.cuisine-item');
+
+                filters.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+
+                items.forEach(item => {
+                    const categories = item.getAttribute('data-category');
+                    if (filter === 'all' || categories.includes(filter)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                updateRestaurantNumbering(section);
+            });
+        });
+
+        function updateRestaurantNumbering(container) {
+            const visibleItems = container.querySelectorAll('.cuisine-item:not(.hidden)');
+            visibleItems.forEach((item, index) => {
+                const numberSpan = item.querySelector('.restaurant-number');
+                if (numberSpan) {
+                    numberSpan.textContent = index + 1;
+                }
+            });
+        }
+    </script>
+
+
+<script>
+(function(){
+  const hamb = document.getElementById('hamburger');
+  const navContainer = document.getElementById('nav-container');
+  if(hamb && navContainer){
+    // show hamburger if screen is small (CSS may override display)
+    hamb.style.display = hamb.style.display || '';
+    hamb.addEventListener('click', function(e){
+      e.stopPropagation();
+      navContainer.classList.toggle('mobile-open');
+      hamb.classList.toggle('is-active');
+    });
+    document.addEventListener('click', function(e){
+      if(!navContainer.contains(e.target) && !hamb.contains(e.target)){
+        navContainer.classList.remove('mobile-open');
+      }
+    });
+  }
+})();
+</script>
+
+<script>
+function toggleWeatherModal() {
+  const modal = document.getElementById('weather-modal');
+  if (!modal) return;
+  if (modal.classList.contains('show')) {
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
+  } else {
+    modal.style.display = 'flex';
+    setTimeout(() => { modal.classList.add('show'); }, 10);
+    modal.addEventListener('click', function handler(e) {
+      if (e.target === modal) {
+        toggleWeatherModal();
+        modal.removeEventListener('click', handler);
+      }
+    });
+  }
+}
+</script>
+
+</body>
+</html>
