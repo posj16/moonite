@@ -1,0 +1,4134 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Taniti Island Paradise</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+	/*use me*/
+        @import url(https://fonts.googleapis.com/css?family=Electrolize);
+	@import url(https://fonts.googleapis.com/css?family=Exo+2:200i);
+        /* Reset & Body */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:#000 url('images/hero.jpg') center/cover no-repeat fixed;
+            color:#fff;
+            transition: background-color 1.5s ease;
+        }
+	:root {
+	  /* Set neon color */
+	  --neon-text-color: #f40;
+	  --neon-border-color: #08f;
+	}
+
+        /* NEW: Body alert state */
+        body.alert-active {
+            animation: pulse-background 3s infinite;
+        }
+
+        @keyframes pulse-background {
+            0%, 100% { background-color: rgba(100, 0, 0, 0); }
+            50% { background-color: rgba(100, 0, 0, 0.4); }
+        }
+
+        /* Header */
+        /* UPDATED: Reduced padding for a more compact header */
+        .tropical-header {
+            background: linear-gradient(45deg,
+                rgba(0, 198, 255, 0.3),
+                rgba(0, 114, 255, 0.1));
+            backdrop-filter: blur(7px);
+            padding: 1.2rem 2.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-container img {
+            width: 120px;
+            height: auto;
+            display: block;
+        }
+
+        .tagline {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            font-size: 1.3rem;
+            font-weight: 777;
+            color: #BCEFDA;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+            white-space: nowrap;
+            text-transform: lowercase;
+            margin-top: -27px;
+            transform: rotate(-3deg);
+            z-index: 11;
+        }
+
+        /* Nav */
+        nav {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* FIX: Darkened the navigation bar background and added a border */
+        #nav-container {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.5);
+            transition: all 0.4s ease;
+        }
+
+        #nav-container:hover {
+            background: rgba(0,0,0,0.3);
+        }
+
+        
+        .nav-button i, .dropdown-item i {
+            color: #ffcc00;
+        }
+        
+        #nav-container > .nav-button-container:first-child .nav-button {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+        #nav-container > .nav-button-container:last-child .nav-button {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .nav-button:hover, .dropdown-item:hover, .nav-button.active {
+            background: rgba(0,0,0,0.2);
+            text-shadow: 0 0 5px #ffe082;
+        }
+        
+        /* New: Class to match dropdowns to the button width */
+        .dropdown-align-to-button {
+            left: 0;
+            transform: none;
+            width: 100%;
+        }
+
+        /* UPDATED: Darker, less transparent, and more blurred dropdown */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            /* NEW: Now aligned with the parent button's width */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            opacity: 0;
+            border-radius: 7px;
+            background: rgba(1, 10, 20, 0.95); /* Deeper, less transparent blue */
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px); /* Increased blur */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            min-width: 150px;
+            z-index: 99; /* Higher z-index to ensure it's on top */
+        }
+
+        .dropdown.visible {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            width: 100%;
+            display: block;
+        }
+
+        .nav-button-container {
+            position: relative;
+            display: inline-block;
+        }
+
+/* Left nav styling */
+.fixed-left-nav {
+  position: fixed;
+  top: 1;
+  left: 0;
+  width: 25%;
+  max-width: 301px;
+  height: 80%;
+  background: rgba(7,8,9,0.5);
+  backdrop-filter: blur(7px);
+  padding: 1px 3px;
+  font-family: Arial, Helvetica, sans-serif; /* match your sans-serif font */
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+  z-index: 1;
+  border-top-left-radius:7px;
+  border-top-right-radius:7px;
+  border-bottom-left-radius:0;
+  border-bottom-right-radius:0;
+}
+
+/* Static category labels - no hover effect */
+.nav-category {
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 11px 10px;
+  color: #030927;
+  background-color: rgba(3, 12, 7, 0.9);
+  border: 1px solid #acf159;
+  border-radius: 1px;
+  cursor: default; /* not clickable, no hover effect */
+  text-shadow: 0 0 9px rgba(255, 255, 255, 0.5); /* Adjusted shadow for new color */
+
+}
+
+/* Make icons yellow */
+.nav-link i {
+  color: #ffcc00;
+}
+
+.nav-category i {
+  font-size: 1.2em; /* or adjust as needed */
+  margin-right: 8px;
+  color: initial;
+
+}
+
+
+/* Links styling */
+.nav-links {
+  list-style: none;
+  padding-left: 10px;
+  margin-bottom: 13px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 21px;
+  padding: 7px 12px;
+  color: #fff;
+  background: rgba(1, 10, 20, 0.95);
+  text-decoration: none;
+  font-size: 0.95em;
+  border-radius: 3px;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-bottom: 2px;
+}
+.nav-link:hover {
+  background: rgba(125,89,77,0.5);
+  box-shadow: 0 0 5px #ffe082;
+}
+
+.nav-link.active {
+  background: rgba(125,89,77,0.5);
+  box-shadow: 0 0 5px #ffe082;
+  justify-content: right;
+  margin-right: 12px;
+  margin-left: 12px;
+}
+
+/* Fixed right semi-transparent panel */
+.fixed-right-panel {
+  position: fixed;
+  top: 175px; /* adjust as needed to avoid header overlap */
+  right: 0;
+  width: 25%; /* same width as your left nav for symmetry, or adjust as needed */
+  max-width: 300px;
+  height: calc(100% - 50px); /* fill remaining height */
+  background: rgba(7, 8, 9, 0.5); /* semi-transparent background similar to your left nav */
+  backdrop-filter: blur(7px);
+  padding: 5px 0px;
+  overflow-y: auto;
+  z-index: 3; /* high z-index to overlay content if needed */
+  border-radius: 8px 0 0 8px; /* rounded corners on the left side */
+  box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* NEON SECTION */
+.neon {
+  font-size: 1.1rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #fff;
+  padding: .5rem .5rem .5rem;
+  border: 0.2rem solid #fff;
+  border-radius: 1rem;
+  text-transform: none;
+  animation: flicker 7.5s infinite alternate;     
+}
+
+::-moz-selection {
+  background-color: var(--neon-border-color);
+  color: var(--neon-text-color);
+}
+
+::selection {
+  background-color: var(--neon-border-color);
+  color: var(--neon-text-color);
+}
+
+
+/* Animate neon flicker */
+@keyframes flicker {
+    
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      
+        text-shadow:
+            -0.2rem -0.2rem 3rem #fff,
+            0.2rem 0.2rem 3rem #fff,
+            0 0 .5rem var(--neon-text-color),
+            0 0 .5rem var(--neon-text-color),
+            0 0 .5rem var(--neon-text-color),
+            0 0 .5rem var(--neon-text-color),
+            0 0 .5rem var(--neon-text-color);
+        
+        box-shadow:
+            0 0 .5rem #fff,
+            inset 0 0 .5rem #fff,
+            0 0 .5rem var(--neon-border-color),
+            inset 0 0 .5rem var(--neon-border-color),
+            0 0 .5rem var(--neon-border-color),
+            inset 0 0 .5rem var(--neon-border-color);        
+    }
+    
+    20%, 24%, 55% {        
+        text-shadow: none;
+        box-shadow: none;
+    }    
+}
+/* END OF NEON */
+
+
+        /* Weather Button specific styles */
+        .weather-li {
+            position: relative;
+            z-index: 3;
+	        margin-left: 20px;
+	        margin-top: 3px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        /* FIX: Set a fixed width for the weather button to match the dropdown */
+        /* UPDATED: Reduced vertical padding to match the new, smaller header */
+        .weather-button {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 1.05rem;
+            line-height: 1.3;
+            padding: 0.25rem 1.35rem;
+            width: 270px; /* Fixed width */
+            background: rgba(0,0,0,0.7);
+            border-radius: 9px;
+            text-align: left;
+            position: relative;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .weather-button .status-dot-container {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .weather-button .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Added glow effect */
+        }
+        
+        /* New animations for alert dots */
+        .weather-dot-ok {
+            background-color: #4ade80; /* Brighter green */
+            box-shadow: 0 0 5px #4ade80, 0 0 10px #4ade80;
+            animation: green-glow 2s infinite ease-in-out;
+        }
+
+        .weather-dot-ok.subdued {
+            background-color: #2e5a57; /* A darker, duller green */
+            box-shadow: none;
+            animation: none; /* Turn off glowing animation */
+        }
+        
+        /* UPDATED: Alert dot to match the new dark cherry root beer color */
+        .weather-dot-alert {
+            background-color: #650B0D;
+            opacity: 0.6;
+        }
+        
+        /* UPDATED: Alert dot's blinking color to match the new color */
+        .weather-dot-alert.blinking {
+            background-color: #B01E23;
+            box-shadow: 0 0 8px #B01E23, 0 0 16px #B01E23;
+            opacity: 1;
+            animation: red-blink 2.1s infinite;
+        }
+
+        @keyframes green-glow {
+            0%, 100% {
+                background-color: #4ade80; /* Brighter green */
+                box-shadow: 0 0 5px #4ade80, 0 0 10px #4ade80;
+            }
+            50% {
+                background-color: #22c55e; /* Green */
+                box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e;
+            }
+        }
+        
+        /* UPDATED: The colors for the red-blink animation to match the new color */
+        @keyframes red-blink {
+            0%, 10%, 20% {
+                background-color: #B01E23;
+                box-shadow: 0 0 8px #B01E23, 0 0 16px #B01E23;
+            }
+            15%, 25%, 100% {
+                background-color: #650B0D;
+                box-shadow: none;
+            }
+        }
+
+        .dot-flash {
+            animation: flashDot 1.5s infinite;
+        }
+
+        @keyframes flashDot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.8); }
+            50% { opacity: 0.3; box-shadow: 0 0 5px 2px rgba(255, 0, 0, 0.3); }
+        }
+
+        .weather-button-temp-skies {
+            font-weight: bold;
+        }
+
+        /* FIX: Weather Dropdown Transparency and Size */
+        .weather-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 270px; /* Fixed width to match button */
+            display: flex;
+            flex-direction: column;
+            gap: 0px; /* Removed gap */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 9;
+        }
+        .weather-dropdown.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* UPDATED: Darker, less transparent, and more blurred weather card */
+        .weather-dropdown .weather-card {
+            background: rgba(1, 10, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 13px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* NEW: Weather forecast styling */
+    .forecast-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1em;
+        margin-bottom: 1em;
+    }
+    .forecast-day {
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 1em 0.5em;
+        border-radius: 10px;
+    }
+    .forecast-day h3 {
+        font-size: 1em;
+        margin-bottom: 0.5em;
+    }
+    .forecast-day i {
+        font-size: 2em;
+        margin-bottom: 0.2em;
+    }
+    .forecast-day p {
+        font-size: 0.9em;
+    }
+
+        /* Alert and Info Card specific styling */
+        /* UPDATED: Changed border color to complement new background */
+        .alert-card {
+            border-color: #650B0D;
+        }
+
+        .weather-dropdown .card-horizontal {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: none;
+        }
+        
+        .weather-dropdown .weather-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        /* Content Wrapper + Cards */
+        .content-wrapper {
+            padding-bottom: 70px;
+            padding-top: 12px;
+            background: transparent;
+        }
+        .card-container { display:flex; flex-direction:column; gap:2rem; padding:0rem; }
+        .card-section { display:flex; flex-direction: column; align-items: center; transition:transform 0.3s ease-out; }
+        .card {
+            display:flex;
+            max-width:49%;
+            width:100%;
+            border-top-left-radius:17px;
+            border-top-right-radius:7px;
+            border-bottom-left-radius:0;
+            border-bottom-right-radius:0;
+            overflow:hidden;
+            box-shadow:0 8px 24px rgba(0,0,0,0.25);
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card.reverse { flex-direction: row-reverse; }
+        .card.reverse .card-image { flex: 0.7; }
+        .card.reverse .card-content { flex: 1.3; }
+        .card-image { flex:1; background-size: cover; background-position: center; min-height:275px; filter: grayscale(0%); transition: filter 7s ease-in-out; }
+        .card-image:hover { transform: scale(1.02); }
+        .card-content { flex:1; background: rgba(0,50,100,0.65); backdrop-filter: blur(6px); padding:2rem; display:flex; flex-direction:column; justify-content:center; text-align:center; }
+        .card-content h2 { margin-bottom:1rem; font-size:1.8rem; font-weight:bold; text-shadow:1px 1px 4px rgba(0,0,0,0.6); }
+        .card-content p { font-size:1.1rem; line-height:1.3; text-shadow:1px 1px 4px rgba(0,0,0,0.6); }
+
+        /* UPDATED: More squarish "learn more" buttons */
+        .toggle-extension-btn {
+            margin-top: auto;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 1px 12px 1px 12px; /* Changed from 50px */
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .toggle-extension-btn:hover {
+            background: rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .toggle-extension-btn i {
+            color: #ffcc00;
+            transition: transform 0.3s ease;
+        }
+
+        /* Card Extension Styles */
+        .card-extension {
+            max-width: 625px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 0 2rem;
+            box-shadow: 0 8-px 24px rgba(0, 0, 0, 0.25);
+            transition: max-height 0.7s ease-out, padding 0.7s ease-out;
+            overflow: hidden;
+            max-height: 0;
+        }
+        .card-extension.visible {
+            padding: 2rem;
+            max-height: 2000px;
+            overflow-y: visible;
+        }
+
+        /* Cuisine Section Specific Styles */
+        .cuisine-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .cuisine-list li:first-child {
+            grid-column: 1 / -1;
+            border: 2px solid #ffe082;
+            box-shadow: 0 0 15px rgba(255, 220, 100, 0.5);
+            position: relative;
+            padding-top: 2.5rem;
+        }
+
+        .cuisine-item.featured h3 {
+            font-size: 1.6rem;
+            color: #ffe082;
+            text-shadow: 0 0 10px rgba(255, 220, 100, 0.8);
+        }
+        .featured-banner {
+            position: absolute;
+            top: 0;
+            left: 1rem;
+            transform: translateY(-50%);
+            background: #ffe082;
+            color: #333;
+            font-weight: bold;
+            padding: 0.3rem 1.5rem;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        .cuisine-item {
+            /* UPDATED: Slightly darker background for the cards */
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, background 0.3s ease, opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .cuisine-item.hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .cuisine-item:hover {
+            /* UPDATED: More transparency and a slight blur on hover */
+            transform: translateY(-5px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .cuisine-item h3 {
+            font-size: 1.2rem;
+            color: #ffe082;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+
+        .cuisine-icon {
+            font-size: 1.2em;
+            color: #ADE9c7;
+            margin-right: 5px;
+        }
+
+        .restaurant-category {
+            font-size: 0.9em;
+            color: #BCEFDA;
+            margin-top: -0.2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .cuisine-item p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+
+        .cuisine-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            filter: grayscale(0%);
+        }
+        .cuisine-item img:hover {
+            filter: grayscale(0%);
+        }
+
+        .vegan-emblem {
+            font-size: 1.2em;
+            color: limegreen;
+            align-self: flex-end;
+            margin-top: auto;
+        }
+
+        .vegan-legend {
+            text-align: right;
+            font-style: italic;
+            font-size: 0.9em;
+            color: #BCEFDA;
+	    background-color:rgba(0,0,0,0.4);
+            border-radius: 3px 1px 2px 1px;
+            margin-bottom: 1rem;
+        }
+        .vegan-legend span {
+            font-weight: bold;
+        }
+
+        .restaurant-filters {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #ffe082;
+            background: transparent;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: #ffe082;
+            color: #333;
+        }
+
+        .filter-btn.active {
+            background: #ffe082;
+            color: #333;
+            border-color: #ffe082;
+            box-shadow: 0 0 10px rgba(255, 224, 130, 0.7);
+        }
+
+  .item-info a {
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .item-info a:hover {
+    color: #fee;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+
+
+
+        /* --- RESTORED HIDDEN-REVEAL SYSTEM --- */
+        .content-page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            width: 100%;
+        }
+        .content-page.active-page {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card-container {
+            flex-grow: 1;
+        }
+        .fade-in { opacity:0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
+        .fade-in.visible { opacity:1; transform: translateY(0); }
+
+        /* Footer Area Content*/
+        .tropical-footer {
+            background: linear-gradient(90deg, rgba(255,126,95,0.8), rgba(254,180,123,0.8), rgba(0,198,255,0.8), rgba(0,114,255,0.8));
+            backdrop-filter: blur(8px);
+            padding:0.4rem 2rem;
+            position:fixed;
+            bottom:0;
+            left:0;
+            right:0;
+            z-index:20;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap: wrap;
+        }
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+	    min-width: 27%;
+        }
+        .contact-info, .sitemap-links, .credits-list {
+            list-style: none;
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9em;
+	    min-width: 33%;
+        }
+
+        .contact-info a {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ffcc00;
+        }
+        .contact-info a i {
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .designer-info {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+
+        .center-footer {
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .sitemap-links a, .contact-info a, .footer-section a, .credits-list a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        .sitemap-links a:hover, .contact-info a:hover, .footer-section a:hover, .credits-list a:hover {
+            color: #ffcc00;
+            text-shadow: 0 0 12px rgba(0,0,0,0.8);
+        }
+
+        .contact-info {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sitemap-links li:not(:last-child)::after, .contact-info li:not(:last-child)::after {
+            content: none;
+        }
+
+        .card-horizontal {
+            position:relative;
+            display:flex;
+            width:100%;
+            height: 120px;
+            font-size:0.9rem;
+            cursor: default;
+            border: 3px solid #ffe082;
+            border-top: none;
+            border-radius: 10px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+        .card-horizontal:active {
+            cursor: default;
+        }
+        .weather-image {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            min-width: 70px;
+            position: relative;
+            overflow: hidden;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 0px;
+        }
+
+        .weather-image img.volcano-static-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            transform: none;
+            display: block;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+        .weather-image.volcano-active {
+            background-image: none !important;
+        }
+        .weather-image.volcano-active img.volcano-static-img {
+            opacity: 1;
+        }
+        .weather-normal-img {
+            background-image: url('images/weather.jpg');
+        }
+
+        .weather-content {
+            flex: 2;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(to right, rgba(0,0,0,0.65), rgba(0,0,0,0));
+        }
+
+        .weather-info-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0.5rem;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        /* UPDATED: Alert state styling */
+        .alert-active .weather-info-wrapper {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .alert-active #alert-content-wrapper {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* UPDATED: Fixed width and right alignment for labels to create column alignment */
+        .label {
+            color:#a0d8ff;
+            font-weight:bold;
+            margin-right:2px;
+            min-width: 50px; /* Fixed width to align colons */
+            text-align: right;
+            display: inline-block;
+        }
+        .number { color:#fff; font-weight:bold; }
+
+        #weather-info { font-weight: normal; }
+        
+        /* FIX: Style updates for main weather button text and horizontal rule */
+        .weather-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font-size: 1.2em; /* Adjusted font size */
+        }
+        
+        /* FIX: Corrected weather main data styles for a single line and smaller font */
+        .weather-main-data {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 1em; /* Smaller font size as requested */
+            color: #fff;
+            text-align: center;
+            line-height: 1.2;
+            gap: 5px;
+        }
+        
+        /* UPDATED: Smaller sunrise/sunset text as requested */
+        .weather-sun {
+            display: block;
+            font-size: 0.7em; /* Even smaller font size */
+            text-align: center;
+            width: 100%;
+            margin-top: 5px; /* Spacing from main data */
+            padding-top: 5px; /* Added padding for the horizontal rule effect */
+            border-top: 1px solid rgba(255, 255, 255, 0.2); /* The horizontal rule */
+        }
+        
+        /* FIX: The colors for the sunset/sunrise text */
+        .rusty-text {
+            color: #d76d21; /* Corrected to rusty orange */
+            text-shadow: 0 0 9px rgba(255, 255, 255, 0.5); /* Adjusted shadow for new color */
+        }
+        
+        .time-text {
+            color: #aaa; /* New class for the time, set to the requested grey */
+        }
+        
+        /* ADDED: Smooth transition for weather numbers and skies text */
+        .weather-main-data .number {
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* NEW: Smoother fade for skies with a longer duration */
+        /* UPDATED: Changed the transition to 3s as requested */
+        .weather-main-data span#skies {
+            transition: opacity 2s ease-in-out;
+        }
+
+        .moon-info {
+            display: block;
+            font-size: 0.8em;
+            padding-top: 8px;
+            margin-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subdued { color: #aaa; font-size: 0.9em; }
+
+
+        .major-updates-text {
+            color: #ffcc00;
+            text-shadow: 0 0 8px #ffcc00;
+            display: block;
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .status-dot-container {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .toggle-extension-btn i {
+            color: #ffcc00;
+            transition: transform 0.3s ease;
+        }
+
+        .american-flag-gradient {
+            background: linear-gradient(to right, #e70000 25%, #ffffff 50%, #002279 75%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 2px #fff, 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        /* UPDATED: Number styling - Darker, more blurry, less transparent */
+        .restaurant-number {
+            position: absolute;
+            bottom: 0;
+            right: 1rem;
+            transform: translateY(50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.5rem;
+            min-width: 2.2rem;
+            height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 2px solid #ffcc00;
+            text-shadow: 0 0 5px rgba(255, 224, 130, 0.7);
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* NEW: Scanner effect and updated alert card styling */
+        #alert-content-wrapper {
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* UPDATED: Changed the background to a dark cherry root beer gradient with transparency */
+        .alert-card.alert-bg-animation {
+            background: linear-gradient(135deg, rgba(74, 11, 14, 0.85), rgba(105, 17, 21, 0.85));
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* The scanner background itself */
+        .alert-card.alert-bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: scan-pulse 3s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes scan-pulse {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .alert-message-h2 {
+            color: #FF4545;
+            font-size: 1.23em;
+            margin-bottom: 0;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+            text-align: center;
+            margin-top: 0;
+            line-height: 1.3;
+        }
+        .alert-message {
+            color: #BCEFDA;
+            display: block;
+            font-size: 1.01em;
+            text-transform: none;
+            font-weight: normal;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        /* NEW: Small text at the bottom of the weather button */
+        .weather-credit {
+            font-size: 0.4em;
+            color: #888;
+            margin-top: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive Mobile Styles */
+        @media(max-width:768px) {
+            .tropical-header { flex-direction: column; align-items: center; padding:1.5rem 0; }
+            .header-left, .header-right, nav { width: 100%; }
+            .header-left { align-items: center; }
+            .header-right { justify-content: center; margin-top: 1rem; }
+            .weather-button { display: none; }
+            .logo-container img { width: 100px; }
+            .tagline { font-size: 1.2rem; margin-top: 65px; margin-left: 105px; }
+
+            nav { width:100%; margin-top:1rem; }
+            #nav-container { flex-direction: column; height: auto; }
+            .nav-links.show { max-height: 300px; }
+            .hamburger { display:flex; position:absolute; top:-2.5rem; right:1.5rem; }
+
+            .nav-button-container { width: 100%; text-align: center; }
+            .dropdown { position: static; transform: none; width: 100%; }
+            .dropdown-item { text-align: center; }
+
+            .card { flex-direction: column !important; }
+            .card-image { height: 200px; min-height: 0; width: 100%; }
+            .card-horizontal { flex-direction: column; width: 95%; font-size: 0.75rem; }
+            .weather-image { min-width: 60px; min-height: 60px; }
+            .weather-content { padding: 0.3rem; }
+            .tropical-footer {
+                flex-direction: column;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                height: auto;
+            }
+            .footer-section { padding: 0.5rem; }
+
+            .card-extension {
+                max-height: none !important;
+                padding: 2rem !important;
+                display: block !important;
+                overflow: visible !important;
+            }
+            .toggle-extension-btn { display: none !important; }
+
+            .cuisine-list { grid-template-columns: 1fr; }
+            .cuisine-list li:first-child { grid-column: 1 / 1; padding-top: 1rem; }
+            .featured-banner { left: 50%; transform: translate(-50%, -50%); }
+        }
+    
+@media (max-width: 768px) {
+  .logo-container img { max-height: 140px !important; }
+  footer, .footer, #footer { font-size: 0.8rem !important; padding: 0.5rem !important; }
+}
+</style>
+<!--tip section-->
+<!-- Set default font to Inter -->
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        /* Custom text shadow for better contrast on colored background */
+        .text-contrast-shadow {
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Vertical Ticker Specific CSS --- */
+
+        .ticker-fact {
+            /* Adjust transition duration if needed */
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        /* State for the currently visible fact */
+        .ticker-fact.active {
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        /* State for the fact that is exiting (moves up) */
+        .ticker-fact.exiting {
+            opacity: 0;
+            transform: translateY(-100%);
+            z-index: 5;
+        }
+
+        /* State for the fact entering from the bottom */
+        .ticker-fact.entering {
+             opacity: 0;
+             transform: translateY(100%);
+             z-index: 5;
+        }
+    </style>
+<!--tip section end-->
+<style>
+/* Mobile-friendly overrides */
+@media (max-width: 768px) {
+  .dashboard, .card-container, .content-pages {
+    display: block !important;
+    grid-template-columns: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    gap: 1rem !important;
+  }
+  .card, .card-section, .card.reverse {
+    flex-direction: column !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto !important;
+  }
+  .card-image {
+    aspect-ratio: 16/9 !important;
+    min-height: 160px !important;
+    width: 100% !important;
+    background-size: cover !important;
+  }
+  .card-content { padding: 1rem !important; }
+  .card-content h2 { font-size: 1.25rem !important; }
+  .card-content p { font-size: 0.95rem !important; }
+  .card-extension { padding: 1rem !important; max-height: none !important; overflow: visible !important; }
+
+
+  #nav-container, .nav-button-container, .nav-button {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .nav-button { justify-content: center !important; padding: 0.6rem 0.9rem !important; }
+  .dropdown { position: static !important; width: 100% !important; opacity: 1 !important; max-height: none !important; pointer-events: auto !important; }
+  .weather-button { display: none !important; }
+  .header-right { margin-top: 0.5rem !important; }
+  .tropical-footer { flex-direction: column !important; gap: 0.5rem !important; padding: 0.5rem 1rem !important; }
+}
+@media (max-width: 480px) {
+  .logo-container img { width: 70px !important; }
+  .tagline { font-size: 1rem !important; white-space: normal !important; }
+  .card-content h2 { font-size: 1.05rem !important; }
+  .card-content p { font-size: 0.9rem !important; }
+  .cuisine-list { grid-template-columns: 1fr !important; }
+  .featured-banner { left: 50% !important; transform: translate(-50%, -50%) !important; }
+}
+#nav-container.mobile-open { display: block !important; }
+#nav-container.mobile-open .dropdown { position: static !important; opacity: 1 !important; max-height: none !important; }
+.dropdown .dropdown-item { width: 100% !important; box-sizing: border-box !important; padding-left: 1rem !important; padding-right: 1rem !important; }
+</style>
+<style>
+@media (max-width: 600px) {
+  .tropical-header {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.5rem 1rem !important;
+  }
+  .logo, .logo-container, .logo-container img {
+    font-size: 1.2rem !important;
+    margin: 0 !important;
+    max-height: 40px !important;
+  }
+  .nav-links {
+    display: none !important; /* hide full nav on mobile */
+  }
+  #hamburger {
+    display: block !important; /* show hamburger icon only */
+  }
+  .tropical-footer {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.8rem !important;
+    flex-direction: column !important;
+    gap: 0.3rem !important;
+  }
+  main.dashboard {
+    margin-top: 1rem !important; /* add breathing room under header */
+  }
+}
+</style>
+<style>
+/* Hamburger base */
+#hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+}
+#hamburger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+/* Animate to X */
+#hamburger.is-active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+#hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+#hamburger.is-active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile dropdown nav panel */
+@media (max-width: 600px) {
+  #nav-container {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 1rem 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  #nav-container.mobile-open {
+    display: flex !important;
+  }
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  .nav-links a {
+    font-size: 1.1rem;
+    color: #fff;
+  }
+}
+</style>
+<style>
+@media (max-width: 600px) {
+  .weather-button, .weather-alert, .weather-capsule {
+    display: none !important;
+  }
+  #nav-container {
+    display: block;
+    width: 100% !important;
+    left: 0 !important;
+    position: absolute !important;
+    top: 100% !important;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+  }
+  #nav-container.mobile-open {
+    max-height: 500px;
+  }
+  .nav-links {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    padding: 1rem 0 !important;
+  }
+  .nav-links a {
+    font-size: 1.1rem !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+.mini-weather-badge {
+  display: none;
+}
+@media (max-width: 600px) {
+  .mini-weather-badge {
+    display: inline-block;
+    background: rgba(247,227,213,0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(9px);
+    border-radius: 12px;
+    padding: 0.25rem 0.6rem;
+    font-size: 1.2rem;
+    color: #fec;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    cursor: pointer;
+    position: absolute !important;
+    top: 8px;
+    right: 12px;
+    width: auto;
+    max-width: 40%;
+  }
+}
+.weather-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.weather-modal.show {
+  display: flex;
+  opacity: 1;
+}
+.weather-modal-content {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #fff;
+  max-width: 300px;
+  text-align: center;
+  position: relative;
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.35s ease;
+}
+.weather-modal.show .weather-modal-content {
+  transform: translateY(0) scale(1);
+}
+.weather-modal .close-btn {
+  position: absolute;
+  top: 0.5rem; right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+</style>
+<style>
+.modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000; }
+.modal-content { background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); padding:1rem; border-radius:12px; width:95%; max-width:425px; position:relative; }
+.close-btn { position:absolute; top:10px; right:15px; background:none; border:none; font-size:1.5rem; cursor:pointer; }
+</style>
+<style>
+/* Prominent booking CTA in card */
+.booking-main {
+  display: block;
+  width: 69%;
+  max-width: 345px;
+  margin: 0.5rem auto 0.75rem;
+  padding: 0.7rem 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #04212a;
+  background: linear-gradient(90deg, #34e8b0 0%, #1fb2ff 100%);
+  border: none;
+  border-radius: 12px 1px 12px 1px; /* Changed from 50px */
+  box-shadow: 0 8px 28px rgba(16,94,97,0.18), inset 0 -2px 0 rgba(255,255,255,0.12);
+  cursor: pointer;
+  text-align:center;
+}
+
+.booking-main:hover {
+  background: rgba(0, 0, 0, 0.4);
+  background: linear-gradient(90deg, #1fb2ff 0%, #34e8b0 100%);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+
+/* Ensure toggle button remains visible */
+.toggle-extension-btn { display: block; margin-top: 0.13rem; }
+
+/* Make sure card-content flows correctly after insertion */
+.card-content { position: relative; z-index: 2; }
+
+:root{
+  --phone-w:425px; --phone-h:524px; --accent:#d76d21; --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+  --notif-tone: rgba(0,0,0,0.37);
+  --blue-msg:#B9D9EA; /* previously 3a99ff*/
+  --green-msg:#dff7dc;
+  --sms-bg:#34c759;
+  --bar-yes:#34c759;
+  --bar-no:#ff3b30;
+  --bar-maybe:#ffd54f;
+  --dark-capsule: rgba(0,0,0,0.37);
+}
+*{box-sizing:border-box}
+
+.wrap{min-height:100%;display:flex;justify-content:center;align-items:flex-start;padding:0px}
+.controls{position:fixed;top:18px;left:18px;display:flex;gap:8px;align-items:center;z-index:9999}
+.btn{background:#fff;border-radius:8px;padding:8px 12px;border:0;cursor:pointer;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.note{color:#fff;font-weight:600;margin-left:8px}
+
+/* phone shell */
+.phone{width:var(--phone-w);height:var(--phone-h);border:12px solid var(--accent);border-radius:34px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.7);background:#fff;position:relative}
+.notch{position:absolute;left:50%;top:-10px;transform:translateX(-50%);width:72px;height:8px;background:#222;border-radius:6px;z-index:20}
+.status{height:34px;background:#f7f7f9;border-bottom:1px solid rgba(0,0,0,.04);display:flex;align-items:center;justify-content:space-between;padding:0 10px;font-weight:600;font-size:13px;z-index:20}
+.status .right{display:flex;gap:8px;align-items:center}
+.viewport{flex:1;position:relative;display:flex;align-items:stretch;justify-content:center}
+.wallpaper{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.92);z-index:0}
+
+/* lock layer */
+.lock-layer{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;color:#fff;z-index:1}
+.lock-overlay{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+
+/* volume area above time/date */
+.volume-area{margin-top:12px;width:88%;display:flex;align-items:center;gap:8px;justify-content:center;z-index:25}
+.volume-capsule{background:var(--dark-capsule);backdrop-filter:blur(6px);border-radius:12px;padding:8px 12px;display:flex;gap:8px;align-items:center}
+.volume-slider{appearance:none;height:8px;width:110px;background:rgba(255,255,255,0.06);border-radius:5px;cursor:pointer}
+.volume-slider::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+.mute-btn{background:transparent;border:1px solid rgba(255,255,255,.12);padding:6px 8px;border-radius:8px;color:#fff;cursor:pointer}
+.vol-indicator{width:72px;height:10px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;position:relative}
+.vol-fill{height:100%;background:var(--bar-yes);width:100%;transition:width .13s linear}
+.vol-percent{color:#fff;font-weight:700;font-size:12px;min-width:37px;text-align:center}
+
+/* clock & date */
+.bigclock{margin-top:8px;font-size:45px;font-weight:700;text-shadow:0 7px 18px rgba(0,0,0,.5)}
+.date-line{font-size:13px;color:rgba(255,255,255,.92);margin-bottom:7px}
+
+/* notif area & stack (below time) */
+.notif-area{width:100%;display:flex;align-items:center;flex-direction:column}
+.notif-stack{width:92%;margin-top:6px;display:flex;flex-direction:column;gap:10px;align-items:stretch;pointer-events:none}
+
+/* lock-notif bubble */
+.lock-notif{
+  display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;color:#fff;background:var(--notif-tone);
+  backdrop-filter:blur(10px);box-shadow:0 8px 23px rgba(0,0,0,.45);opacity:0;transform:translateY(-21px);
+  transition:all .45s cubic-bezier(.2,.9,.2,1);
+  pointer-events:auto;
+}
+.lock-notif.show{opacity:1;transform:translateY(0)}
+.lock-notif .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#444;font-weight:700;flex-shrink:0}
+.lock-notif .content{display:flex;flex-direction:column}
+.lock-notif .title{font-weight:700;font-size:16px}
+.lock-notif .preview{font-size:16px;opacity:.95}
+
+/* chat overlay */
+.chat-overlay{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .35s ease}
+.chat-overlay.visible{opacity:1;pointer-events:auto}
+.chat-header{color:#fe2127;height:56px;background:linear-gradient(#fff,#fbfbfd);display:flex;align-items:center;gap:12px;padding:10px;border-bottom:1px solid #e6e6ea}
+.chat-header .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#ccc;font-weight:700}
+.chat-body{flex:1;background:linear-gradient(#f8fbff,#fff);padding:12px;overflow:auto;display:flex;flex-direction:column}
+.chat-footer{height:64px;border-top:1px solid #eee;display:flex;align-items:center;padding:0 12px;background:#fff}
+
+/* messages */
+.msg-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:12px;max-width:100%}
+.msg-row.me{justify-content:flex-end}
+.msg-avatar{width:37px;height:37px;border-radius:50%;background:#999;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex-shrink:0}
+.msg-bubble{max-width:70%;padding:10px 14px;border-radius:18px;font-size:17px;line-height:1.35;overflow:hidden;word-wrap:break-word}
+.msg-bubble.them{background:#d0dade;color:#000;border-bottom-left-radius:6px}
+.msg-bubble.me{background:var(--blue-msg);color:#000;border-bottom-right-radius:5px}
+.msg-bubble.easter{background:var(--green-msg);color:#fff;border-bottom-right-radius:5px}
+.msg-bubble.sms{background:var(--sms-bg);color:#212731;border-bottom-right-radius:5px}
+.msg-name{font-size:13px;font-weight:700;margin-bottom:6px;color:#222}
+.typing{display:inline-flex;padding:8px 12px;border-radius:18px;background:#f0f0f2;align-items:center;gap:6px}
+.typing .dot{width:6px;height:6px;border-radius:50%;background:#7b7b7b;animation:blink 1.4s infinite}
+.typing .dot:nth-child(1){animation-delay:0s}
+.typing .dot:nth-child(2){animation-delay:.15s}
+.typing .dot:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.photo-wrap{border-radius:12px;overflow:hidden;max-width:220px;flex-shrink:0}
+.photo{display:block;width:100%;height:140px;object-fit:cover;border-radius:0}
+.msg-time{font-size:10px;margin-top:5px}
+.read-receipt{font-size:10px;color:#777;margin-top:5px;text-align:right}
+
+/* frosted inline poll result (vertical bars) */
+.frosted-inline{width:92%;padding:12px;border-radius:12px;background:var(--notif-tone);backdrop-filter:blur(10px);box-shadow:0 8px 22px rgba(0,0,0,.45);z-index:40;color:#fff;display:flex;gap:12px;align-items:flex-end;justify-content:space-between;opacity:0;transform:translateY(-8px);transition:opacity .35s, transform .35s}
+.frosted-inline.show{opacity:1;transform:translateY(0)}
+.vertical-bars{display:flex;gap:12px;align-items:flex-end;justify-content:center;width:59%}
+.vbar{width:27%;display:flex;flex-direction:column;align-items:center;gap:6px}
+.vbar .bar{width:44px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;height:120px}
+.vbar .fill{width:100%;background:#444;height:0;transition:height 900ms cubic-bezier(.2,.9,.2,1)}
+.vbar .label{font-size:12px;color:rgba(255,255,255,0.9);margin-top:6px}
+.vbar .pct{font-weight:700;font-size:13px;color:#fff;margin-bottom:6px}
+
+/* colors for bars */
+.fill.yes{background:var(--bar-yes)}
+.fill.no{background:var(--bar-no)}
+.fill.maybe{background:var(--bar-maybe)}
+
+/* glow & animations */
+@keyframes glow { 0% { box-shadow: 0 0 0 rgba(0,0,0,0); } 50% { box-shadow: 0 8px 30px rgba(52,199,89,0.14);} 100% { box-shadow: 0 0 0 rgba(0,0,0,0); } }
+.poll-glow { animation: glow 1.6s ease-in-out; }
+
+/* poll & call buttons animation */
+.poll-actions button, .call-btn{transition:transform .12s ease, box-shadow .12s ease}
+.poll-actions button:hover, .call-btn:hover{transform:scale(1.06);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.poll-actions button:active, .call-btn:active{transform:scale(.98)}
+
+/* call overlay near bottom */
+.call-overlay{position:absolute;left:50%;transform:translateX(-50%);bottom:54px;width:92%;background:var(--notif-tone);backdrop-filter:blur(10px);padding:12px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:60;color:#fff;opacity:0;transition:opacity .25s}
+.call-overlay.show{opacity:1}
+.call-title{font-size:21px;font-weight:700;margin-bottom:6px}
+
+/* battery low indicator */
+.battery-low{color:#ff3b30;animation: pulse 1.2s infinite}
+@keyframes pulse{0%{text-shadow:0 0 0 rgba(255,59,48,0)}50%{text-shadow:0 6px 18px rgba(255,59,48,0.18)}100%{text-shadow:0 0 0 rgba(255,59,48,0)}}
+
+/* helpers */
+.hidden{display:none}
+.center{display:flex;align-items:center;justify-content:center}
+
+<!--Test Drawer Nav-->
+
+.drawer-nav {
+  display: flex;
+  flex-direction: column;
+  width: 200px;             /* expanded width */
+  transition: width 0.7s ease;
+  background: #222;
+  color: white;
+  overflow: hidden;
+  border-radius: 3px 1px;
+}
+
+.drawer-nav ul {
+  list-style: none;
+  padding: 1;
+  margin: 2;
+}
+
+.drawer-nav li {
+  display: flex;
+  align-items: center;
+  padding: 0px;
+}
+
+.drawer-nav a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+.drawer-nav .navicon {
+  margin-right: 1px;
+  flex-shrink: 0;
+}
+
+.drawer-nav.collapsed {
+  width: 60px;  /* only enough for icons */
+}
+
+.fixed-left-nav.collapsed {
+  width: 60px;  /* only enough for icons */
+}
+.drawer-nav.collapsed .navlabel {
+  display: none; /* hide text labels when collapsed */
+}
+
+/* Optional: hover effect still works */
+.drawer-nav li:hover {
+  background: #444;
+}
+
+/* Toggle button styling */
+.toggle-btn {
+  background: #0077ac;
+  color: white;
+  border: 1px solid #acbde1;
+  cursor: pointer;
+  padding: 5px;
+  width: 95%;
+  margin-left:13px;
+}
+
+
+<!--End of Test-->
+
+<!-- CSS TEST BOOKING MODAL-->
+
+/* Modal background */
+.modal {
+  display: none; /* hidden initially */
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 85%;
+  background: rgba(0,0,0,0.1);
+}
+
+/* Modal content box */
+.modal-content {
+  position: relative;
+  margin: 1% auto;
+  width: 100% !important;
+  max-width: 57% !important;
+  height: 85%;
+  background: rgba(0,0,0,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;            /* Chrome, Safari */
+}
+
+/* Close button */
+.modal-content .close {
+  position: absolute;
+
+  top: 10px; right: 15px;
+  font-size: 27px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Iframe fills modal */
+#ctaIframe {
+  flex: 1;
+  width: 99%;
+  border: none;
+}
+
+#ctaIframe {
+  overflow-y: scroll;
+  scrollbar-width: none;    
+  -ms-overflow-style: none;
+}
+
+#ctaIframe::-webkit-scrollbar {
+  display: none;
+}
+
+<!-- END CSS TEST BOOKING MODAL-->
+
+</style>
+<style data-mobile-rescue="1">
+/* MOBILE RESCUE PATCH - safe non-destructive overrides (mobile-first) */
+@media (max-width: 768px) {
+  /* Logo full-width banner */
+  .logo-container, .site-logo { width: 100% !important; display: block !important; text-align: center !important; padding: 0 !important; margin: 0 !important; }
+  .logo-container img, .site-logo img { width: 100% !important; max-height: none !important; height: auto !important; object-fit: contain !important; }
+
+  /* Hide left nav, right nav, weather, alerts on mobile */
+  #nav-container, .drawer-nav, .fixed-left-nav, .fixed-right-panel, .weather-button, #weather-dropdown, .weather-dropdown, .weather-card, .alert-card, .alert-container, .alert-banner { display: none !important; }
+
+  /* Ensure header stacks as banner above */
+  .tropical-header { flex-direction: column !important; align-items: center !important; gap: 0.25rem !important; padding: 0.6rem 0.8rem !important; }
+
+  /* Move 'tips' (if present) below logo */
+  .tips, .tips-and-info, .tips-block { display: block !important; width: 100% !important; margin-top: 0.5rem !important; }
+
+  /* Main content: show one content page at a time (swipe) */
+  .content-page { display: none !important; }
+  .content-page.active-page { display: block !important; }
+
+  /* Prevent layout overflow */
+  html, body { overflow-x: hidden !important; }
+}
+</style>
+<style data-mobile-extra="1">
+/* === Mobile Tweaks: Logo, Footer, Swipe Hints === */
+@media (max-width: 768px) {
+  /* Logo smaller */
+  .logo-container img { max-height: 120px !important; }
+
+  #tip-app {
+    margin: 0 !important;    /* center horizontally */
+    max-width: 99% !important;    /* allow breathing room */
+    width: 99% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    position: relative !important;
+  }
+
+  .footer-drawer { 
+    height: auto !important;
+    overflow: hidden;
+  }
+  .footer-rotator-section {
+    display: none;
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 0.75rem;
+  }
+  .footer-rotator-section.active {
+    display: block;
+    animation: fadeIn 1s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .tips, .tips-and-info, .tips-block {
+    text-align: center !important;
+    margin: 0.5rem auto !important;
+    max-width: 90% !important;
+  }
+
+  .modal-content {
+    width: 95% !important;
+    max-width: none !important;
+    height: 90% !important;
+  }
+  #ctaIframe {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+
+/* Swipe hint styling */
+.swipe-hint {
+  position: fixed;
+  top: 45%;
+  transform: translateY(-50%);
+  font-size: 2.1rem;
+  color: rgba(247,227,159,0.9); /* brighter */
+  background: rgba(0,0,0,0.72);      /* dark pill behind arrow */
+  z-index: 2001;
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+  height: 28%;
+}
+
+.swipe-hint-text {
+  position: fixed;
+  top: 60%;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.9);
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.swipe-hint.left { left: 12px; }
+.swipe-hint.right { right: 12px; }
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+</style>
+<style id="mobile-tips-fix">
+@media (max-width: 768px) {
+  /* Break header layout so tips can sit full-width below logo */
+  .tropical-header, .tropical-header .header-inner, .header-left, .header-right {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    overflow: visible !important;
+  }
+
+  /* Generic tips selectors; apply full-width and center */
+  .tips, .tips-and-info, .tips-block, .tickerViewport, .tips-container {
+    order: 2 !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    margin: 8px auto !important;
+    position: relative !important;
+    z-index: 2001 !important;
+    white-space: normal !important;
+  }
+
+  /* if tips are inside a clipped container, ensure it becomes visible */
+  .tropical-header, .header-left, .header-right { overflow: visible !important; }
+}
+
+@media (min-width: 769px) {
+  .swipe-hint,
+  .swipe-hint-text {
+    display: none !important;
+  }
+</style>
+</head>
+<body>
+<header class="tropical-header">
+<div class="header-left">
+<a aria-label="Taniti home" class="logo-container" href="index.html">
+<img alt="Taniti logo" src="images/taniti-logo.png"/>
+</a>
+<span class="tagline">you know you want to...</span>
+</div>
+<!-- Main Container (REDUCED: Now max-w-xl, approximately 576px wide) -->
+<div class="mr-auto ml-16 w-full max-w-xl bg-black/70 backdrop-blur-md shadow-lg rounded-xl p-2 border border-white/50" id="tip-app">
+<!-- INCREASED HEADER TEXT SIZE to text-xs -->
+<p class="text-xs font-bold text-yellow-100 mb-1">Taniti Travel Tips</p>
+<!-- Search Input (text-sm for better legibility) -->
+<div class="mb-2 relative">
+<input class="w-full text-sm text-gray-900 p-1.5 pl-7 border border-gray-200 rounded-md focus:outline-none focus:border-cyan-500 transition duration-150 bg-white/95" id="search-input" placeholder="Search facts..." type="text"/>
+<svg class="absolute left-1.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<!-- Ticker Viewport (h-9) -->
+<div class="relative h-9 rounded-lg bg-cyan-600 border border-cyan-200 overflow-hidden" id="ticker-viewport">
+<!-- Facts will be dynamically injected here -->
+<div class="relative w-full h-full" id="fact-container">
+<!-- Fact elements go here -->
+</div>
+</div>
+<!-- No Results Message -->
+<div class="hidden text-center py-3 text-gray-500" id="no-results-message">
+<p class="text-xs">No facts match your search.</p>
+</div>
+</div>
+<div class="header-right">
+<!--<div class="weather-li">
+                <button id="weather-button" class="weather-button" aria-haspopup="true" aria-expanded="false">
+                    <div class="status-dot-container">
+                        <span id="weather-status-dot-ok" class="status-dot weather-dot-ok"></span>
+                        <span id="weather-status-dot-alert" class="status-dot weather-dot-alert"></span>
+                    </div>
+                    <div id="weather-main" class="weather-main">
+                        <!-- Main weather info, each on its own line --*
+                        <span class="weather-main-data">
+                            <!-- UPDATED: Added a consistent label container for vertical alignment --*
+                            <span class="label-container"><span class="label">Temp:</span></span>
+                            <span id="temp" class="number">75</span>°F
+                        </span>
+                        <span class="weather-main-data">
+                            <span class="label-container"><span class="label">Skies:</span></span>
+                            <span id="skies">Sunny</span> <span id="sky-emoji">☀️</span>
+                        </span>
+                        <!-- Smaller sunrise/sunset info --*
+                        <span class="weather-sun">
+                            <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:25 AM</span> |
+                            <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:11 PM</span>
+                        </span>
+                        <!-- NEW: Secretive text at the bottom --*
+                        <span class="weather-credit">weather data by NeverWrong Weathermen Service™</span>
+                    </div>
+                </button>
+                <!-- UPDATED: Re-structured weather dropdown for two stacked cards --*
+                <div id="weather-dropdown" class="weather-dropdown" role="dialog" aria-hidden="true">
+
+                    <div id="weather-info-card" class="weather-card">
+                         <div id="weather-info-wrapper">
+			<!-- 3 Day Weather BELOW
+                            <h3 style="margin-top: 1.5em; font-size: 1.2em; text-align: center;">3-Day Forecast</h3>
+			<div class="forecast-grid">
+			    <div class="forecast-day">
+			        <h3>Today</h3>
+		        	<i class="fa-solid fa-cloud-sun-rain"></i>
+			        <p>Showers</p>
+			        <p>75°F / 69°F</p>
+			    </div>
+			    <div class="forecast-day">
+			        <h3>Tomorrow</h3>
+			        <i class="fa-solid fa-cloud-sun"></i>
+		        	<p>Partly Cloudy</p>
+			        <p>76°F / 71°F</p>
+			    </div>
+			    <div class="forecast-day">
+		        	<h3>Sunday</h3>
+			        <i class="fa-solid fa-sun"></i>
+				        <p>Showers</p>
+			        <p>68°C / 63°F</p>
+			    </div>
+			</div>
+			 <!--3 Day Weather ABOVE--*
+                            <!-- REPLACE weather content--*
+                            <p id="weather-info">
+                                <span class="label">Temperature:</span> <span id="temp-detail" class="number">75</span>°F<br>
+                                <span class="label">Wind:</span> <span id="wind" class="number">10</span> mph<br>
+                                <span class="label">Humidity:</span> <span id="humidity" class="number">50</span>%<br>
+                                <span class="label">Skies:</span> <span id="skies-detail">Sunny</span> <span id="sky-emoji-detail">☀️</span>
+                            </p>
+                            <!--end REPLACE weather content--*
+                            <div class="moon-info">
+                                <span class="subdued"><i class="fas fa-moon rusty-text"></i> Moon Phase:</span>
+                                <span id="moon-phase" class="time-text">Full Moon</span><br>
+                                <span class="subdued">Illumination:</span>
+                                <span id="moon-illumination" class="time-text">100%</span>
+                            </div><!-- end moon info-->
+</div><!-- end weather info wrapper --*
+                    </div><!-- end weather info card --*
+                    <div id="alert-card" class="weather-card alert-card" style="display:none;">
+                        <!-- NEW: Moved scanner effect to the alert card --*
+                        <div id="alert-content-wrapper">
+                            <h2 id="alert-title" class="alert-message-h2">Volcano Alert!</h2>
+                            <p id="alert-message" class="alert-message">All island residents and visitors must follow emergency evacuation protocol.</p>
+                            <span class="major-updates-text">>>> MAJOR UPDATES <<<</span>
+                        </div>
+                    </div>                    
+                </div><!-- end weather dropdown --*
+            </div>-->
+<span class="mini-weather-badge" onclick="toggleWeatherModal()">81°F ☀</span>
+<div class="weather-modal" id="weather-modal">
+<div class="weather-modal-content">
+<button class="close-btn" onclick="toggleWeatherModal()">✕</button>
+<h2>Weather in Taniti</h2>
+<p>81°F, Sunny</p>
+<p>Sunrise: 6:12 AM | Sunset: 7:45 PM</p>
+<p>Alerts: None</p>
+</div>
+</div>
+</header>
+<!-- NEW NAV-->
+<!-- Fixed left navigation -->
+<div class="drawer-nav">
+<nav class="drawer-nav">
+<div class="fixed-left-nav">
+<button class="toggle-btn">☰</button>
+<!-- Attractions -->
+<ul class="nav-links">
+<li><a class="nav-link" data-target="beaches" href="#beaches">
+<span class="navicon"><i class="fas fa-house"></i></span>
+<span class="navlabel"> Home</span></a></li>
+</ul>
+<span class="navlabel">
+<div class="nav-category">
+<!--<i class="fas fa-anchor" style="font-size:1.2em; margin-right:8px;"></i>--> 🌴🏖️ <span class="neon"> Island Attractions</span> 🏖️🌴
+    </div>
+</span>
+<ul class="nav-links">
+<li><a class="nav-link" data-target="peaches" href="#peaches">
+<span class="navicon"><i class="fas fa-umbrella-beach"></i></span>
+<span class="navlabel"> Beaches</span></a></li>
+<li><a class="nav-link" data-target="mountains" href="#mountains">
+<span class="navicon"><i class="fas fa-mountain"></i></span>
+<span class="navlabel"> Adventures</span></a></li>
+<li><a class="nav-link" data-target="entertainment" href="#entertainment">
+<span class="navicon"><i class="fas fa-cocktail"></i></span>
+<span class="navlabel"> Entertainment</span></a></li>
+</ul>
+<!-- Dining & Shopping -->
+<span class="navlabel">
+<div class="nav-category">
+<!--<i class="fas fa-fish" style="font-size:1.2em; margin-right:8px;"></i>-->🌮🍺<span class="neon">Dining &amp; Shopping</span>🍕🍝
+    </div>
+</span>
+<ul class="nav-links">
+<li><a class="nav-link" data-target="cuisine" href="#">
+<span class="navicon"><i class="fas fa-utensils"></i></span>
+<span class="navlabel"> Cuisine</span></a></li>
+<li><a class="nav-link" data-target="markets" href="#markets">
+<span class="navicon"><i class="fas fa-shopping-basket"></i></span>
+<span class="navlabel"> Markets</span></a></li>
+</ul>
+<!-- Services -->
+<span class="navlabel">
+<div class="nav-category">
+<!--<i class="fas fa-taxi" style="font-size:1.2em; margin-right:8px;"></i>-->  🛬 🚕 <span class="neon">Tourist Services</span> 🚴🛏️
+    </div>
+</span>
+<ul class="nav-links">
+<li><a class="nav-link" data-target="lodging" href="#">
+<span class="navicon"><i class="fas fa-hotel"></i></span>
+<span class="navlabel"> Lodging</span></a></li>
+<li><a class="nav-link" data-target="transportation" href="#transportation">
+<span class="navicon"><i class="fas fa-bus"></i></span>
+<span class="navlabel"> Transportation</span></a></li>
+</ul>
+</div>
+</nav>
+</div>
+<!--END NEW NAV-->
+<div class="content-wrapper">
+<main class="card-container content-pages">
+<section class="card-section content-page active-page" id="beaches">
+<div class="wrap">
+<div class="phone" id="phone">
+<div class="notch"></div>
+<div class="status">
+<div class="left"><span id="timeTop" style="color:#321123">--:--</span></div>
+<div class="right"><span>📶</span><span id="battery" style="color:#321123">🔋 100%</span></div>
+</div>
+<div class="viewport">
+<div class="wallpaper" id="wallpaper"></div>
+<div class="lock-layer" id="lockLayer">
+<div class="lock-overlay">
+<!-- Volume area above time/date -->
+<div aria-hidden="false" class="volume-area">
+<div aria-label="Volume controls" class="volume-capsule" role="group">
+<input aria-label="Volume" class="volume-slider" id="volSlider" max="1" min="0" step="0.01" type="range" value="0.25"/>
+<button aria-pressed="false" class="mute-btn" id="muteBtn">Mute</button>
+<div aria-hidden="true" class="vol-indicator"><div class="vol-fill" id="volFill" style="width:25%"></div></div>
+<div class="vol-percent" id="volPercentLabel">25🔊</div>
+</div>
+</div>
+<div class="bigclock" id="bigClock">--:--</div>
+<div class="date-line" id="bigDate">--</div>
+<div class="notif-area">
+<div aria-live="polite" class="notif-stack" id="notifStack"></div>
+<!-- Poll results inline will be prepended to notifStack -->
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="chat-overlay" id="chatOverlay">
+<div class="chat-header">
+<div class="avatar" id="chatHeaderAvatar">E</div>
+<div style="display:flex;flex-direction:column;">
+<div id="chatHeaderName" style="font-weight:700">Emily D.</div>
+<div id="chatHeaderSub" style="font-size:12px;color:#555">myPhone</div>
+</div>
+</div>
+<div class="chat-body" id="chatBody"></div>
+<div class="chat-footer"><div style="color:#999">— based on <i>*real</i> visitor reviews —</div></div>
+</div>
+<div aria-hidden="true" class="call-overlay" id="callOverlay">
+<div class="call-title" id="callTitle">🏖️🌴 Your Vacation 🌴🏖️</div>
+<div id="callSubtitle" style="font-size:16px;color:rgba(255,255,255,0.95);margin-bottom:8px">is calling…</div>
+<div class="call-buttons">
+<button aria-label="Answer" class="call-btn call-accept" id="acceptBtn" data-src="book.html" style="background:#34c759;color:#fff;padding:8px 12px;border-radius:8px;border:0;margin-right:8px">Answer</button>
+<button aria-label="Decline" class="call-btn call-decline" id="declineBtn" style="background:#ff3b30;color:#fff;padding:8px 12px;border-radius:8px;border:0">Decline</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- keep these local -->
+<audio id="ping" preload="auto" src="ping.m4a"></audio>
+<audio id="ring" loop="" preload="auto" src="ring.mp3"></audio>
+</section>
+<section class="card-section content-page" id="peaches">
+<div class="card reverse">
+<div class="card-image beaches-img"></div>
+<div class="card-content">
+<h2>Pristine Beaches</h2>
+<p>Relax on beautiful beaches with clear waters and white sand.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">Your Holiday Awaits</button>
+<button class="toggle-extension-btn">
+                            Discover Our Beaches <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<p class="vegan-legend">** Surfing lessons available <span>🏄</span>**  </p>
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="Sandy">Sandy</button>
+<button class="filter-btn" data-filter="Rocky">Rocky</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="Rocky">
+<span class="restaurant-number"></span>
+<h3> Paradise Palms</h3>
+<span class="restaurant-category">Early Bird's Dream</span>
+<p>An unobstructed beachfront spot known for its local hospitality, sparse crowds, and quiet atmosphere.</p>
+</li>
+<li class="cuisine-item" data-category="Sandy">
+<span class="restaurant-number"></span>
+<h3> Emerald Shore</h3>
+<span class="restaurant-category">Tree-Lined Hideaway</span>
+<p>A vibrant, rainforest-adjacent swimmer's paradise! Nightly live music and chill vibes. Open 24/7/365</p>
+</li>
+<li class="cuisine-item" data-category="Rocky">
+<span class="restaurant-number"></span>
+<h3> Sunset Lagoon</h3>
+<span class="restaurant-category">Seductive Hotspot</span>
+<p>The go-to spot for the young, energetic crowd. The vibes never waver, drinks are on-point and with live music shows the party's just gettin' started.</p>
+</li>
+<li class="cuisine-item" data-category="Rocky">
+<span class="restaurant-number"></span>
+<h3> Volcano's Edge</h3>
+<span class="restaurant-category">Adventure Lover's</span>
+<p>Breathtaking views and unique terrain make this beach the perfect locale for special occasions. Concomitant Steak-House restaurant nearby.</p>
+</li>
+<li class="cuisine-item" data-category="Rocky">
+<span class="restaurant-number"></span>
+<h3> Coral Crag</h3>
+<span class="restaurant-category">Secluded Spectacle</span>
+<p>Fishing, hiking, and trinket shopping - the Coral Crag has it all. Local crafts created on the spot make this location worth the effort.</p>
+</li>
+<li class="cuisine-item" data-category="Sandy">
+<span class="restaurant-number"></span>
+<h3> Pearl's Shell</h3>
+<span class="restaurant-category">Traditional Sands</span>
+<p>Enjoy a classic picturesque view with a Tanitian sunny backdrop. Known for their family-focused fun in the sun activities.</p>
+</li>
+<li class="cuisine-item" data-category="Sandy">
+<span class="restaurant-number"></span>
+<h3> Waveform</h3>
+<span class="restaurant-category">Native Secret</span>
+<p>Only one way to find out! Come on over and see us... **Closed During Holidays**</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="card-section content-page" id="cuisine">
+<div class="card">
+<div class="card-image cuisine-img"></div>
+<div class="card-content">
+<h2>Local Cuisine</h2>
+<p>Experience the unique flavors of Taniti's local cuisine.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">Taste Island Life</button>
+<button class="toggle-extension-btn">
+                            Savor Local Flavors <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<p class="vegan-legend">**Vegan options available <span>🌱</span>**</p>
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="Pan-Asian">Pan-Asian</button>
+<button class="filter-btn" data-filter="American-Style">American-Style</button>
+<button class="filter-btn" data-filter="Taniti-Style">Taniti-Style</button>
+<button class="filter-btn" data-filter="Vegan">Vegan</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="American-Style">
+<span class="restaurant-number"></span>
+<h3>🌭 The Salty Dog</h3>
+<span class="restaurant-category">Seafood &amp; Grill</span>
+<p>A classic beachfront spot known for its fresh-caught fish, coconut shrimp, and grilled island vegetables.</p>
+</li>
+<li class="cuisine-item" data-category="Pan-Asian Vegan">
+<span class="restaurant-number"></span>
+<h4>🌶️ Isle of Spice</h4>
+<span class="restaurant-category">Caribbean Fusion</span>
+<p>A vibrant, flavorful restaurant that blends Caribbean spices with local ingredients. Offers many vegan options. <span class="vegan-emblem">🌱</span></p>
+</li>
+<li class="cuisine-item" data-category="Taniti-Style">
+<span class="restaurant-number"></span>
+<h4>🦢 Sunset Swan</h4>
+<span class="restaurant-category">Beachfront Cafe</span>
+<p>The go-to spot for a quick and delicious meal. Their Tanitian tacos and tropical fruit smoothies are a must-try.</p>
+</li>
+<li class="cuisine-item" data-category="American-Style">
+<span class="restaurant-number"></span>
+<h4>🍽️ Volcano's Edge</h4>
+<span class="restaurant-category">Fine Dining</span>
+<p>Offering breathtaking views and the finest cuts of meat, this restaurant is perfect for a special occasion.</p>
+</li>
+<li class="cuisine-item" data-category="Taniti-Style Vegan">
+<span class="restaurant-number"></span>
+<h4>🥬 Coral Dish</h4>
+<span class="restaurant-category">Farm-to-Table</span>
+<p>Focusing on locally sourced, sustainable ingredients, The Coral Dish crafts creative courses with a fresh twist. <span class="vegan-emblem">🌱</span></p>
+</li>
+<li class="cuisine-item" data-category="Taniti-Style">
+<span class="restaurant-number"></span>
+<h4>🍕 Sunset Pizza +</h4>
+<span class="restaurant-category">Italian</span>
+<p>Enjoy classic Italian fare with a Tanitian sunset backdrop. Known for their wood-fired pizzas and homemade pasta.</p>
+</li>
+<li class="cuisine-item" data-category="American-Style">
+<span class="restaurant-number"></span>
+<h4>🍔 Tiki-Hut</h4>
+<span class="restaurant-category">Diner</span>
+<p>A fun, retro-style diner serving up juicy burgers, crispy fries, and thick milkshakes. A family favorite.</p>
+</li>
+<li class="cuisine-item" data-category="Pan-Asian Vegan">
+<span class="restaurant-number"></span>
+<h4>🥖 Palm Grove</h4>
+<span class="restaurant-category">French-Bistro</span>
+<p>An elegant bistro with a menu that changes daily, focusing on seasonal ingredients and classic French techniques. <span class="vegan-emblem">🌱</span></p>
+</li>
+<li class="cuisine-item" data-category="Taniti-Style">
+<span class="restaurant-number"></span>
+<h4>🍸 Sassy Parrot</h4>
+<span class="restaurant-category">Bar &amp; Pub</span>
+<p>A lively pub with a great selection of local beers, tropical cocktails, and a simple but delicious menu of pub classics.</p>
+</li>
+<li class="cuisine-item" data-category="Taniti-Style Vegan">
+<span class="restaurant-number"></span>
+<h4>🥭 Mango Breeze</h4>
+<span class="restaurant-category">Bakery &amp; Cafe</span>
+<p>The perfect place to start your day with fresh-baked pastries, artisan coffee, and a selection of vegan-friendly treats. <span class="vegan-emblem">🌱</span></p>
+</li>
+</ul>
+</div>
+</section>
+<section class="card-section content-page" id="markets">
+<div class="card reverse">
+<div class="card-image markets-img"></div>
+<div class="card-content">
+<h2>Fresh Marketplaces</h2>
+<p>Discover handmade crafts and local produce in vibrant markets.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">Find Something Special</button>
+<button class="toggle-extension-btn">
+                            Shop Local Crafts <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="Supermarket">Supermarkets</button>
+<button class="filter-btn" data-filter="Grocery">Grocery Stores</button>
+<button class="filter-btn" data-filter="Convenience">24-Hour Stores</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="Supermarket">
+<span class="restaurant-number"></span>
+<h3><i class="fa-solid fa-cart-shopping cuisine-icon"></i> Taniti Mega Mart</h3>
+<span class="restaurant-category">One Big Supermarket</span>
+<p>The island's largest store, offering a huge selection of imported goods, fresh produce, and a bakery. It's your one-stop shop for everything you might need.</p>
+<p class="item-info" style="color:#cef"><b>Address:</b> 15901 Coral Forest Drive
+				<br/><b>Directions: </b><a href="#">driving</a> | <a href="#">bus</a> | <a href="#">walking</a>
+<br/><b>Website: <a href="#">tani-mega.com</a></b>
+<br/><b>Operating Hours:</b> Monday - Saturday 7AM to 11pm, <i>Closed Sunday</i>
+<br/><b>Phone: </b><a href="tel:+689-516-89473">+689.516.89473</a>
+</p>
+</li>
+<li class="cuisine-item" data-category="Supermarket">
+<span class="restaurant-number"></span>
+<h3> Island Fresh</h3>
+<span class="restaurant-category">Organic &amp; Local</span>
+<p>Focused on quality, this supermarket specializes in organic, locally-sourced produce, meats, and dairy. Perfect for health-conscious shoppers.</p>
+<p class="item-info" style="color:#cef"><b>Address:</b><br/>  7698 Astal Circle
+				<br/><br/><b>Directions:</b><br/>  <a href="#">drive</a> | <a href="#">bus</a> | <a href="#">walk</a>
+<br/><br/><b>Website:<br/>  <a href="#">freshpro.com</a></b>
+<br/><br/><b>Operating Hours:</b><br/>  Monday - Sunday<br/>  8AM to 10pm
+				<br/><br/><b>Phone: </b>  <a href="tel:+689-516-89473">+689.516.89473</a>
+</p>
+</li>
+<li class="cuisine-item" data-category="Grocery">
+<span class="restaurant-number"></span>
+<h3> Jungle Depot</h3>
+<span class="restaurant-category">Hardware/Market</span>
+<p>A small, family-run grocery store located inland. It stocks all the local essentials and fresh catches from the morning's fishing boats.</p>
+<p class="item-info" style="color:#cef"><b>Address:</b><br/>  467 Quicksand Ln.
+				<br/><br/><b>Directions:</b><br/>  <a href="#">drive</a> | <a href="#">bus</a> | <a href="#">walk</a>
+<br/><br/><b>Website:<br/>  <a href="#">jungall.com</a></b>
+<br/><br/><b>Operating Hours:</b><br/>  Monday - Sunday<br/>  8AM to 10pm
+				<br/><br/><b>Phone: </b>  <a href="tel:+689-516-89473">+689.516.89473</a>
+</p>
+</li>
+<li class="cuisine-item" data-category="Grocery">
+<span class="restaurant-number"></span>
+<h3> Coastal Corner</h3>
+<span class="restaurant-category">Beachside Stop</span>
+<p>Conveniently located near the main beaches, this is the go-to spot for sunscreen, snacks, drinks, and beach gear. Open from 7 AM to 9 PM.</p>
+<p class="item-info" style="color:#cef"><b>Address:</b><br/>  6927 Sandy Street
+				<br/><br/><b>Directions:</b><br/>  <a href="#">drive</a> | <a href="#">bus</a> | <a href="#">walk</a>
+<br/><br/><b>Website:<br/>  <a href="#">cc-co.com</a></b>
+<br/><br/><b>Operating Hours:</b><br/>  Monday - Sunday<br/>  8AM to 10pm
+				<br/><br/><b>Phone: </b>  <a href="tel:+689-516-89473">+689.516.89473</a>
+</p>
+</li>
+<li class="cuisine-item" data-category="Convenience">
+<span class="restaurant-number"></span>
+<h3> The Night Owl</h3>
+<span class="restaurant-category">24/7 Convenience</span>
+<p>The island's first, and currently <b><i>only 24-hour</i></b> convenience store. A perfect spot for late-night snacks, drinks, gift cards and any essentials you might have forgotten.</p>
+<p class="item-info" style="color:#cef"><b>Address:</b><br/>  1590 Coral Shores
+				<br/><br/><b>Directions:</b><br/>  <a href="#">drive</a> | <a href="#">bus</a> | <a href="#">walk</a>
+<br/><br/><b>Website:<br/>  <a href="#">night-owl.com</a></b>
+<br/><br/><b>Operating Hours:</b><br/>  Monday - Sunday<br/>  8AM to 10pm
+				<br/><br/><b>Phone: </b>  <a href="tel:+689-247-89501">+689.247.89501</a>
+</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="card-section content-page" id="lodging">
+<div class="card">
+<div class="card-image lodging-img"></div>
+<div class="card-content">
+<h2>Lodging</h2>
+<p>Find the perfect place to stay, from luxurious resorts to cozy beach bungalows.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">Down To Relax</button>
+<button class="toggle-extension-btn">
+                            Explore Your Options <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<p class="vegan-legend">All lodging is strictly regulated and regularly inspected by the Tanitian government.</p>
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="Resorts">Resorts</button>
+<button class="filter-btn" data-filter="Hostels">Hostels</button>
+<button class="filter-btn" data-filter="Bed &amp; Breakfasts">Bed &amp; Breakfasts</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="Resorts">
+<span class="restaurant-number"></span>
+<h3>🏝️ Coral Vista Resort</h3>
+<span class="restaurant-category">Resort</span>
+<p>Taniti’s only large four-star resort, located beachfront with pools, a spa, fine dining, and a full range of guest services. Ideal for visitors seeking luxury and comfort.</p>
+</li>
+<li class="cuisine-item" data-category="Hostels">
+<span class="restaurant-number"></span>
+<h4>🛏️ Lost Trekkers</h4>
+<span class="restaurant-category">Hostel</span>
+<p>Taniti’s budget-friendly hostel. Inexpensive, safe, and welcoming. Dorm-style accommodations with shared kitchen facilities and a friendly social atmosphere. Great for students and solo travelers.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🌿 Palm Gardens</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>A family-run inn surrounded by lush tropical gardens. Offers home-cooked breakfasts and a welcoming, personal touch.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🌊 Seabreeze Inn</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>Steps away from the beach, this cozy B&amp;B provides ocean-view rooms and fresh local fruit at breakfast.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>⛰️ Mountain View</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>Quiet inland retreat with panoramic mountain views. Perfect for couples looking for a peaceful escape.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🏠 Merriton House</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>Historic Merriton Landing home converted into an elegant B&amp;B. Combines old-world charm with modern comforts.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🌺 Hibiscus Haven</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>Charming, colorful guesthouse with airy rooms and a garden courtyard. Popular with repeat visitors.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🏖️Lagoon Cottage</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>A handful of rooms overlooking Taniti’s lagoon. Known for its sunrise breakfasts and tranquil vibe.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🥥Coconut Grove</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>Surrounded by coconut palms, this B&amp;B emphasizes sustainable practices and locally sourced food.</p>
+</li>
+<li class="cuisine-item" data-category="Bed &amp; Breakfasts">
+<span class="restaurant-number"></span>
+<h4>🌅Sunrise Stay Inn</h4>
+<span class="restaurant-category">Bed &amp; Breakfast</span>
+<p>Bright, cheerful lodging with an emphasis on hospitality. Guests rave about the morning coffee and fresh pastries.</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="card-section content-page" id="mountains">
+<div class="card reverse">
+<div class="card-image mountains-img"></div>
+<div class="card-content">
+<h2>Memorable Adventures</h2>
+<p>Hike scenic trails and enjoy breathtaking mountain views.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">Ready For Adventure</button>
+<button class="toggle-extension-btn">
+                            Trek the Trails <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<p class="vegan-legend">Taniti Adventures - sightseeing by land &amp; sea, plus unforgettable encounters with nature.</p>
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="tours">Tours</button>
+<button class="filter-btn" data-filter="nature">Nature</button>
+<button class="filter-btn" data-filter="volcano">Volcano</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="tours">
+<h3><i class="fas fa-ship"></i> Island Explorer Cruises</h3>
+<span class="restaurant-category">Tours</span>
+<span class="restaurant-number"></span>
+<p>Day-long boat tours around Yellow Leaf Bay and the island coastline, with scenic stops and wildlife spotting.</p>
+</li>
+<li class="cuisine-item" data-category="tours">
+<h3><i class="fas fa-water"></i> Sunset Bay Cruises</h3>
+<span class="restaurant-category">Tours</span>
+<span class="restaurant-number"></span>
+<p>Evening cruises offering spectacular views of the sun setting over the Pacific horizon.</p>
+</li>
+<li class="cuisine-item" data-category="tours">
+<h3><i class="fas fa-bus"></i> Taniti Scenic Bus Tours</h3>
+<span class="restaurant-category">Tours</span>
+<span class="restaurant-number"></span>
+<p>Comfortable bus rides around the island with local guides sharing history and culture.</p>
+</li>
+<li class="cuisine-item" data-category="tours">
+<h3><i class="fas fa-road"></i> Coastal Highlights Tour</h3>
+<span class="restaurant-category">Tours</span>
+<span class="restaurant-number"></span>
+<p>A half-day bus tour of Taniti’s most beautiful coastal viewpoints and beaches.</p>
+</li>
+<li class="cuisine-item" data-category="nature">
+<h3><i class="fas fa-hiking"></i> Rainforest Treks</h3>
+<span class="restaurant-category">Nature</span>
+<span class="restaurant-number"></span>
+<p>Guided hikes into the island’s lush rainforest, with trails ranging from beginner-friendly to advanced.</p>
+</li>
+<li class="cuisine-item" data-category="nature">
+<h3><i class="fas fa-leaf"></i> EcoDiscovery Walks</h3>
+<span class="restaurant-category">Nature</span>
+<span class="restaurant-number"></span>
+<p>Nature walks focused on Taniti’s unique plants, birds, and colorful wildlife, led by expert naturalists.</p>
+</li>
+<li class="cuisine-item" data-category="volcano">
+<h3><i class="fas fa-fire"></i> Volcano Vista Tours</h3>
+<span class="restaurant-category">Volcano</span>
+<span class="restaurant-number"></span>
+<p>Guided day trips to the active volcano with safe vantage points for unforgettable photographs.</p>
+</li>
+<li class="cuisine-item" data-category="volcano">
+<h3><i class="fas fa-mountain"></i> Summit Challenge Hike</h3>
+<span class="restaurant-category">Volcano</span>
+<span class="restaurant-number"></span>
+<p>Challenging hikes to the volcano’s summit trails, recommended for experienced adventurers.</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="card-section content-page" id="transportation">
+<div class="card">
+<div class="card-image transportation-img"></div>
+<div class="card-content">
+<h2>Transportation</h2>
+<p>Discover the best ways to get around the island, including bus, taxi, and rental options.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">It's Travel Time</button>
+<button class="toggle-extension-btn">
+                            See Your Travel Options <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<p class="vegan-legend">**Safety note: helmets are required for bike rentals.**</p>
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="Land">Land</button>
+<button class="filter-btn" data-filter="Sea">Sea</button>
+<button class="filter-btn" data-filter="Air">Air</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="Land">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-bus"></i> Taniti Regional Transit</h3>
+<span class="restaurant-category">Land</span>
+<p>Public buses run daily from 5 a.m. to 11 p.m., covering the city extensively. Affordable and reliable service for locals and visitors.</p>
+</li>
+<li class="cuisine-item" data-category="Land">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-shuttle-van"></i> Island Coach Lines</h3>
+<span class="restaurant-category">Land</span>
+<p>Private buses that extend beyond the city, reaching rural villages and remote areas of Taniti.</p>
+</li>
+<li class="cuisine-item" data-category="Land">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-taxi"></i> Taniti City Taxi</h3>
+<span class="restaurant-category">Land</span>
+<p>24/7 taxi service with metered fares. Convenient for short trips around the island.</p>
+</li>
+<li class="cuisine-item" data-category="Land">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-car"></i> Island Wheels Car Rentals</h3>
+<span class="restaurant-category">Land</span>
+<p>Local rental agency near the airport offering compact cars, SUVs, and vans for island exploration.</p>
+</li>
+<li class="cuisine-item" data-category="Land">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-bicycle"></i> CycleTaniti</h3>
+<span class="restaurant-category">Land</span>
+<p>Bikes and helmets available for rent across town. Helmets are required by law, and rentals are affordable.</p>
+</li>
+<li class="cuisine-item" data-category="Land">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-walking"></i> Merriton Walking Trails</h3>
+<span class="restaurant-category">Land</span>
+<p>The Merriton Landing area is scenic and highly walkable, with cafes, shops, and safe pedestrian paths.</p>
+</li>
+<li class="cuisine-item" data-category="Sea">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-ship"></i> Yellow Leaf Bay Cruise Dock</h3>
+<span class="restaurant-category">Sea</span>
+<p>One cruise ship docks here for one night each week, bringing visitors from around the world.</p>
+</li>
+<li class="cuisine-item" data-category="Air">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-plane"></i> Taniti Regional Airport</h3>
+<span class="restaurant-category">Air</span>
+<p>A small airport serving prop planes and small jets. Expansion is underway to accommodate larger jets.</p>
+</li>
+<li class="cuisine-item" data-category="Air">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-helicopter"></i> Island Hopper Charters</h3>
+<span class="restaurant-category">Air</span>
+<p>Private charters and air tours offering breathtaking views of Taniti and the surrounding ocean.</p>
+</li>
+<li class="cuisine-item" data-category="Air">
+<span class="restaurant-number"></span>
+<h3><i class="fas fa-tools"></i> Taniti Airport Expansion</h3>
+<span class="restaurant-category">Air</span>
+<p>Ongoing project to upgrade runways and facilities so larger jets can land in the near future.</p>
+</li>
+</ul>
+</div>
+</section>
+<section class="card-section content-page" id="entertainment">
+<div class="card reverse">
+<div class="card-image entertainment-img"></div>
+<div class="card-content">
+<h2>Entertainment</h2>
+<p>From live music and theater to vibrant nightlife, find your fun on Taniti.</p>
+<button aria-haspopup="dialog" class="booking-main cta-button" data-lodging="Pristine Beaches" data-url="book.html">Sign Me Up!</button>
+<button class="toggle-extension-btn">
+                            Find Your Fun <i class="fas fa-chevron-down"></i>
+</button>
+</div>
+</div>
+<div class="card-extension">
+<p class="vegan-legend">Many entertainment options within walking distance of Yellow Leaf Bay (northend) </p>
+<div class="restaurant-filters">
+<button class="filter-btn active" data-filter="all">All</button>
+<button class="filter-btn" data-filter="outdoors">Outdoors</button>
+<button class="filter-btn" data-filter="indoors">Indoors</button>
+</div>
+<ul class="cuisine-list">
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-landmark"></i> Taniti History Museum</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>A small but engaging museum highlighting Taniti’s cultural heritage and island history.</p>
+</li>
+<li class="cuisine-item" data-category="outdoors">
+<h3><i class="fas fa-fish"></i> Bay Breeze Charters</h3>
+<span class="restaurant-category">Outdoors</span>
+<span class="restaurant-number"></span>
+<p>Guided fishing tours departing daily from Yellow Leaf Bay, perfect for anglers of all levels.</p>
+</li>
+<li class="cuisine-item" data-category="outdoors">
+<h3><i class="fas fa-water"></i> Coral Quest Snorkeling</h3>
+<span class="restaurant-category">Outdoors</span>
+<span class="restaurant-number"></span>
+<p>Snorkeling excursions to vibrant reefs, offering a chance to see tropical fish and marine life.</p>
+</li>
+<li class="cuisine-item" data-category="outdoors">
+<h3><i class="fas fa-tree"></i> Rainforest Zip Adventures</h3>
+<span class="restaurant-category">Outdoors</span>
+<span class="restaurant-number"></span>
+<p>Thrilling zip-line rides through Taniti’s lush rainforest canopy.</p>
+</li>
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-beer"></i> Tiki Taproom</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>A lively pub and microbrewery in Merriton Landing serving locally crafted beers.</p>
+</li>
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-music"></i> Club Lava</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>Taniti’s newest dance club, with DJs spinning music late into the night.</p>
+</li>
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-film"></i> Bayview Cinema</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>A small movie theater showing American films three times per week.</p>
+</li>
+<li class="cuisine-item" data-category="outdoors">
+<h3><i class="fas fa-helicopter"></i> SkyTours Helicopters</h3>
+<span class="restaurant-category">Outdoors</span>
+<span class="restaurant-number"></span>
+<p>Spectacular helicopter rides offering panoramic views of Taniti and Yellow Leaf Bay.</p>
+</li>
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-gamepad"></i> Skyline Arcade</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>A modern arcade featuring classic video games, air hockey, and family-friendly fun.</p>
+</li>
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-paint-brush"></i> Bayfront Art Galleries</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>Local artists showcase paintings, sculptures, and crafts inspired by island life.</p>
+</li>
+<li class="cuisine-item" data-category="indoors">
+<h3><i class="fas fa-bowling-ball"></i> StrikePoint Bowling</h3>
+<span class="restaurant-category">Indoors</span>
+<span class="restaurant-number"></span>
+<p>Casual lanes with a tropical flair, great for families and groups of friends.</p>
+</li>
+<li class="cuisine-item" data-category="outdoors">
+<h3><i class="fas fa-golf-ball"></i> Taniti Greens</h3>
+<span class="restaurant-category">Outdoors</span>
+<span class="restaurant-number"></span>
+<p>A nine-hole golf course expected to open next year, offering a scenic island playing experience.</p>
+</li>
+</ul>
+</div>
+</section>
+</main>
+</div>
+<!-- Right semi-transparent panel -->
+<div class="fixed-right-panel">
+<div class="weather-li">
+<button aria-expanded="false" aria-haspopup="true" class="weather-button" id="weather-button">
+<div class="status-dot-container">
+<span class="status-dot weather-dot-ok" id="weather-status-dot-ok"></span>
+<span class="status-dot weather-dot-alert" id="weather-status-dot-alert"></span>
+</div>
+<div class="weather-main" id="weather-main">
+<!-- Main weather info, each on its own line -->
+<span class="weather-main-data">
+<!-- UPDATED: Added a consistent label container for vertical alignment -->
+<span class="label-container"><span class="label">Temp:</span></span>
+<span class="number" id="temp">75</span>°F
+                        </span>
+<span class="weather-main-data">
+<span class="label-container"><span class="label">Skies:</span></span>
+<span id="skies">Sunny</span> <span id="sky-emoji">☀️</span>
+</span>
+<!-- Smaller sunrise/sunset info -->
+<span class="weather-sun">
+<span class="rusty-text">Sunrise:</span> <span class="time-text" id="sunrise">6:25 AM</span> |
+                            <span class="rusty-text">Sunset:</span> <span class="time-text" id="sunset">7:11 PM</span>
+</span>
+<!-- NEW: Secretive text at the bottom -->
+<span class="weather-credit">weather data by NeverWrong Weathermen Service™</span>
+</div>
+</button>
+<!-- UPDATED: Re-structured weather dropdown for two stacked cards -->
+<div aria-hidden="true" class="weather-dropdown" id="weather-dropdown" role="dialog">
+<div class="weather-card" id="weather-info-card">
+<div id="weather-info-wrapper">
+<!-- 3 Day Weather BELOW
+                            <h3 style="margin-top: 1.5em; font-size: 1.2em; text-align: center;">3-Day Forecast</h3>
+			<div class="forecast-grid">
+			    <div class="forecast-day">
+			        <h3>Today</h3>
+		        	<i class="fa-solid fa-cloud-sun-rain"></i>
+			        <p>Showers</p>
+			        <p>75°F / 69°F</p>
+			    </div>
+			    <div class="forecast-day">
+			        <h3>Tomorrow</h3>
+			        <i class="fa-solid fa-cloud-sun"></i>
+		        	<p>Partly Cloudy</p>
+			        <p>76°F / 71°F</p>
+			    </div>
+			    <div class="forecast-day">
+		        	<h3>Sunday</h3>
+			        <i class="fa-solid fa-sun"></i>
+				        <p>Showers</p>
+			        <p>68°C / 63°F</p>
+			    </div>
+			</div>
+			 3 Day Weather ABOVE-->
+<!-- REPLACE weather content-->
+<p id="weather-info">
+<span class="label">Temperature:</span> <span class="number" id="temp-detail">75</span>°F<br/>
+<span class="label">Wind:</span> <span class="number" id="wind">10</span> mph<br/>
+<span class="label">Humidity:</span> <span class="number" id="humidity">50</span>%<br/>
+<span class="label">Skies:</span> <span id="skies-detail">Sunny</span> <span id="sky-emoji-detail">☀️</span>
+</p>
+<!--aend REPLACE weather content-->
+<div class="moon-info">
+<span class="subdued"><i class="fas fa-moon rusty-text"></i> Moon Phase:</span>
+<span class="time-text" id="moon-phase">Full Moon</span><br/>
+<span class="subdued">Illumination:</span>
+<span class="time-text" id="moon-illumination">100%</span>
+</div><!-- end moon info-->
+</div><!-- end weather info wrapper -->
+</div><!-- end weather info card -->
+<div class="weather-card alert-card" id="alert-card" style="display:none;">
+<!-- NEW: Moved scanner effect to the alert card -->
+<div id="alert-content-wrapper">
+<h2 class="alert-message-h2" id="alert-title">Volcano Alert!</h2>
+<p class="alert-message" id="alert-message">All island residents and visitors must follow emergency evacuation protocol.</p>
+<span class="major-updates-text">&gt;&gt;&gt; MAJOR UPDATES &lt;&lt;&lt;</span>
+</div>
+</div>
+</div>
+</div><!-- end weather dropdown -->
+<!-- You can add more content here -->
+</div>
+<!-- TEST BOOKING MODAL INTegration -->
+<!-- Modal structure -->
+<div class="modal" id="ctaModal">
+<div class="modal-content">
+<span class="close">×</span>
+<iframe frameborder="0" id="ctaIframe" src=""></iframe>
+</div>
+</div>
+<!-- END BOOKING MODAL TEST -->
+<div class="footer-drawer">
+<div class="footer-drawer-content">
+<footer class="tropical-footer">
+<div class="footer-section footer-rotator-section">
+<ul class="contact-info">
+<li><a href="tel:+689-404-72738"><i class="fa-solid fa-phone"></i>+689.404.72738</a></li>
+<li><a href="mailto:travel@taniti.gov"><i class="fa-solid fa-envelope"></i>travel@taniti.gov</a></li>
+</ul>
+</div>
+<div class="footer-section footer-rotator-section center-footer">
+<p>logo by <a href="https://www.canva.com">Canva</a></p>
+<p>graphics/imagery courtesy <a href="https://www.unsplash.com">Unsplash</a></p>
+</div>
+<div class="footer-section footer-rotator-section">
+<p>© 2025 Taniti Corp</p>
+<p class="designer-info">Site Designer: <a href="mailto:jp@fbi.gov">jp@fbi.gov</a></p>
+</div>
+</footer>
+</div>
+<script>
+        // Load images
+        async function loadImages() {
+            try {
+                document.querySelector('.beaches-img').style.backgroundImage = `url('images/beach.jpg')`;
+                document.querySelector('.cuisine-img').style.backgroundImage = `url('images/cuisine.jpg')`;
+                document.querySelector('.markets-img').style.backgroundImage = `url('images/market.jpg')`;
+                document.querySelector('.lodging-img').style.backgroundImage = `url('images/lodging.jpg')`;
+                document.querySelector('.mountains-img').style.backgroundImage = `url('images/mountain.jpg')`;
+                document.querySelector('.transportation-img').style.backgroundImage = `url('images/transportation.jpg')`;
+                document.querySelector('.entertainment-img').style.backgroundImage = `url('images/entertainment.jpg')`;
+                document.body.style.backgroundImage = `url('images/hero.jpg')`;
+            } catch {
+                console.log('Using fallback images');
+            }
+        }
+        loadImages();
+
+        const allContentPages = document.querySelectorAll('.content-page');
+        const hamburger = document.getElementById('hamburger');
+
+        // Toggle card extensions & continuous chevron rotation
+        document.querySelectorAll('.toggle-extension-btn').forEach(button => {
+            button.dataset.rotation = 0; // Initialize rotation state
+            button.addEventListener('click', () => {
+                const extension = button.closest('.card-section').querySelector('.card-extension');
+                extension.classList.toggle('visible');
+
+                const icon = button.querySelector('i');
+                let currentRotation = parseInt(button.dataset.rotation);
+                if (isNaN(currentRotation)) currentRotation = 0;
+                currentRotation += 180;
+                icon.style.transform = `rotate(${currentRotation}deg)`;
+                button.dataset.rotation = currentRotation;
+            });
+        });
+
+        function showPage(pageId) {
+            allContentPages.forEach(page => {
+                page.classList.remove('active-page');
+            });
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active-page');
+            }
+        }
+
+        const navContainer = document.querySelector('.fixed-left-nav');
+        const navButtonContainers = document.querySelectorAll('.nav-button-container');
+
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            navButtonContainers.forEach(container => {
+                container.querySelector('.nav-link, .logo-container').classList.remove('active');
+                container.querySelector('.dropdown').classList.remove('visible');
+            });
+        }
+
+        navButtonContainers.forEach(container => {
+            const button = container.querySelector('.nav-link, .logo-container');
+            const dropdown = container.querySelector('.dropdown');
+
+            button.addEventListener('click', (e) => {
+                const isAlreadyActive = button.classList.contains('active');
+                closeAllDropdowns();
+                if (!isAlreadyActive) {
+                    button.classList.add('active');
+                    dropdown.classList.add('visible');
+                    // Set dropdown width to match the button
+                    const buttonWidth = button.offsetWidth;
+                    dropdown.style.width = `${buttonWidth}px`;
+                }
+                e.stopPropagation();
+            });
+        });
+
+        navContainer.querySelectorAll('.logo-container, .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                if (targetId) {
+                    showPage(targetId);
+                }
+                closeAllDropdowns();
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!navContainer.contains(event.target)) {
+                closeAllDropdowns();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('beaches');
+            updateFilterCounts();
+            // Update numbering for all sections on load
+            document.querySelectorAll('.card-extension').forEach(section => {
+                updateRestaurantNumbering(section);
+            });
+        });
+
+        let colorTriggered = false;
+        function triggerColor() {
+            if (!colorTriggered) {
+                document.querySelectorAll('.card-image').forEach(img => img.style.filter = "grayscale(0%)");
+                colorTriggered = true;
+            }
+        }
+        window.addEventListener('mousemove', triggerColor, { once: true });
+        window.addEventListener('keydown', triggerColor, { once: true });
+
+        // --- REWORKED WEATHER & ALERT LOGIC ---
+        const weatherButton = document.getElementById('weather-button');
+        const weatherDropdown = document.getElementById('weather-dropdown');
+        const weatherStatusDotOk = document.getElementById('weather-status-dot-ok');
+        const weatherStatusDotAlert = document.getElementById('weather-status-dot-alert');
+        const body = document.body;
+        const alertCard = document.getElementById('alert-card');
+
+        const skiesOptions = ["Sunny", "Cloudy", "Rainy"];
+        const snowSkiesOptions = ["Snowing", "Blizzard"]; // New options for the Easter egg
+        const emojiMap = { "Sunny": "☀️", "Cloudy": "☁️", "Rainy": "🌧️" };
+        const snowEmojiMap = { "Snowing": "❄️", "Blizzard": "🌬️" }; // New emoji for snow
+        const moonPhases = [
+            'New Moon', 'Waxing Crescent', 'First Quarter',
+            'Waxing Gibbous', 'Full Moon', 'Waning Gibbous',
+            'Third Quarter', 'Waning Crescent'
+        ];
+
+        let isAlertActive = false;
+        let isSnowing = false; // New state variable for the Easter egg
+        let snowTimeout = null; // To store the timeout ID for the snow event
+
+        const possibleAlerts = [
+            {
+                type: 'Volcano',
+                title: '🌋 Volcano Alert!',
+                message: 'Volcanic activity detected. Follow emergency evacuation protocol immediately.',
+                capsuleText: `<span class="label" style="color:#FF4545">ALERT</span> <span style="font-weight:bold; color:#fff;">Volcano Active</span>
+                                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:25 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:11 PM</span>
+                </span>
+                <span class="weather-credit">weather data by NeverWrong Weathermen Service™</span>`
+            },
+            {
+                type: 'Tsunami',
+                title: '🌊 Tsunami Warning!',
+                message: 'A tsunami warning is in effect. Move to higher ground immediately.',
+                capsuleText: `<span class="label" style="color:#6495ED">ALERT</span> <span style="font-weight:bold; color:#fff;">Tsunami Watch</span>
+                                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:25 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:11 PM</span>
+                </span>
+                <span class="weather-credit">weather data by NeverWrong Weathermen Service™</span>`
+            },
+            {
+                type: 'Hurricane',
+                title: '🌀 Storm Warning!',
+                message: 'A major hurricane is approaching. Please shelter in place and stay tuned for updates.',
+                capsuleText: `<span class="label" style="color:#FFA500">ALERT</span> <span style="font-weight:bold; color:#fff;">Hurricane Warning</span>
+                                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:25 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:11 PM</span>
+                </span>
+                <span class="weather-credit">weather data by NeverWrong Weathermen Service™</span>`
+            }
+        ];
+
+        /* FIX: Logic for the alert dots */
+        function updateDotVisibility() {
+            if (isAlertActive) {
+                weatherStatusDotOk.classList.add('subdued');
+                weatherStatusDotAlert.classList.add('blinking');
+            } else {
+                weatherStatusDotOk.classList.remove('subdued');
+                weatherStatusDotAlert.classList.remove('blinking');
+            }
+        }
+
+        function triggerAlert(alertData) {
+            if (isAlertActive) return;
+            isAlertActive = true;
+            console.log(`🚨 ALERT TRIGGERED: ${alertData.type}`);
+
+            body.classList.add('alert-active');
+            updateDotVisibility();
+
+            document.getElementById('alert-title').textContent = alertData.title;
+            document.getElementById('alert-message').textContent = alertData.message;
+            document.getElementById('weather-main').innerHTML = alertData.capsuleText;
+
+            weatherDropdown.classList.add('show');
+            weatherButton.setAttribute('aria-expanded', 'true');
+            
+            // Show the alert card with animation
+            alertCard.style.display = 'block';
+            alertCard.classList.add('alert-bg-animation');
+
+            setTimeout(clearAlert, 20000);
+        }
+
+        function clearAlert() {
+            isAlertActive = false;
+            console.log('✅ ALERT CLEARED');
+
+            body.classList.remove('alert-active');
+            updateDotVisibility();
+
+            // Revert the weather main display back to normal
+            document.getElementById('weather-main').innerHTML = `
+                <span class="weather-main-data">
+                    <span class="label-container"><span class="label">Temp:</span></span>
+                    <span id="temp" class="number"></span>°F
+                </span>
+                <span class="weather-main-data">
+                    <span class="label-container"><span class="label">Skies:</span></span>
+                    <span id="skies"></span> <span id="sky-emoji"></span>
+                </span>
+                <span class="weather-sun">
+                    <span class="rusty-text">Sunrise:</span> <span id="sunrise" class="time-text">6:25 AM</span> |
+                    <span class="rusty-text">Sunset:</span> <span id="sunset" class="time-text">7:11 PM</span>
+                </span>
+                <span class="weather-credit">weather provided by NeverWrong Weathermen Service™</span>`;
+            
+            // Re-run the weather data generation to populate the new elements
+            setTimeout(() => {
+                generateGeneralWeatherData();
+                generateSkiesData();
+            }, 100);
+
+            // Hide the alert card and remove animation
+            alertCard.style.display = 'none';
+            alertCard.classList.remove('alert-bg-animation');
+        }
+
+        setInterval(() => {
+            if (Math.random() < 0.15 && !isAlertActive) {
+                const randomAlert = possibleAlerts[Math.floor(Math.random() * possibleAlerts.length)];
+                triggerAlert(randomAlert);
+            }
+        }, 7000);
+
+        // Easter Egg Logic
+        // Check every 3 minutes for a chance of snow
+        setInterval(() => {
+            if (Math.random() < 0.2 && !isAlertActive && !isSnowing) { // 20% chance to trigger snow
+                isSnowing = true;
+                generateSnowData();
+                snowTimeout = setTimeout(() => {
+                    isSnowing = false;
+                    generateGeneralWeatherData(); // Revert back to normal weather
+                    generateSkiesData();
+                    document.querySelectorAll('weather-credit').textContent = "weather provided by NeverWrong Weathermen Service™";
+                }, 60000); // Snow lasts for 60 seconds
+            }
+        }, 3 * 60 * 1000); // Check every 3 minutes
+
+        function generateSnowData() {
+            if (!isSnowing) return;
+
+            const tempElement = document.getElementById('temp');
+            const tempDetail = document.getElementById('temp-detail');
+            const skiesElement = document.getElementById('skies');
+            const skyEmojiElement = document.getElementById('sky-emoji');
+            const skiesDetail = document.getElementById('skies-detail');
+            const skyEmojiDetail = document.getElementById('sky-emoji-detail');
+
+            const newSkies = snowSkiesOptions[Math.floor(Math.random() * snowSkiesOptions.length)];
+            const newEmoji = snowEmojiMap[newSkies];
+            const newTemp = Math.floor(Math.random() * 5) + 28; // Temps between 28-32°F
+
+            animateValue(tempElement, parseInt(tempElement.textContent), newTemp, 1500);
+            tempDetail.textContent = newTemp;
+
+            // Fade out current text before changing
+            skiesElement.style.opacity = '0';
+            skiesDetail.style.opacity = '0';
+            
+            setTimeout(() => {
+                skiesElement.textContent = newSkies;
+                skyEmojiElement.textContent = newEmoji;
+                skiesDetail.textContent = newSkies;
+                skyEmojiDetail.textContent = newEmoji;
+
+                skiesElement.style.opacity = '1';
+                skiesDetail.style.opacity = '1';
+            }, 3000);
+
+            // Update the secretive credit text
+            document.querySelectorAll('weather-credit').textContent = "A glitch in the system.";
+        }
+
+
+        /* FIX: Re-implemented the number animation and simplified the update logic */
+        function animateValue(obj, start, end, duration) {
+            if (!obj) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function generateSkiesData() {
+            if (isAlertActive || isSnowing) return;
+
+            const skiesElement = document.getElementById('skies');
+            const skyEmojiElement = document.getElementById('sky-emoji');
+            const skiesDetail = document.getElementById('skies-detail');
+            const skyEmojiDetail = document.getElementById('sky-emoji-detail');
+
+            if (!skiesElement || !skyEmojiElement || !skiesDetail || !skyEmojiDetail) {
+                console.error("Sky elements not found in the DOM.");
+                return;
+            }
+
+            const newSkies = skiesOptions[Math.floor(Math.random() * skiesOptions.length)];
+            const newEmoji = emojiMap[newSkies];
+
+            // Fade out the current text
+            skiesElement.style.opacity = '0';
+            skiesDetail.style.opacity = '0';
+
+            // Wait for the fade-out transition to complete (3 seconds)
+            setTimeout(() => {
+                // Update content after fade-out
+                skiesElement.textContent = newSkies;
+                skyEmojiElement.textContent = newEmoji;
+                skiesDetail.textContent = newSkies;
+                skyEmojiDetail.textContent = newEmoji;
+                
+                // Fade content back in
+                skiesElement.style.opacity = '1';
+                skiesDetail.style.opacity = '1';
+            }, 1500);
+        }
+
+        function generateGeneralWeatherData() {
+            if (isAlertActive || isSnowing) return;
+            
+            const tempElement = document.getElementById('temp');
+            const windElement = document.getElementById('wind');
+            const humidityElement = document.getElementById('humidity');
+            const moonPhaseElement = document.getElementById('moon-phase');
+            const moonIlluminationElement = document.getElementById('moon-illumination');
+            const tempDetail = document.getElementById('temp-detail');
+
+            if (!tempElement || !windElement || !humidityElement || !moonPhaseElement || !moonIlluminationElement || !tempDetail) {
+                console.error("Weather elements not found in the DOM.");
+                return;
+            }
+
+            const currentTemp = parseInt(tempElement.textContent) || 75;
+            const currentWind = parseInt(windElement.textContent) || 10;
+            const currentHumidity = parseInt(humidityElement.textContent) || 50;
+
+            const newTemp = Math.floor(Math.random() * 5) + 70;
+            const newWind = Math.floor(Math.random() * 3) + 8;
+            const newHumidity = Math.floor(Math.random() * 5) + 50;
+            const newMoonPhase = moonPhases[Math.floor(Math.random() * moonPhases.length)];
+            const newMoonIllumination = Math.floor(Math.random() * 101);
+
+            // Smoothly update temperature
+            animateValue(tempElement, currentTemp, newTemp, 1500);
+            tempDetail.textContent = newTemp;
+            
+            // Smoothly update other weather info
+            animateValue(windElement, currentWind, newWind, 1500);
+            animateValue(humidityElement, currentHumidity, newHumidity, 1500);
+
+            // Update moon conditions
+            moonPhaseElement.textContent = newMoonPhase;
+            moonIlluminationElement.textContent = `${newMoonIllumination}%`;
+        }
+
+        // Set different update intervals as requested
+        setInterval(generateGeneralWeatherData, 5000); // General weather every 5 seconds
+        setInterval(generateSkiesData, 15000); // Skies data every 15 seconds
+
+        // Initial calls to populate data
+        generateGeneralWeatherData();
+        generateSkiesData();
+        updateDotVisibility();
+
+        // Toggle Dropdown Logic
+        weatherButton.addEventListener('click', (e) => {
+            const isExpanded = weatherButton.getAttribute('aria-expanded') === 'true';
+            if (isExpanded) {
+                weatherDropdown.classList.remove('show');
+                weatherButton.setAttribute('aria-expanded', 'false');
+            } else {
+                weatherDropdown.classList.add('show');
+                weatherButton.setAttribute('aria-expanded', 'true');
+            }
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!weatherButton.contains(e.target) && !weatherDropdown.contains(e.target)) {
+                weatherDropdown.classList.remove('show');
+                weatherButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // NEW: Function to update filter counts with dynamic logic
+        function updateFilterCounts() {
+            // Loop through all sections that have a filter system
+            document.querySelectorAll('.card-extension').forEach(section => {
+                const filters = section.querySelectorAll('.filter-btn');
+                const items = section.querySelectorAll('.cuisine-item');
+
+                // Get the total count and update the "All" button first
+                const allCount = items.length;
+                const allBtn = section.querySelector('[data-filter="all"]');
+                if (allBtn) {
+                    allBtn.textContent = `All (${allCount})`;
+                }
+
+                // Now, loop through the other filter buttons and count their items
+                filters.forEach(btn => {
+                    const filter = btn.getAttribute('data-filter');
+                    // Skip the "All" button since we already handled it
+                    if (filter === 'all') return;
+
+                    let count = 0;
+                    items.forEach(item => {
+                        // Check if the item's categories string contains the filter
+                        if (item.getAttribute('data-category').includes(filter)) {
+                            count++;
+                        }
+                    });
+
+                    // Update the button's text with the category name and count
+                    btn.textContent = `${filter} (${count})`;
+                });
+            });
+        }
+
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const section = btn.closest('.card-extension');
+                const filters = section.querySelectorAll('.filter-btn');
+                const items = section.querySelectorAll('.cuisine-item');
+
+                filters.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+
+                items.forEach(item => {
+                    const categories = item.getAttribute('data-category');
+                    if (filter === 'all' || categories.includes(filter)) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                updateRestaurantNumbering(section);
+            });
+        });
+
+        function updateRestaurantNumbering(container) {
+            const visibleItems = container.querySelectorAll('.cuisine-item:not(.hidden)');
+            visibleItems.forEach((item, index) => {
+                const numberSpan = item.querySelector('.restaurant-number');
+                if (numberSpan) {
+                    numberSpan.textContent = index + 1;
+                }
+            });
+        }
+    </script>
+<script>
+(function(){
+  const hamb = document.getElementById('hamburger');
+  const navContainer = document.getElementById('nav-container');
+  if(hamb && navContainer){
+    // show hamburger if screen is small (CSS may override display)
+    hamb.style.display = hamb.style.display || '';
+    hamb.addEventListener('click', function(e){
+      e.stopPropagation();
+      navContainer.classList.toggle('mobile-open');
+      hamb.classList.toggle('is-active');
+    });
+    document.addEventListener('click', function(e){
+      if(!navContainer.contains(e.target) && !hamb.contains(e.target)){
+        navContainer.classList.remove('mobile-open');
+      }
+    });
+  }
+})();
+</script>
+<script>
+function toggleWeatherModal() {
+  const modal = document.getElementById('weather-modal');
+  if (!modal) return;
+  if (modal.classList.contains('show')) {
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; }, 350);
+  } else {
+    modal.style.display = 'flex';
+    setTimeout(() => { modal.classList.add('show'); }, 10);
+    modal.addEventListener('click', function handler(e) {
+      if (e.target === modal) {
+        toggleWeatherModal();
+        modal.removeEventListener('click', handler);
+      }
+    });
+  }
+}
+
+// Highlight the clicked link as active
+const navLinks = document.querySelectorAll('.logo-container, .nav-link');
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+</script>
+<!-- Booking Modal -->
+
+<script>
+/* --Tip Search FAQ INFO --*/
+        // --- CONFIGURATION ---
+        const ROTATION_INTERVAL_MS = 6000; // 6 seconds per fact
+        const TRANSITION_DURATION_MS = 500; // 0.5 seconds for CSS transition
+
+        // --- DATA SECTION (Concise Content) ---
+        const ALL_TIPS = [
+            { title: "Power (120V)", content: "Electricity type - (US standard outlet)", tag: "Power Plug Outlet" },
+            { title: "Alcohol Hours", content: "NO SALES 12 (midnight) to 9:00 a.m.", tag: "Laws" },
+            { title: "Drinking Age", content: "Legal age - 18 years. (unenforced)", tag: "Laws" },
+            { title: "Language(s)", content: "City locals & youth - English", tag: "Language" },
+            { title: "Language(s)", content: "Rural/Seniors: Tanitian, Japanese, +", tag: "Language Speak Talk" },
+            { title: "Hospital(s)", content: "One general hospital, multilingual staff", tag: "Medical Emergency" },
+            { title: "Clinic(s)", content: "Several clinics, multilingual staff", tag: "Medical Clinic" },
+            { title: "Crime", content: "Violence is rare (watch for pickpocketing)", tag: "Safety" },
+            { title: "Holidays", content: "Many businesses close (plan ahead)", tag: "Calendar Holiday Closure" },
+            { title: "Currency", content: "Official - USD ($) Dollars.", tag: "Money Dollar" },
+            { title: "Currency", content: "Euros (€), Yen (¥), and major credit cards.", tag: "Money Credit" },
+
+        ];
+        
+        // --- GLOBAL STATE & DOM ELEMENTS ---
+        let currentTips = [...ALL_TIPS];
+        let currentFactIndex = 0;
+        let rotationTimer = null;
+
+        const factContainer = document.getElementById('fact-container');
+        const searchInput = document.getElementById('search-input');
+        const noResultsMsg = document.getElementById('no-results-message');
+        const tickerViewport = document.getElementById('ticker-viewport');
+
+        // --- GRAPHICAL FLAIR (Lightning Bolt SVG) ---
+        const LIGHTNING_ICON = `
+            <svg class="w-3.5 h-3.5 inline mr-1 -mt-0.5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.832 1.587l-7 10A1 1 0 019 18v-5H5a1 1 0 01-.832-1.587l7-10a1 1 0 011.132-.367z" clip-rule="evenodd"></path>
+            </svg>`;
+
+
+        // --- TICKER/ROTATION LOGIC ---
+
+        /**
+         * Clears all existing facts and injects the new HTML structure based on currentTips.
+         */
+        function renderTickerFacts() {
+            factContainer.innerHTML = '';
+            
+            if (currentTips.length === 0) {
+                return;
+            }
+
+            currentTips.forEach((tip, index) => {
+                const factElement = document.createElement('div');
+                factElement.className = 'ticker-fact px-3 text-gray-100'; // Updated text color for contrast
+                factElement.dataset.index = index;
+                factElement.innerHTML = `
+                    <!-- INCREASED FACT TEXT SIZE to text-sm -->
+                    <p class="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis text-contrast-shadow">
+                        ${LIGHTNING_ICON}
+                        <span class="font-bold">${tip.title}:</span> ${tip.content}
+                    </p>
+                `;
+                factContainer.appendChild(factElement);
+            });
+        }
+
+        /**
+         * Starts or restarts the interval timer for rotating facts.
+         */
+        function startRotation() {
+            if (rotationTimer) {
+                clearInterval(rotationTimer);
+            }
+
+            if (currentTips.length <= 1) {
+                 // If 0 or 1 fact, no rotation needed. Ensure the single fact is visible.
+                 if (currentTips.length === 1) {
+                    const factEl = factContainer.querySelector(`[data-index="0"]`);
+                    if (factEl) {
+                        factEl.classList.add('active');
+                        factEl.classList.remove('exiting', 'entering');
+                    }
+                 }
+                 return; 
+            }
+
+            currentFactIndex = 0; // Reset index to start of filtered list
+            showFact(0, 'immediate'); // Show the first fact instantly
+
+            rotationTimer = setInterval(() => {
+                const nextIndex = (currentFactIndex + 1) % currentTips.length;
+                showFact(nextIndex, 'slide');
+            }, ROTATION_INTERVAL_MS);
+        }
+
+        /**
+         * Controls the visibility and animation of the facts.
+         * @param {number} newIndex - The index of the fact to show.
+         * @param {string} mode - 'immediate' or 'slide'.
+         */
+        function showFact(newIndex, mode) {
+            if (currentTips.length === 0) return;
+            
+            const currentFactEl = factContainer.querySelector(`.ticker-fact.active`);
+            const nextFactEl = factContainer.querySelector(`[data-index="${newIndex}"]`);
+
+            if (currentFactEl) {
+                // Animate old fact out
+                currentFactEl.classList.remove('active', 'entering');
+                if (mode === 'slide') {
+                    currentFactEl.classList.add('exiting');
+                } else {
+                    currentFactEl.classList.remove('exiting');
+                }
+            }
+
+            if (nextFactEl) {
+                // Animate new fact in
+                nextFactEl.classList.remove('exiting');
+                if (mode === 'slide') {
+                    // Start in the 'entering' state, transition to 'active'
+                    nextFactEl.classList.add('entering');
+                    // Use a slight delay to ensure transition happens
+                    setTimeout(() => {
+                        nextFactEl.classList.remove('entering');
+                        nextFactEl.classList.add('active');
+                    }, 50);
+                } else {
+                    nextFactEl.classList.add('active');
+                }
+            }
+            currentFactIndex = newIndex;
+        }
+        
+        // --- USER INTERACTION LOGIC ---
+
+        /**
+         * Filters the tips based on the search query and updates the ticker.
+         */
+        function filterTips() {
+            const query = searchInput.value.toLowerCase().trim();
+
+            if (query === '') {
+                currentTips = [...ALL_TIPS];
+            } else {
+                currentTips = ALL_TIPS.filter(tip => 
+                    tip.title.toLowerCase().includes(query) ||
+                    tip.content.toLowerCase().includes(query) ||
+                    tip.tag.toLowerCase().includes(query)
+                );
+            }
+            
+            // Re-render the HTML elements based on filtered list
+            renderTickerFacts();
+            
+            const contentVisible = currentTips.length > 0;
+            noResultsMsg.classList.toggle('hidden', contentVisible);
+            tickerViewport.classList.toggle('hidden', !contentVisible);
+
+            // Restart rotation cycle on the new set of tips
+            startRotation();
+        }
+
+        /**
+         * Pause/Resume rotation on hover.
+         */
+        function setupHoverEvents() {
+            tickerViewport.addEventListener('mouseenter', () => {
+                if (rotationTimer) {
+                    clearInterval(rotationTimer);
+                }
+            });
+            tickerViewport.addEventListener('mouseleave', () => {
+                startRotation(); // Will check if rotation is needed internally
+            });
+        }
+
+
+        // --- INITIALIZATION ---
+        
+        window.onload = function() {
+            // FIX: Add the event listener to trigger filtering when the user types
+            searchInput.addEventListener('input', filterTips);
+            
+            setupHoverEvents();
+            
+            // Initial render and start
+            renderTickerFacts();
+            filterTips(); // Initial call to show all facts and start rotation
+        };
+/* -- END Tip Search FAQ INFO --*/
+// Show hints briefly on load and after each page change
+function showSwipeHints() {
+  document.querySelectorAll('.swipe-hint, .swipe-hint-text').forEach(el => {
+    el.style.opacity = '1';
+    setTimeout(() => el.style.opacity = '0', 1500);
+  });
+}
+document.addEventListener('DOMContentLoaded', showSwipeHints);
+// Hook into page change
+const oldShowPage = window.showPage;
+window.showPage = function(id) {
+  if (typeof oldShowPage === 'function') oldShowPage(id);
+  showSwipeHints();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const drawer = document.querySelector('.footer-drawer');
+  if (drawer) {
+    drawer.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+      drawer.textContent = drawer.classList.contains('open') ? 'Less ▾' : 'More ▴';
+    });
+  }
+});
+
+    </script>
+<script data-merged-swipe="1">
+/* MOBILE RESCUE SWIPE - uses .content-page elements and toggles .active-page */
+document.addEventListener('DOMContentLoaded', function() {
+  const pages = Array.from(document.querySelectorAll('.content-page'));
+  if (!pages.length) return;
+  let current = pages.findIndex(p => p.classList.contains('active-page'));
+  if (current === -1) current = 0;
+  function goToIndex(i) {
+    if (typeof window.showPage === 'function') {
+      window.showPage(pages[i].id);
+    } else {
+      pages.forEach((p, idx) => p.classList.toggle('active-page', idx === i));
+    }
+  }
+  goToIndex(current);
+  let startX = 0;
+  window.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive:true});
+  window.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff > 60 && current > 0) { current--; goToIndex(current); }
+    else if (diff < -60 && current < pages.length - 1) { current++; goToIndex(current); }
+  }, {passive:true});
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const sections = document.querySelectorAll(".footer-rotator-section");
+  let index = 0;
+  function showNext() {
+    sections.forEach((s,i)=> s.classList.toggle("active", i===index));
+    index = (index+1) % sections.length;
+  }
+  if (sections.length > 0) {
+    showNext();
+    setInterval(showNext, 4000); // rotate every 4 seconds
+  }
+});
+</script>
+<div class="swipe-hint left"><br/><br/><i class="fas fa-angles-left"></i><br/><br/><br/><br/></div>
+<div class="swipe-hint right"><br/><br/><i class="fas fa-angles-right"></i><br/><br/><br/><br/></div>
+<div class="swipe-hint-text"></div>
+</div><script>
+/* ===========================
+   JS: Vertical Poll + tweaks
+   =========================== */
+
+/* ---------- Data & contacts ---------- */
+const contacts = {
+  mom: { name: "•✦ ❤ ✦ Mom ✦ ❤ ✦•", avatar: "M" },
+  wifey: { name: " ★❤✦ Wifey ✦❤★ ", avatar: "💖" },
+  bestie: { name: "✿ Bestie ✿", avatar: "✿" },
+  emily: { name: "Dr. Emily D., M.D.", avatar: "E" },
+  vinny: { name: "💎 Vinny 💎", avatar: "💎" },
+  gymbro: { name: "🤜 Gym Bro 🤛🏻", avatar: "🏋🏻" },
+  unknown: { name: "Unknown", avatar: "❓" }
+};
+
+/* reviews — green bubble conversation for wifey thread; husband-style playful reply */
+const reviews = [
+  { date: "Sep 12, 2025", messages: [
+      { type: "text", sender: "them", contact: "mom", text: "hey em how's your vacation goin'?" },
+      { type: "text", sender: "me", contact: "emily", text: "OMG its so gorgeous here, i never want to leave 😎" },
+      { type: "text", sender: "me", contact: "emily", text: "lol jk I might leave 😅" }
+  ]},
+  { date: "Sep 9, 2025", messages: [
+      { type: "text", sender: "them", contact: "gymbro", text: "What's it like there, bro?!" },
+      { type: "photo", sender: "me", contact: "vinny", src: "smsBeach.jpg", caption: "Para-para...paradise 🎶😎🏖️" },
+      { type: "text", sender: "them", contact: "gymbro", text: "Bro...🤯" }
+  ]},
+  { date: "Sep 4, 2025", messages: [
+      { type: "photo", sender: "them", contact: "bestie", src: "smsSunset.jpg", caption: "Last night’s sunset 🌅" },
+      { type: "text", sender: "me", contact: "emily", text: "That’s unreal. I’m booking my flight now ✈️🧳" },
+      { type: "text", sender: "them", contact: "bestie", text: "Lol hurry up! 😂" }
+  ]},
+  { date: "Aug 31, 2025", messages: [
+      { type: "text", sender: "them", contact: "wifey", text: "Babe! Where are you - i'm soOOO hungry 😘" },
+      { type: "text", sender: "me", contact: "vinny", text: "On the beach — near Sunset Swan Cafe. whatchu wnat?! 🤤" },
+      { type: "text", sender: "me", contact: "vinny", text: "*want" },
+      { type: "text", sender: "them", contact: "wifey", text: "surprise me😏", bubble: "sms" } // entire convo uses sms style for incoming (we'll mark them)
+  ]}
+];
+
+const CTAS = ["When are you coming over?","Your adventure is waiting…","Don’t keep paradise waiting 🌴","This could be you ✈️"];
+
+/* ---------- state & refs ---------- */
+let reviewIndex = 0;
+let altToggle = true;
+let battery = 100;
+let paused = false;
+let pingedThisCycle = false;
+let volume = 0.25;
+let firstNotificationFired = false;
+
+const notifStack = document.getElementById('notifStack');
+const wallpaper = document.getElementById('wallpaper');
+const bigClock = document.getElementById('bigClock');
+const bigDate = document.getElementById('bigDate');
+const timeTop = document.getElementById('timeTop');
+const batteryEl = document.getElementById('battery');
+const chatOverlay = document.getElementById('chatOverlay');
+const chatBody = document.getElementById('chatBody');
+const chatHeaderAvatar = document.getElementById('chatHeaderAvatar');
+const chatHeaderName = document.getElementById('chatHeaderName');
+const callOverlay = document.getElementById('callOverlay');
+const callTitle = document.getElementById('callTitle');
+const callSubtitle = document.getElementById('callSubtitle');
+const acceptBtn = document.getElementById('acceptBtn');
+const declineBtn = document.getElementById('declineBtn');
+const ping = document.getElementById('ping');
+const ring = document.getElementById('ring');
+const pauseBtn = document.getElementById('pauseBtn');
+const volSlider = document.getElementById('volSlider');
+const muteBtn = document.getElementById('muteBtn');
+const volFill = document.getElementById('volFill');
+const volPercentLabel = document.getElementById('volPercentLabel');
+
+wallpaper.style.backgroundImage = 'url("lockscreenBg.jpg")';
+
+/* ---------- Time (no leading zero) ---------- */
+function updateTimeDisplays(){
+  const d = new Date();
+  const t = d.toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+  timeTop.textContent = t;
+  bigClock.textContent = t;
+  bigDate.textContent = d.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+}
+setInterval(updateTimeDisplays,1000); updateTimeDisplays();
+
+/* ---------- Battery: 1% every 5s; calls -5% on arrival ---------- */
+let drainInterval = setInterval(()=>{ if(!paused) drainBattery(); }, 5000);
+function drainBattery(){
+  if (battery > 0){
+    battery = Math.max(0, battery - 1);
+    updateBatteryDisplay();
+    if (battery === 0) showBatteryZero();
+  }
+}
+function deductCallBattery(){
+  battery = Math.max(0, battery - 5);
+  updateBatteryDisplay();
+  if (battery === 0) showBatteryZero();
+}
+function updateBatteryDisplay(){
+  const el = batteryEl;
+  el.textContent = '🔋 ' + battery + '%';
+  if (battery <= 10){
+    el.classList.add('battery-low');
+  } else {
+    el.classList.remove('battery-low');
+  }
+}
+
+/* ---------- helpers ---------- */
+function mk(tag,cls,html){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html !== undefined) e.innerHTML = html;
+  return e;
+}
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+function safePlay(audio){ try{ audio.currentTime = 0; audio.volume = volume; audio.play().catch(()=>{}); } catch(e){} }
+
+/* ---------- Volume UI ---------- */
+volSlider.addEventListener('input', async (e)=>{
+  volume = parseFloat(e.target.value);
+  volFill.style.width = Math.round(volume*100) + '🔊';
+  volPercentLabel.textContent = Math.round(volume*100) + '🔊';
+  ping.volume = volume; ring.volume = volume;
+  if (volume === 0){ muteBtn.setAttribute('aria-pressed','true'); muteBtn.textContent='Muted'; } else { muteBtn.setAttribute('aria-pressed','false'); muteBtn.textContent='Mute'; }
+  try{ ping.currentTime = 0; await ping.play().catch(()=>{}); } catch(e){}
+});
+muteBtn.addEventListener('click', ()=>{
+  if (volume === 0){ volume = 0.5; volSlider.value = 0.5; volFill.style.width = '50%'; volPercentLabel.textContent='50🔊'; ping.volume = 0.5; ring.volume = 0.5; muteBtn.setAttribute('aria-pressed','false'); muteBtn.textContent='Mute'; }
+  else { volume = 0; volSlider.value = 0; volFill.style.width = '0%'; volPercentLabel.textContent='0🔇'; ping.volume = 0; ring.volume = 0; muteBtn.setAttribute('aria-pressed','true'); muteBtn.textContent='Muted'; }
+});
+
+/* ---------- initial delay before first notification (3s) ---------- */
+async function waitThenStart(delay=3000){
+  await sleep(delay);
+  firstNotificationFired = true;
+}
+
+/* ---------- single lock notif (only one ping per cycle) ---------- */
+async function showSingleLockNotif(senderKey, text){
+  notifStack.innerHTML = '';
+  const node = mk('div','lock-notif');
+  const av = mk('div','avatar', contacts[senderKey]?.avatar || '◯' );
+  const content = mk('div','content');
+  const title = mk('div','title', contacts[senderKey]?.name || senderKey );
+  const preview = mk('div','preview', text );
+  content.appendChild(title); content.appendChild(preview); node.appendChild(av); node.appendChild(content);
+  notifStack.prepend(node);
+  await sleep(40); node.classList.add('show');
+  if (!pingedThisCycle){ safePlay(ping); pingedThisCycle = true; }
+  await sleep(2000); node.classList.remove('show'); await sleep(250);
+}
+
+/* ---------- unlock to chat & messages (green SMS convo preserved) ---------- */
+async function unlockToChat(review){
+  const firstContact = review.messages[0].contact;
+  chatHeaderAvatar.textContent = contacts[firstContact]?.avatar || '◯';
+  chatHeaderName.textContent = contacts[firstContact]?.name || firstContact;
+  chatBody.innerHTML = '';
+  chatOverlay.classList.add('visible');
+
+  for (let msg of review.messages){
+    const typingRow = mk('div','msg-row ' + (msg.sender === 'me' ? 'me' : ''));
+    const av = mk('div','msg-avatar', contacts[msg.contact]?.avatar || '◯');
+    const typingBubble = mk('div','typing','<div class="dot"></div><div class="dot"></div><div class="dot"></div>');
+    if (msg.sender === 'me'){ typingRow.appendChild(typingBubble); typingRow.appendChild(av); } else { typingRow.appendChild(av); typingRow.appendChild(typingBubble); }
+    chatBody.appendChild(typingRow); chatBody.scrollTop = chatBody.scrollHeight;
+    await sleep(1100);
+    if (typingRow.parentNode) chatBody.removeChild(typingRow);
+
+    const row = mk('div','msg-row ' + (msg.sender === 'me' ? 'me' : ''));
+    const avatar = mk('div','msg-avatar', contacts[msg.contact]?.avatar || '◯');
+    // Determine bubble class: if contact is 'wifey' keep sms style for entire convo (incoming)
+    const bubbleClass = (msg.bubble === 'easter') ? 'msg-bubble easter' :
+                        (msg.bubble === 'sms' || (msg.contact === 'wifey' && msg.sender !== 'me')) ? 'msg-bubble sms' :
+                        (msg.sender === 'me' ? 'msg-bubble me' : 'msg-bubble them');
+    const bubble = mk('div', bubbleClass);
+    const name = mk('div','msg-name', contacts[msg.contact]?.name || msg.contact );
+    bubble.appendChild(name);
+
+    if (msg.type === 'text'){
+      bubble.insertAdjacentText('beforeend', ' ' + msg.text);
+    } else if (msg.type === 'photo'){
+      const wrap = mk('div','photo-wrap');
+      const img = mk('img','photo'); img.src = msg.src; img.alt = msg.caption || 'photo';
+      wrap.appendChild(img); bubble.appendChild(wrap);
+      if (msg.caption){
+        const cap = mk('div','msg-time', msg.caption );
+        cap.style.color = (msg.sender === 'me') ? '#111' : '#333';
+        bubble.appendChild(cap);
+      }
+    }
+
+    if (msg.sender === 'me'){ row.appendChild(bubble); row.appendChild(avatar); } else { row.appendChild(avatar); row.appendChild(bubble); }
+    chatBody.appendChild(row); chatBody.scrollTop = chatBody.scrollHeight;
+    await sleep(2100);
+  }
+
+  const rr = mk('div','read-receipt','Read ' + new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit'}) );
+  chatBody.appendChild(rr); chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+/* ---------- return to lock ---------- */
+async function returnToLockScreen(){
+  await sleep(2200);
+  chatOverlay.classList.remove('visible');
+  await sleep(1300);
+  notifStack.innerHTML = '';
+  pingedThisCycle = false;
+}
+
+/* ---------- final event: call or poll ---------- */
+async function showFinalEvent(){
+  if (battery === 0) return;
+
+  if (altToggle){
+    // incoming call: deduct 5% now
+    deductCallBattery();
+
+    callTitle.textContent = '🏖️🌴 Your Vacation 🌴🏖️';
+    callSubtitle.textContent = 'is calling…';
+    callOverlay.classList.add('show');
+    ring.volume = volume;
+    try{ ring.currentTime = 0; ring.play().catch(()=>{}); }catch(e){}
+    await new Promise(resolve=>{
+      let done=false;
+      function cleanup(){ if(done) return; done=true; try{ ring.pause(); ring.currentTime=0; }catch(e){} callOverlay.classList.remove('show'); resolve(); }
+      acceptBtn.onclick = cleanup;
+      declineBtn.onclick = cleanup;
+      setTimeout(()=>{ cleanup(); },15000);
+    });
+  } else {
+    // poll with 3 options (Yes, No, Maybe later)
+    notifStack.innerHTML = '';
+    const node = mk('div','lock-notif');
+    const av = mk('div','avatar','★');
+    const content = mk('div','content');
+    const title = mk('div','title','Quick Poll');
+    const preview = mk('div','preview','Are you ready to book your trip?!');
+    const actions = mk('div','poll-actions');
+    const yes = mk('button','btn-yes','Yes 👍');
+    const no = mk('button','btn-no','No 👎');
+    const maybe = mk('button','btn-maybe','Maybe later 🤷‍♀️');
+
+    yes.style.cssText = 'background:#34c759;color:#fff;border:0;padding:9px 8px;border-radius:8px';
+    no.style.cssText = 'background:#ff3b30;color:#fff;border:0;padding:9px 8px;border-radius:8px';
+    maybe.style.cssText = 'background:#9aa0a6;color:#fff;border:0;padding:9px 8px;border-radius:8px';
+
+    actions.appendChild(yes); actions.appendChild(no); actions.appendChild(maybe);
+    content.appendChild(title); content.appendChild(preview); content.appendChild(actions);
+    node.appendChild(av); node.appendChild(content);
+    notifStack.prepend(node);
+
+    await sleep(40); node.classList.add('show'); safePlay(ping);
+
+    const result = await new Promise(resolve=>{
+      let done=false;
+      yes.onclick = ()=>{ if(done) return; done=true; node.classList.remove('show'); resolve('yes'); };
+      no.onclick = ()=>{ if(done) return; done=true; node.classList.remove('show'); resolve('no'); };
+      maybe.onclick = ()=>{ if(done) return; done=true; node.classList.remove('show'); resolve('no'); }; // same behavior as No
+      setTimeout(()=>{ if(done) return; done=true; node.classList.remove('show'); resolve('timeout'); },15000);
+    });
+
+    if (result === 'no'){
+      // randomized results, ensure sum 100
+      const yesPct = Math.floor(40 + Math.random()*41); // 40..80
+      const rest = 100 - yesPct;
+      const noPct = Math.floor(rest * (0.4 + Math.random()*0.5)); // portion to 'no'
+      const maybePct = 100 - yesPct - noPct;
+      showPollResultBelowTime({yes:yesPct, no:noPct, maybe: maybePct});
+      await sleep(9000); // persist longer (9s)
+      hidePollResultBelowTime();
+    }
+
+    notifStack.innerHTML = '';
+  }
+
+  altToggle = !altToggle;
+}
+
+/* ---------- poll result: vertical bars (CSS) ---------- */
+function showPollResultBelowTime(data){
+  // create frosted-inline
+  const box = mk('div','frosted-inline poll-glow show');
+  box.style.pointerEvents = 'auto';
+
+  // left: vertical bars
+  const vb = mk('div','vertical-bars');
+  const vYes = mk('div','vbar');
+  const barYesOuter = mk('div','bar'); const fillYes = mk('div','fill yes'); fillYes.style.height = '0%';
+  const pctYes = mk('div','pct','' + data.yes + '%');
+  const lblYes = mk('div','label','Yes 👍');
+  barYesOuter.appendChild(fillYes); vYes.appendChild(pctYes); vYes.appendChild(barYesOuter); vYes.appendChild(lblYes);
+
+  const vNo = mk('div','vbar');
+  const barNoOuter = mk('div','bar'); const fillNo = mk('div','fill no'); fillNo.style.height = '0%';
+  const pctNo = mk('div','pct','' + data.no + '%');
+  const lblNo = mk('div','label','No 👎');
+  barNoOuter.appendChild(fillNo); vNo.appendChild(pctNo); vNo.appendChild(barNoOuter); vNo.appendChild(lblNo);
+
+  const vMaybe = mk('div','vbar');
+  const barMaybeOuter = mk('div','bar'); const fillMaybe = mk('div','fill maybe'); fillMaybe.style.height = '0%';
+  const pctMaybe = mk('div','pct','' + data.maybe + '%');
+  const lblMaybe = mk('div','label','??? 🤷‍♀️');
+  barMaybeOuter.appendChild(fillMaybe); vMaybe.appendChild(pctMaybe); vMaybe.appendChild(barMaybeOuter); vMaybe.appendChild(lblMaybe);
+
+  vb.appendChild(vYes); vb.appendChild(vNo); vb.appendChild(vMaybe);
+
+  // right: summary text
+  const summary = mk('div','content','<div style="font-weight:700;margin-bottom:6px"><<< Results</div>');
+
+  box.appendChild(vb); box.appendChild(summary);
+  notifStack.prepend(box);
+
+  // animate fills (use requestAnimationFrame)
+  requestAnimationFrame(()=>{ fillYes.style.height = data.yes + '%'; fillNo.style.height = data.no + '%'; fillMaybe.style.height = data.maybe + '%'; });
+}
+
+function hidePollResultBelowTime(){
+  const el = notifStack.querySelector('.frosted-inline');
+  if (el) el.parentNode.removeChild(el);
+}
+
+/* ---------- battery zero ---------- */
+function showBatteryZero(){
+  notifStack.innerHTML = '';
+  try{ ring.pause(); ring.currentTime = 0; }catch(e){}
+  chatOverlay.classList.remove('visible');
+  const node = mk('div','lock-notif show');
+  const av = mk('div','avatar','⚡');
+  const content = mk('div','content');
+  const title = mk('div','title','Battery Empty!');
+  const preview = mk('div','preview','Looks like you could REALLY use a recharge! Get 20% off any vacation package. Only for you 😉 use code: 20TANME');
+  content.appendChild(title); content.appendChild(preview); node.appendChild(av); node.appendChild(content);
+  notifStack.prepend(node);
+}
+
+/* ---------- main flow & runner ---------- */
+async function runCycle(){
+  if (!firstNotificationFired) await waitThenStart(3000); // initial quiet delay (3s), only first cycle
+  if (battery === 0) return;
+  const review = reviews[reviewIndex];
+  const first = review.messages[0];
+  const senderKey = first.contact;
+  const previewText = first.text || first.caption || 'photo';
+
+  await showSingleLockNotif(senderKey, previewText);
+  await sleep(300);
+  await unlockToChat(review);
+  await returnToLockScreen();
+  await showFinalEvent();
+  await sleep(7000);
+  reviewIndex = (reviewIndex + 1) % reviews.length;
+}
+
+let running = true;
+async function runner(){
+  let primed=false;
+  function prime(){ if(!primed){ try{ ping.play().catch(()=>{}); ping.pause(); }catch(e){} primed=true; window.removeEventListener('pointerdown', prime); } }
+  window.addEventListener('pointerdown', prime);
+  while (running && battery > 0){
+    if (paused){ await sleep(500); continue; }
+    try{ await runCycle(); } catch(e){ console.error(e); await sleep(1000); }
+  }
+}
+runner();
+
+/* ---------- controls ---------- */
+
+/* ---------- debug helpers ---------- */
+window.__lockscreen_debug = {
+  setBattery: (v)=>{ battery = Math.max(0,Math.min(100,parseInt(v)||0)); const el=batteryEl; el.textContent='🔋 '+battery+'%'; if(battery<=10){ el.classList.add('battery-low'); } else { el.classList.remove('battery-low'); } if(battery===0) showBatteryZero(); },
+  nextReview: ()=>{ reviewIndex = (reviewIndex+1) % reviews.length; }
+};
+
+/*--Test Nav Drawer JS--*/
+
+const nav = document.querySelector('.drawer-nav');
+const fix = document.querySelector('.fixed-left-nav');
+const toggleBtn = nav.querySelector('.toggle-btn');
+
+toggleBtn.addEventListener('click', () => {
+  nav.classList.toggle('collapsed');
+  fix.classList.toggle('collapsed');
+});
+
+/*---End Nav Test--*/
+
+/* -- TEST BOOKING MODAL JS --*/
+
+// Modal elements
+const modal = document.getElementById("ctaModal");
+const iframe = document.getElementById("ctaIframe");
+const closeBtn = modal.querySelector(".close");
+
+// Open modal when CTA clicked
+document.querySelectorAll(".cta-button").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const url = "book.html"; // custom URL from button: previously btn.getAttribute("data-url")
+    iframe.src = url;
+    modal.style.display = "block";
+  });
+});
+
+// Close modal
+closeBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+  iframe.src = ""; // clear to stop background loading
+});
+
+// Close when clicking outside content
+window.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+    iframe.src = "";
+  }
+});
+
+/* --- Phone Button CTAs --- */
+
+document.addEventListener("click", function (e) {
+  if (e.target.matches(".btn-yes, .acceptBtn")) {
+    e.preventDefault();
+    const url = "book.html"; // replace with your booking page
+    const modal = document.getElementById("ctaModal");
+    const iframe = document.getElementById("ctaIframe");
+    iframe.src = url;
+    modal.style.display = "block";
+  }
+});
+
+
+/*--- END phone button cta ---*/
+
+// In the parent window's script
+window.addEventListener('message', function(event) {
+// Ensure the message is from a trusted origin (optional but recommended)
+// if (event.origin !== "http://your-iframe-origin.com") return; 
+
+  if (event.data === 'closeModal') {
+    const modal = document.getElementById('ctaModal'); // Replace with your modal's ID
+    const iframe = document.getElementById('ctaIframe'); // Replace with your iframe's ID
+
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  if (iframe) {
+    iframe.src = ''; // Clear iframe src to stop background loading
+    }
+  }
+});
+
+/* --END BOOKING MODAL JS --*/
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = document.getElementById("ctaModal");
+  const iframe = document.getElementById("ctaIframe");
+
+  // Function to open modal and set iframe source
+  const modalTrigger = (e) => {
+    if (!modal) return;
+    modal.style.display = "block";
+
+    // If button has a data-src, load it into the iframe
+    const src = e.currentTarget.getAttribute("data-src");
+    if (iframe && src) {
+      iframe.src = src;
+    }
+  };
+
+  // Attach to all CTA buttons including the "Answer" button (#acceptBtn)
+  document.querySelectorAll(
+    "#acceptBtn, .acceptBtn, .btn-yes, .answer, .answerBtn, .btn-answer, .phone-answer, .cta-button"
+  ).forEach(btn => btn.addEventListener("click", modalTrigger));
+});
+</script>
+
+</body>
+</html>

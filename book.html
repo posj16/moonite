@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taniti Island Accessible Booking</title>
+    <!-- Load Tailwind CSS: REQUIRED for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons: REQUIRED for icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=IBM+Plex+Mono:wght@400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Dark background */
+	    overflow-y: scroll;       /* still allow scrolling */
+	    scrollbar-width: none;    /* Firefox */
+	    -ms-overflow-style: none; /* IE/Edge */
+        }
+
+	html::-webkit-scrollbar, 
+	body::-webkit-scrollbar {
+	display: none;            /* Chrome, Safari */
+	}
+
+        /* Use IBM Plex Mono for financial figures for a more professional, fixed-width look */
+        .font-mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* Custom Scrollbar for better appearance on dark theme */
+        .modal-body::-webkit-scrollbar {
+            width: 1px;
+        }
+        .modal-body::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 4px;
+        }
+        .modal-body::-webkit-scrollbar-track {
+            background-color: #1a202c;
+        }
+
+        /* Card transition for hover effect */
+        .booking-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .booking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        .booking-card.selected {
+            border-color: #38bdf8; /* Sky-400 */
+            box-shadow: 0 0 0 3px #38bdf8;
+            background-color: #1f2937; /* Darker background when selected */
+        }
+
+        /* Custom Calendar Styling */
+        .date-cell.active {
+            background-color: #38bdf8 !important;
+            color: white !important;
+            font-weight: 600;
+        }
+        .date-cell.range {
+            background-color: #0ea5e966; /* Sky-600 with transparency */
+            border-radius: 0;
+            color: white;
+        }
+        .date-cell.start, .date-cell.end {
+            background-color: #0ea5e9 !important; /* Sky-600 */
+            border-radius: 9999px;
+            color: white !important;
+        }
+        .date-cell.disabled {
+            color: #4b5563;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        /* Credit Card Mockup Style */
+        .credit-card-mockup {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            border: 1px solid #4b5563;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .chip {
+            width: 32px;
+            height: 24px;
+            background-color: #d1d5db;
+            border-radius: 4px;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 900;
+            font-style: italic;
+            background: linear-gradient(45deg, #FF9500, #F36E00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="p-4 flex items-center justify-center min-h-screen">
+
+    <!-- Booking Modal Container -->
+    <div id="bookingModal" class="w-full max-w-4xl bg-gray-800 rounded-xl shadow-2xl transition-all duration-300 overflow-hidden">
+        <header class="p-6 border-b border-gray-700">
+            <h2 class="text-3xl font-extrabold text-white flex items-center">
+                <i data-lucide="plane-takeoff" class="w-7 h-7 mr-3 text-sky-400"></i>
+                Taniti Island Booking
+            </h2>
+            <p class="text-gray-400 mt-1">Plan your perfect getaway in a few simple steps.</p>
+        </header>
+
+        <!-- Stepper Navigation -->
+        <div class="px-6 pt-4 pb-2 border-b border-gray-700">
+            <div class="flex justify-between items-center text-sm font-medium">
+                <div class="step-indicator flex flex-col items-center cursor-pointer" data-step="1">
+                    <div class="step-circle w-8 h-8 flex items-center justify-center rounded-full bg-sky-500 text-white transition-colors">1</div>
+                    <span class="mt-1 text-xs text-sky-400">Activity</span>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-600 mx-2 step-line transition-colors"></div>
+                <div class="step-indicator flex flex-col items-center cursor-pointer" data-step="2">
+                    <div class="step-circle w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 text-gray-300 transition-colors">2</div>
+                    <span class="mt-1 text-xs text-gray-500">Dates</span>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-600 mx-2 step-line transition-colors"></div>
+                <div class="step-indicator flex flex-col items-center cursor-pointer" data-step="3">
+                    <div class="step-circle w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 text-gray-300 transition-colors">3</div>
+                    <span class="mt-1 text-xs text-gray-500">Details</span>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-600 mx-2 step-line transition-colors"></div>
+                <div class="step-indicator flex flex-col items-center cursor-pointer" data-step="4">
+                    <div class="step-circle w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 text-gray-300 transition-colors">4</div>
+                    <span class="mt-1 text-xs text-gray-500">Payment</span>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-600 mx-2 step-line transition-colors"></div>
+                <div class="step-indicator flex flex-col items-center cursor-pointer" data-step="5">
+                    <div class="step-circle w-8 h-8 flex items-center justify-center rounded-full bg-gray-600 text-gray-300 transition-colors">5</div>
+                    <span class="mt-1 text-xs text-gray-500">Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Body (Content) -->
+        <div id="modalBody" class="p-6 h-[500px] overflow-y-auto modal-body">
+            <form id="bookingForm" onsubmit="return false;">
+
+                <!-- Step 1: What are you booking? -->
+                <div id="step-1" class="booking-step space-y-6">
+                    <h3 class="text-2xl font-semibold text-white">1. Choose Your Experience (Select All That Apply)</h3>
+                    
+                    <!-- BASE CHARGE EXPLANATION -->
+                    <div class="p-4 bg-yellow-900 text-yellow-200 rounded-lg border border-yellow-500 flex items-start">
+                        <i data-lucide="info" class="w-5 h-5 mr-3 mt-0.5 text-yellow-400 flex-shrink-0"></i>
+                        <div class="text-sm">
+                            <p class="font-bold">Mandatory Island Fee:</p>
+                            <p>All bookings include a non-refundable **$300.00 Mandatory Island & Facility Fee**, covering essential island access and maintenance.</p>
+                        </div>
+                    </div>
+
+                    <!-- Validation Message for Activity Selection -->
+                    <div id="activityError" class="hidden p-3 bg-red-800 text-white rounded-lg border border-red-500 flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i>
+                        Please select at least one activity to continue.
+                    </div>
+
+                    <div id="activitySelectionGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <!-- Dive Package Card -->
+                        <label for="bookingDive" class="booking-card bg-gray-700 text-white rounded-lg p-3 text-center cursor-pointer border-2 border-transparent hover:border-sky-500">
+                            <input type="checkbox" id="bookingDive" name="bookingActivity" value="Scuba Diving" class="hidden" checked>
+                            <div class="space-y-1">
+                                <i data-lucide="sailboat" class="w-6 h-6 mx-auto text-sky-400"></i>
+                                <p class="text-sm font-medium">Scuba Diving</p>
+                                <p class="text-xs text-gray-400">($150 per person, per day)</p>
+                            </div>
+                        </label>
+
+                        <!-- Hiking Package Card -->
+                        <label for="bookingHike" class="booking-card bg-gray-700 text-white rounded-lg p-3 text-center cursor-pointer border-2 border-transparent hover:border-sky-500">
+                            <input type="checkbox" id="bookingHike" name="bookingActivity" value="Volcano Hiking" class="hidden">
+                            <div class="space-y-1">
+                                <i data-lucide="mountain" class="w-6 h-6 mx-auto text-green-400"></i>
+                                <p class="text-sm font-medium">Volcano Hiking</p>
+                                <p class="text-xs text-gray-400">($150 per person, per day)</p>
+                            </div>
+                        </label>
+
+                        <!-- Resort Stay Card -->
+                        <label for="bookingResort" class="booking-card bg-gray-700 text-white rounded-lg p-3 text-center cursor-pointer border-2 border-transparent hover:border-sky-500">
+                            <input type="checkbox" id="bookingResort" name="bookingActivity" value="Resort Stay" class="hidden">
+                            <div class="space-y-1">
+                                <i data-lucide="hotel" class="w-6 h-6 mx-auto text-pink-400"></i>
+                                <p class="text-sm font-medium">Resort Stay</p>
+                                <p class="text-xs text-gray-400">($150 per person, per day)</p>
+                            </div>
+                        </label>
+
+                        <!-- Helicopter Rides Card (ROCKET ICON) -->
+                        <label for="bookingHeli" class="booking-card bg-gray-700 text-white rounded-lg p-3 text-center cursor-pointer border-2 border-transparent hover:border-sky-500">
+                            <input type="checkbox" id="bookingHeli" name="bookingActivity" value="Helicopter Ride" class="hidden">
+                            <div class="space-y-1">
+                                <i data-lucide="globe" class="w-6 h-6 mx-auto text-red-400"></i>
+                                <p class="text-sm font-medium">Helicopter Ride</p>
+                                <p class="text-xs text-gray-400">($150 per person, per day)</p>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Step 2: Select Dates -->
+                <div id="step-2" class="booking-step hidden space-y-6">
+                    <h3 class="text-2xl font-semibold text-white">2. Select Your Dates</h3>
+                    <div class="bg-gray-700 rounded-xl p-4 shadow-lg flex flex-col lg:flex-row gap-6">
+                        <!-- Calendar Widget -->
+                        <div class="lg:w-1/2">
+                            <div class="flex justify-between items-center mb-4 text-white">
+                                <button type="button" onclick="prevMonth()" class="p-2 rounded-full hover:bg-gray-600 transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                                <div id="monthYearDisplay" class="text-lg font-bold"></div>
+                                <button type="button" onclick="nextMonth()" class="p-2 rounded-full hover:bg-gray-600 transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+                            </div>
+                            <div class="grid grid-cols-7 text-center text-sm font-semibold text-gray-400">
+                                <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                            </div>
+                            <div id="calendarGrid" class="grid grid-cols-7 text-center mt-2 text-white">
+                                <!-- Calendar days injected here -->
+                            </div>
+                        </div>
+
+                        <!-- Date Summary and Selection -->
+                        <div class="lg:w-1/2 space-y-4">
+                            <div class="p-4 bg-gray-800 rounded-lg shadow-inner">
+                                <h4 class="text-xl font-semibold text-sky-400 mb-2">Trip Summary</h4>
+                                <p class="text-gray-300">Start Date: <span id="startDateDisplay" class="font-medium text-white">-</span></p>
+                                <p class="text-gray-300">End Date: <span id="endDateDisplay" class="font-medium text-white">-</span></p>
+                                <p class="text-gray-300">Duration: <span id="durationDisplay" class="font-medium text-white">0 nights</span></p>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="guests" class="block text-sm font-medium text-gray-300">Number of Passengers</label>
+                                <select id="guests" required class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7+</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Passenger Details -->
+                <div id="step-3" class="booking-step hidden space-y-6">
+                    <h3 class="text-2xl font-semibold text-white">3. Passenger Details</h3>
+                    
+                    <!-- Primary Contact Information Block -->
+                    <div class="p-4 bg-gray-700 rounded-xl shadow-inner space-y-4">
+                        <h4 class="text-lg font-medium text-sky-400">Primary Contact Information</h4>
+
+                        <!-- Phone Number Field Group -->
+                        <div class="grid grid-cols-4 gap-4">
+                            <!-- Country Code Dropdown -->
+                            <div class="col-span-1">
+                                <label for="primaryPhoneCode" class="block text-sm font-medium text-gray-300">Code</label>
+                                <select id="primaryPhoneCode" required class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500">
+                                    <option value="+1" selected>+1 (US/CA)</option>
+                                    <option value="+81">+81 (Japan)</option>
+                                    <option value="+44">+44 (UK)</option>
+                                    <option value="+61">+61 (AU)</option>
+                                    <option value="+49">+49 (DE)</option>
+                                </select>
+                            </div>
+                            <!-- Phone Number Input -->
+                            <div class="col-span-3">
+                                <label for="primaryPhoneNumber" class="block text-sm font-medium text-gray-300">Phone Number</label>
+                                <input type="tel" id="primaryPhoneNumber" required placeholder="555-123-4567" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500">
+                            </div>
+                        </div>
+
+                        <!-- Contact Email -->
+                        <div>
+                            <label for="contactEmail" class="block text-sm font-medium text-gray-300">Contact Email</label>
+                            <input type="email" id="contactEmail" required placeholder="name@example.com" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500">
+                        </div>
+                    </div>
+
+                    <div id="passengerDetails" class="space-y-4">
+                        <!-- Passenger forms will be injected here -->
+                    </div>
+
+                    <div class="mt-6 space-y-4">
+                        <label for="specialRequests" class="block text-sm font-medium text-gray-300">Special Requests (Optional)</label>
+                        <textarea id="specialRequests" rows="3" placeholder="Dietary restrictions, equipment rental, etc." class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 4: Payment -->
+                <div id="step-4" class="booking-step hidden space-y-6">
+                    <h3 class="text-2xl font-semibold text-white">4. Secure Payment</h3>
+                    <div class="bg-gray-700 rounded-xl p-6 space-y-6 shadow-lg">
+                        
+                        <!-- Total Price Display (Mock) -->
+                        <div class="flex justify-between items-center text-xl font-bold border-b border-gray-600 pb-4">
+                            <span class="text-gray-300">Estimated Total:</span>
+                            <span id="estimatedTotalDisplay" class="text-yellow-400 font-mono">Loading...</span>
+                        </div>
+
+                        <!-- Payment Method Selection (Radio Group) -->
+                        <fieldset class="space-y-4">
+                            <legend class="text-lg font-medium text-white mb-2">Payment Method</legend>
+                            
+                            <!-- Saved Card Option with Graphic -->
+                            <label for="paymentSaved" class="flex items-center p-3 bg-gray-800 rounded-lg cursor-pointer border border-transparent has-[:checked]:border-sky-400 transition">
+                                <input type="radio" id="paymentSaved" name="paymentMethod" value="saved" checked onchange="updatePaymentFormState()" class="form-radio h-4 w-4 text-sky-500 focus:ring-sky-500 border-gray-500">
+                                <span class="ml-3 text-white font-medium"></span>
+                                
+                                <!-- Credit Card Mockup -->
+                                <div class="credit-card-mockup ml-auto w-48 h-28 rounded-xl p-3 text-xs text-white">
+                                    <div class="flex justify-between">
+                                        <div class="chip"></div>
+                                        <div class="logo text-xl">VISA</div>
+                                    </div>
+                                    <div class="mt-2 tracking-widest font-mono text-sm">**** **** **** 0927</div>
+                                    <div class="flex justify-between mt-1 text-xs">
+                                        <span>EXPR 12/31</span> 
+                                        <!-- Adjusted text truncation for better fit -->
+                                        <span class="font-semibold text-gray-400 truncate max-w-[90px]">WGU TRAVEL ACCOUNT</span> 
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- New Card Option -->
+                            <label for="paymentNew" class="flex items-center p-3 bg-gray-800 rounded-lg cursor-pointer border border-transparent has-[:checked]:border-sky-400 transition">
+                                <input type="radio" id="paymentNew" name="paymentMethod" value="new" onchange="updatePaymentFormState()" class="form-radio h-4 w-4 text-sky-500 focus:ring-sky-500 border-gray-500">
+                                <span class="ml-3 text-white font-medium">Pay with New Card</span>
+                            </label>
+                        </fieldset>
+
+                        <!-- Manual Card Entry Fields (Toggled by JS) -->
+                        <div id="newCardFields" class="space-y-4 transition-opacity duration-300">
+                             <!-- Name on Card -->
+                             <div>
+                                <label for="cardName" class="block text-sm font-medium text-gray-300">Name on Card</label>
+                                <input type="text" id="cardName" placeholder="John S. Doe" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500" disabled>
+                            </div>
+
+                            <!-- Card Number -->
+                            <div>
+                                <label for="cardNumber" class="block text-sm font-medium text-gray-300">Card Number</label>
+                                <input type="text" id="cardNumber" placeholder="**** **** **** ****" maxlength="19" inputmode="numeric" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500" disabled>
+                            </div>
+                           
+                            <!-- Expiry and CVV -->
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="col-span-2">
+                                    <label for="cardExpiry" class="block text-sm font-medium text-gray-300">Expiry Date (MM/YY)</label>
+                                    <input type="text" id="cardExpiry" placeholder="01/25" maxlength="5" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500" disabled>
+                                </div>
+                                <div>
+                                    <label for="cardCvv" class="block text-sm font-medium text-gray-300">CVV</label>
+                                    <input type="text" id="cardCvv" placeholder="123" maxlength="4" inputmode="numeric" class="w-full p-3 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500" disabled>
+                                </div>
+                            </div>
+
+                            <!-- Billing Address Checkbox -->
+                            <div class="flex items-center pt-2">
+                                <input id="billingSame" type="checkbox" checked class="h-4 w-4 text-sky-500 border-gray-500 rounded bg-gray-600 focus:ring-sky-500">
+                                <label for="billingSame" class="ml-2 text-sm text-gray-300">Billing address same as contact details</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Step 5: Review and Grand Total -->
+                <div id="step-5" class="booking-step hidden space-y-6">
+                    <h3 class="text-2xl font-semibold text-white">5. Review & Grand Total</h3>
+                    <div id="reviewContent" class="bg-gray-700 rounded-xl p-6 shadow-lg space-y-6">
+                        <!-- Summary content will be injected here by JavaScript -->
+                        <p class="text-gray-400">Loading trip summary...</p>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Modal Footer (Navigation Buttons and Running Total) -->
+        <footer class="p-6 border-t border-gray-700 flex justify-between items-center">
+            
+            <!-- Running Total Summary -->
+            <div class="flex flex-col items-start">
+
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex space-x-3">
+                <button id="prevBtn" onclick="prevStep()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors hidden">
+                    <i data-lucide="arrow-left" class="w-4 h-4 inline-block mr-2"></i> Previous
+                </button>
+                <button id="nextBtn" onclick="nextStep()" class="px-6 py-2 bg-sky-500 text-white font-semibold rounded-lg hover:bg-sky-600 transition-colors">
+                    Next Step <i data-lucide="arrow-right" class="w-4 h-4 inline-block ml-2"></i>
+                </button>
+                <!-- Now calls showProcessing() for the pre-confirmation delay -->
+                <button id="confirmBtn" onclick="showProcessing()" class="px-6 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors hidden">
+                    Confirm Booking <i data-lucide="check-circle" class="w-4 h-4 inline-block ml-2"></i>
+                </button>
+            </div>
+        </footer>
+
+        <!-- Confirmation Message Placeholder -->
+        <div id="confirmationMessage" class="hidden fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center p-8 z-50">
+            <div class="text-center bg-gray-800 p-8 rounded-xl shadow-2xl">
+                
+                <!-- Dynamic content container for personalized message -->
+                <div id="confirmationMessageContent">
+                    <!-- Content injected by showProcessing() or finalizeBookingContent() -->
+                </div>
+
+                <!-- Static buttons controlled by the processing state -->
+                <div id="confirmationButtons" class="flex justify-center space-x-4 mt-8 hidden">
+                    <button onclick="document.location.reload()" class="px-6 py-3 bg-sky-500 text-white font-semibold rounded-lg hover:bg-sky-600 transition-colors">
+                        Start New Booking
+                    </button>
+                    <!-- Done button calls closeImmersive() to clear the page content -->
+                    <button onclick="closeImmersive()" class="px-6 py-3 bg-green-500 text-gray-900 font-semibold rounded-lg hover:bg-emerald-700 transition-colors">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Global State
+        let currentStep = 1; 
+        
+        // Initial mock activities: Scuba Diving is checked by default in HTML
+        let selectedActivities = ['Scuba Diving']; 
+        let booking = {
+            startDate: null,
+            endDate: null,
+            guests: 2, 
+            primaryPhoneCode: '+1', 
+            primaryPhoneNumber: '555-123-4567', 
+            passengers: [], 
+            contactEmail: 'user@example.com',
+            specialRequests: '',
+            paymentMethod: 'saved',
+            confirmationCode: null 
+        };
+
+        // Pricing Constants 
+        const BASE_ISLAND_FEE = 300.00; // Mandatory charge for facility access/base stay
+        const ACTIVITY_PRICE_PER_PERSON_DAY = 150.00; // Cost per activity per person per day
+        const TAX_RATE = 0.09;
+
+        // Saved Card Mock Data
+        const SAVED_CARD_DETAILS = {
+            name: 'WGU Travel Account c/o President Shinra',
+            number: '4111222233330927', 
+            displayNumber: '**** **** **** 0927', 
+            expiry: '12/31',
+            cvv: '810' 
+        };
+
+        // DOM Elements
+        const steps = document.querySelectorAll('.booking-step');
+        const stepIndicators = document.querySelectorAll('.step-indicator');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const confirmationMessageContent = document.getElementById('confirmationMessageContent');
+        const confirmationButtons = document.getElementById('confirmationButtons'); 
+        const calendarGrid = document.getElementById('calendarGrid');
+        const monthYearDisplay = document.getElementById('monthYearDisplay');
+        const startDateDisplay = document.getElementById('startDateDisplay');
+        const endDateDisplay = document.getElementById('endDateDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const passengerDetails = document.getElementById('passengerDetails');
+        const guestsInput = document.getElementById('guests'); 
+        const newCardFieldsContainer = document.getElementById('newCardFields');
+        const estimatedTotalDisplay = document.getElementById('estimatedTotalDisplay');
+        const activityError = document.getElementById('activityError'); 
+        const runningTotalDisplay = document.getElementById('runningTotalDisplay');
+
+
+        // Calendar State
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let selectingStartDate = true;
+
+        // --- Utility Functions ---
+
+        /**
+         * Formats a number as currency string with commas.
+         * @param {number} amount - The number to format.
+         * @returns {string} The formatted currency string (e.g., "$1,250.00").
+         */
+        function formatCurrency(amount) {
+            if (typeof amount !== 'number' || isNaN(amount)) return '-';
+            return `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        }
+        
+        /**
+         * Generates a unique 10-character alphanumeric confirmation code.
+         * @returns {string} The confirmation code.
+         */
+        function generateConfirmationCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 10; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        /**
+         * Calculates the mock total for display purposes, returning unformatted numbers.
+         * Note: The base fee is charged regardless of selected activities.
+         * @returns {object} Object containing price breakdowns.
+         */
+        function calculateTotal() {
+            // Calculate duration (minimum 1 day if dates are selected, but using nights for display)
+            let durationDays = 1;
+            if (booking.endDate && booking.startDate) {
+                // Duration in nights for display
+                const durationNights = Math.ceil(Math.abs(booking.endDate.getTime() - booking.startDate.getTime()) / (1000 * 60 * 60 * 24));
+                // Use duration days, which is nights + 1, as activities are charged per day.
+                durationDays = durationNights === 0 ? 1 : durationNights; 
+            }
+            
+            // Calculate activity cost
+            const activitiesCount = selectedActivities.length;
+            const totalActivityCost = activitiesCount * ACTIVITY_PRICE_PER_PERSON_DAY * durationDays * booking.guests;
+            
+            // Total before tax includes the mandatory base island fee
+            const totalBeforeTax = BASE_ISLAND_FEE + totalActivityCost;
+            const taxAmount = totalBeforeTax * TAX_RATE;
+            const grandTotal = totalBeforeTax + taxAmount;
+            
+            return {
+                baseIslandFee: BASE_ISLAND_FEE,
+                activityPricePerPersonDay: ACTIVITY_PRICE_PER_PERSON_DAY,
+                durationDays: durationDays, // Used for calculation (Nights + 1 if necessary)
+                activitiesCount: activitiesCount,
+                totalActivityCost: totalActivityCost,
+                totalBeforeTax: totalBeforeTax,
+                taxAmount: taxAmount,
+                grandTotal: grandTotal
+            };
+        }
+
+        /**
+         * Updates the running total in the footer.
+         */
+        function updateRunningTotal() {
+            const totals = calculateTotal();
+            runningTotalDisplay.textContent = 1*2;
+        }
+        
+        /**
+         * Closes the entire application page.
+         * In an iframe context, this is achieved by navigating to a blank page, 
+         * which effectively dismisses the current application view.
+         */
+        function closeImmersive() {
+          console.log("Closing application page...");
+	  //function closeIframeModal() {
+          window.parent.postMessage('closeModal', '*'); // '*' allows any origin, consider specifying parent origin for security
+        }
+
+        // --- Core Functions ---
+
+        /**
+         * Renders the current step content and updates the navigation.
+         */
+        function renderStep() {
+            // 1. Update Step Visibility
+            steps.forEach((step, index) => {
+                step.classList.add('hidden');
+                if (index + 1 === currentStep) {
+                    step.classList.remove('hidden');
+                }
+            });
+
+            // 2. Update Stepper Indicator & Line
+            stepIndicators.forEach((indicator, index) => {
+                const stepNum = index + 1;
+                const circle = indicator.querySelector('.step-circle');
+                const line = indicator.nextElementSibling;
+
+                if (stepNum === currentStep) {
+                    circle.classList.add('bg-sky-500', 'text-white');
+                    circle.classList.remove('bg-gray-600', 'bg-green-500', 'text-gray-300');
+                    indicator.querySelector('span').classList.add('text-sky-400');
+                    indicator.querySelector('span').classList.remove('text-gray-500');
+                } else if (stepNum < currentStep) {
+                    circle.classList.add('bg-green-500', 'text-white');
+                    circle.classList.remove('bg-sky-500', 'bg-gray-600', 'text-gray-300');
+                    indicator.querySelector('span').classList.add('text-sky-400');
+                    indicator.querySelector('span').classList.remove('text-gray-500');
+                } else {
+                    circle.classList.add('bg-gray-600', 'text-gray-300');
+                    circle.classList.remove('bg-sky-500', 'bg-green-500', 'text-white');
+                    indicator.querySelector('span').classList.remove('text-sky-400');
+                    indicator.querySelector('span').classList.add('text-gray-500');
+                }
+
+                if (line) {
+                    if (stepNum < currentStep) {
+                        line.classList.remove('bg-gray-600');
+                        line.classList.add('bg-green-500');
+                    } else {
+                        line.classList.remove('bg-green-500');
+                        line.classList.add('bg-gray-600');
+                    }
+                }
+            });
+
+            // 3. Update Navigation Buttons
+            prevBtn.classList.toggle('hidden', currentStep === 1);
+            nextBtn.classList.toggle('hidden', currentStep === steps.length); 
+            confirmBtn.classList.toggle('hidden', currentStep !== steps.length); 
+
+            // 4. Run Step-Specific Setup
+            if (currentStep === 1) setupStep1();
+            if (currentStep === 2) setupStep2();
+            if (currentStep === 3) setupStep3();
+            if (currentStep === 4) setupStep4();
+            if (currentStep === 5) setupStep5();
+            
+            // 5. Update running total
+            updateRunningTotal();
+
+            // Re-render lucide icons if content changed
+            lucide.createIcons();
+        }
+
+        /**
+         * Validates the current step before proceeding. 
+         */
+        function validateStep() {
+            if (currentStep === 1) {
+                if (selectedActivities.length === 0) {
+                    activityError.classList.remove('hidden');
+                    console.error("Please select at least one activity."); 
+                    return false;
+                }
+                activityError.classList.add('hidden');
+                return true;
+            } else if (currentStep === 2) {
+                const validDates = booking.startDate && booking.endDate;
+                const validGuests = parseInt(guestsInput.value) >= 1; 
+                if (!validDates) console.error("Please select a start and end date.");
+                if (!validGuests) console.error("Please select a number of passengers.");
+                return validDates && validGuests;
+            } else if (currentStep === 3) {
+                const phoneCodeInput = document.getElementById('primaryPhoneCode');
+                const phoneNumberInput = document.getElementById('primaryPhoneNumber');
+                const emailInput = document.getElementById('contactEmail');
+
+                booking.primaryPhoneCode = phoneCodeInput.value;
+                booking.primaryPhoneNumber = phoneNumberInput.value;
+                booking.contactEmail = emailInput.value;
+                booking.specialRequests = document.getElementById('specialRequests').value;
+
+                let validContact = phoneCodeInput.reportValidity() && phoneNumberInput.reportValidity() && emailInput.reportValidity();
+                
+                const passengers = document.querySelectorAll('#passengerDetails input[required]');
+                let validPassengers = true;
+                passengers.forEach(input => {
+                    if (!input.reportValidity()) validPassengers = false;
+                });
+                return validContact && validPassengers;
+            } else if (currentStep === 4) {
+                const isNewCard = document.getElementById('paymentNew').checked;
+                booking.paymentMethod = isNewCard ? 'new' : 'saved';
+
+                if (isNewCard) {
+                    const cardFields = newCardFieldsContainer.querySelectorAll('input[required]');
+                    let validCard = true;
+                    cardFields.forEach(input => {
+                        if (!input.reportValidity()) validCard = false;
+                    });
+                    return validCard;
+                }
+                return true;
+            }
+            return true;
+        }
+
+        /**
+         * Moves to the next step.
+         */
+        function nextStep() {
+            if (validateStep()) {
+                currentStep = Math.min(steps.length, currentStep + 1);
+                renderStep();
+                document.getElementById('modalBody').scrollTo(0, 0); 
+            }
+        }
+
+        /**
+         * Moves to the previous step.
+         */
+        function prevStep() {
+            currentStep = Math.max(1, currentStep - 1);
+            renderStep();
+            document.getElementById('modalBody').scrollTo(0, 0); 
+        }
+        
+        /**
+         * Initiates the processing state with a delay before final confirmation.
+         */
+        function showProcessing() {
+            // Log data before processing starts
+            const totals = calculateTotal();
+            console.log("Starting Processing. Final Payload Preview:", {
+                ...booking,
+                grandTotal: formatCurrency(totals.grandTotal)
+            });
+
+            // 1. Show a loading screen/processing animation
+            confirmationMessageContent.innerHTML = `
+                <i data-lucide="loader-circle" class="w-16 h-16 mx-auto text-sky-400 animate-spin mb-4"></i>
+                <h3 class="text-3xl font-bold text-white mb-2">Processing Your Reservation...</h3>
+                <p class="text-gray-300 mb-6">Securing your dates and confirming payment details.</p>
+                <div class="flex justify-center space-x-4">
+                    <button disabled class="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg opacity-50 cursor-not-allowed">
+                        Please Wait...
+                    </button>
+                </div>
+            `;
+            
+            // Hide the final buttons during processing
+            confirmationButtons.classList.add('hidden');
+
+            // 2. Show the overlay
+            confirmationMessage.classList.remove('hidden');
+            document.getElementById('bookingModal').classList.add('overflow-hidden'); 
+            lucide.createIcons(); 
+
+            // 3. Simulate network delay before showing confirmation
+            setTimeout(() => {
+                finalizeBookingContent(); // Show the final confirmed state after delay
+            }, 2000); // 2 second delay
+        }
+
+
+        /**
+         * Generates and displays the final confirmation message content.
+         */
+        function finalizeBookingContent() {
+            // 1. Generate Confirmation Code
+            booking.confirmationCode = generateConfirmationCode();
+            
+            const primaryPassenger = booking.passengers[0] || { firstName: 'Valued', lastName: 'Customer' };
+            const fullName = `${primaryPassenger.firstName} ${primaryPassenger.lastName}`.trim() || 'Valued Customer';
+            const contactEmail = booking.contactEmail || 'your provided address';
+
+            // 2. Update Confirmation Message Content
+            confirmationMessageContent.innerHTML = `
+                <i data-lucide="party-popper" class="w-16 h-16 mx-auto text-yellow-400 mb-4"></i>
+                <h3 class="text-3xl font-bold text-white mb-2">Booking Confirmed!</h3>
+                <p class="text-gray-300 mb-2">
+                    Thank you, <strong class="text-sky-300">${fullName}</strong>, for booking your Taniti experience.
+		    Your selected payment method was charged: <strong class="text-sky-300">$24,957.13</strong>  
+                </p>
+                <p class="text-gray-300 mb-6">
+                    A confirmation email has been sent to <strong class="text-sky-300">${contactEmail}</strong>.
+		    Any residual dues will be reconciled directly with your <strong class="text-sky-300">WGU</strong> student account.
+                </p>
+                <div class="bg-gray-700 p-3 rounded-lg inline-block">
+                    <p class="text-xs text-gray-400 mb-1 uppercase">Confirmation Code</p>
+                    <p class="text-2xl font-mono text-green-400">${booking.confirmationCode}</p>
+                </div>
+            `;
+            
+            // 3. Reveal the static action buttons 
+            confirmationButtons.classList.remove('hidden');
+
+            // 4. Re-render icons
+            lucide.createIcons();
+        }
+
+        // --- Step 1: Activity Selection ---
+        function setupStep1() {
+            activityError.classList.add('hidden'); 
+            
+            document.querySelectorAll('input[name="bookingActivity"]').forEach(checkbox => {
+                const label = checkbox.parentElement;
+
+                checkbox.checked = selectedActivities.includes(checkbox.value);
+                label.classList.toggle('selected', checkbox.checked);
+
+                checkbox.onchange = () => {
+                    const value = checkbox.value;
+                    if (checkbox.checked) {
+                        if (!selectedActivities.includes(value)) {
+                            selectedActivities.push(value);
+                        }
+                    } else {
+                        const index = selectedActivities.indexOf(value);
+                        if (index > -1) {
+                            selectedActivities.splice(index, 1);
+                        }
+                    }
+                    label.classList.toggle('selected', checkbox.checked);
+
+                    validateStep(); 
+                    updateRunningTotal(); 
+                };
+            });
+            lucide.createIcons();
+        }
+
+        // --- Step 2: Date Selection & Calendar Logic ---
+
+        function setupStep2() {
+            renderCalendar(currentYear, currentMonth);
+            
+            guestsInput.onchange = () => {
+                const value = guestsInput.value;
+                booking.guests = parseInt(value, 10);
+                updateRunningTotal(); 
+            };
+
+            guestsInput.value = booking.guests > 6 ? '7' : booking.guests.toString();
+
+            updateSummary();
+            updateRunningTotal();
+        }
+
+        function renderCalendar(year, month) {
+            calendarGrid.innerHTML = '';
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            const todayStr = today.toDateString();
+
+            monthYearDisplay.textContent = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            for (let i = 0; i < firstDay; i++) {
+                calendarGrid.innerHTML += '<div></div>';
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dateStr = date.toDateString();
+                let classes = 'date-cell p-2 text-sm rounded-full cursor-pointer transition-all duration-100 hover:bg-gray-600';
+
+                // Disable past dates
+                if (date < today && dateStr !== todayStr) {
+                    classes += ' disabled';
+                }
+
+                const start = booking.startDate ? booking.startDate.toDateString() : null;
+                const end = booking.endDate ? booking.endDate.toDateString() : null;
+
+                if (dateStr === start) {
+                    classes += ' start';
+                } else if (dateStr === end) {
+                    classes += ' end';
+                } else if (start && end && date > booking.startDate && date < booking.endDate) {
+                    classes += ' range';
+                }
+
+                const dayHtml = `<div class="${classes}" data-date="${dateStr}">${day}</div>`;
+                calendarGrid.innerHTML += dayHtml;
+            }
+
+            document.querySelectorAll('.date-cell:not(.disabled)').forEach(cell => {
+                cell.onclick = (e) => handleDateClick(new Date(e.target.dataset.date));
+            });
+        }
+
+        function handleDateClick(date) {
+            if (selectingStartDate || (booking.startDate && date < booking.startDate)) {
+                booking.startDate = date;
+                booking.endDate = null;
+                selectingStartDate = false;
+            } else if (date >= booking.startDate) {
+                booking.endDate = date;
+                selectingStartDate = true;
+            }
+
+            renderCalendar(currentYear, currentMonth);
+            updateSummary();
+            updateRunningTotal(); 
+        }
+
+        function updateSummary() {
+            const format = (date) => date ? date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-';
+            startDateDisplay.textContent = format(booking.startDate);
+            endDateDisplay.textContent = format(booking.endDate);
+
+            let duration = 0;
+            if (booking.startDate && booking.endDate) {
+                const diffTime = Math.abs(booking.endDate.getTime() - booking.startDate.getTime());
+                duration = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+            durationDisplay.textContent = `${duration} nights`;
+        }
+
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        }
+
+        // --- Step 3: Passenger Details ---
+
+        function setupStep3() {
+            const numGuests = booking.guests || 1; 
+            
+            while (booking.passengers.length < numGuests) {
+                booking.passengers.push({ firstName: '', lastName: '', isPrimary: booking.passengers.length === 0 });
+            }
+            booking.passengers.length = numGuests;
+
+            renderPassengerForms();
+        }
+
+        function renderPassengerForms() {
+            passengerDetails.innerHTML = '';
+            booking.passengers.forEach((p, index) => {
+                const title = index === 0 ? 'Primary Passenger (Your Details)' : `Passenger ${index + 1}`;
+                const formHtml = `
+                    <div class="p-4 bg-gray-800 rounded-lg border-l-4 ${index === 0 ? 'border-sky-400' : 'border-gray-500'}">
+                        <h4 class="text-lg font-medium text-white mb-3">${title}</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="p${index}FirstName" class="block text-xs font-medium text-gray-400">First Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="p${index}FirstName" required value="${p.firstName}" onchange="updatePassenger(${index}, 'firstName', this.value)"
+                                    class="w-full p-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500">
+                            </div>
+                            <div>
+                                <label for="p${index}LastName" class="block text-xs font-medium text-gray-400">Last Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="p${index}LastName" required value="${p.lastName}" onchange="updatePassenger(${index}, 'lastName', this.value)"
+                                    class="w-full p-2 bg-gray-600 border border-gray-500 rounded-lg text-white focus:ring-sky-500 focus:border-sky-500">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                passengerDetails.innerHTML += formHtml;
+            });
+
+            document.getElementById('primaryPhoneCode').value = booking.primaryPhoneCode;
+            document.getElementById('primaryPhoneNumber').value = booking.primaryPhoneNumber;
+            document.getElementById('contactEmail').value = booking.contactEmail;
+            document.getElementById('specialRequests').value = booking.specialRequests;
+        }
+
+        function updatePassenger(index, field, value) {
+            if (booking.passengers[index]) {
+                booking.passengers[index][field] = value;
+            }
+        }
+
+        // --- Step 4: Payment ---
+
+        function setupStep4() {
+            const totals = calculateTotal();
+            estimatedTotalDisplay.textContent = formatCurrency(totals.grandTotal);
+            updatePaymentFormState();
+            updateRunningTotal();
+        }
+
+        function updatePaymentFormState() {
+            const isSavedCardSelected = document.getElementById('paymentSaved').checked;
+            booking.paymentMethod = isSavedCardSelected ? 'saved' : 'new';
+
+            const cardNameInput = document.getElementById('cardName');
+            const cardNumberInput = document.getElementById('cardNumber');
+            const cardExpiryInput = document.getElementById('cardExpiry');
+            const cardCvvInput = document.getElementById('cardCvv');
+
+            const cardInputs = [cardNameInput, cardNumberInput, cardExpiryInput, cardCvvInput];
+
+            cardInputs.forEach(input => {
+                input.disabled = isSavedCardSelected;
+                input.classList.toggle('opacity-50', isSavedCardSelected);
+            });
+            
+            if (isSavedCardSelected) {
+                cardNameInput.value = SAVED_CARD_DETAILS.name;
+                cardNumberInput.value = SAVED_CARD_DETAILS.displayNumber; 
+                cardExpiryInput.value = SAVED_CARD_DETAILS.expiry;
+                cardCvvInput.value = SAVED_CARD_DETAILS.cvv; 
+                
+                cardInputs.forEach(input => input.required = false);
+
+            } else {
+                cardNameInput.value = '';
+                cardNumberInput.value = '';
+                cardExpiryInput.value = '';
+                cardCvvInput.value = '';
+
+                cardInputs.forEach(input => input.required = true);
+            }
+        }
+
+        // --- Step 5: Review and Grand Total ---
+        function setupStep5() {
+            const reviewContent = document.getElementById('reviewContent');
+            const { startDate, endDate, guests, passengers, contactEmail, primaryPhoneCode, primaryPhoneNumber, specialRequests, paymentMethod } = booking;
+            const totals = calculateTotal();
+            
+            // Format currency amounts for display
+            const formattedTotals = {
+                baseIslandFee: formatCurrency(totals.baseIslandFee),
+                totalActivityCost: formatCurrency(totals.totalActivityCost),
+                totalBeforeTax: formatCurrency(totals.totalBeforeTax),
+                taxAmount: formatCurrency(totals.taxAmount),
+                grandTotal: formatCurrency(totals.grandTotal),
+                activityPricePerPersonDay: formatCurrency(ACTIVITY_PRICE_PER_PERSON_DAY), 
+                // Raw numbers for calculation line
+                rawActivityPrice: ACTIVITY_PRICE_PER_PERSON_DAY,
+                rawGuests: totals.guests,
+                rawDays: totals.durationDays,
+                rawActivities: totals.activitiesCount
+            };
+
+            // Calculate duration in nights for display (separate from calculation days)
+            let durationNights = 0;
+            if (booking.startDate && booking.endDate) {
+                const diffTime = Math.abs(booking.endDate.getTime() - booking.startDate.getTime());
+                durationNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            }
+
+
+            // --- Activities Section ---
+            const activitiesHtml = `
+                <div class="border-b border-gray-600 pb-4">
+                    <h4 class="text-xl font-semibold text-sky-400 mb-3">Activities & Duration</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-300 ml-4">
+                        ${selectedActivities.map(act => `<li>${act} (${formattedTotals.activityPricePerPersonDay} per person, per day)</li>`).join('')}
+                    </ul>
+                    <p class="mt-2 text-sm text-gray-400"><strong>Dates:</strong> ${startDate ? startDate.toLocaleDateString() : 'N/A'} - ${endDate ? endDate.toLocaleDateString() : 'N/A'}</p>
+                    <p class="text-sm text-gray-400"><strong>Duration:</strong> ${durationNights} nights</p>
+                    <p class="text-sm text-gray-400"><strong>Passengers:</strong> ${guests}</p>
+                </div>
+            `;
+
+            // --- Passenger Section ---
+            const passengersHtml = `
+                <div class="border-b border-gray-600 pb-4">
+                    <h4 class="text-xl font-semibold text-sky-400 mb-3">Passenger Details</h4>
+                    <div class="space-y-2 text-gray-300">
+                        ${passengers.map((p, index) => `
+                            <p class="pl-4 border-l-2 ${index === 0 ? 'border-sky-400 font-medium' : 'border-gray-500'}">
+                                ${index === 0 ? 'Primary:' : `Passenger ${index + 1}:`} 
+                                ${p.firstName || '[Missing]'} ${p.lastName || ''}
+                            </p>
+                        `).join('')}
+                        <p class="pt-2 text-sm text-gray-400"><strong>Contact Email:</strong> ${contactEmail || '[Missing]'}</p>
+                        <p class="text-sm text-gray-400"><strong>Phone:</strong> ${primaryPhoneCode || ''} ${primaryPhoneNumber || '[Missing]'}</p>
+                        ${specialRequests ? `<p class="text-sm text-gray-400"><strong>Requests:</strong> ${specialRequests}</p>` : '<p class="text-sm text-gray-500">No special requests.</p>'}
+                    </div>
+                </div>
+            `;
+            
+            // --- Payment Section ---
+            let cardInfo = 'New Card (Will be charged upon confirmation)';
+            if (paymentMethod === 'saved') {
+                cardInfo = `${SAVED_CARD_DETAILS.name} (Card: ${SAVED_CARD_DETAILS.displayNumber}, Expires: ${SAVED_CARD_DETAILS.expiry})`;
+            }
+            
+            const paymentHtml = `
+                <div class="pb-4">
+                    <h4 class="text-xl font-semibold text-sky-400 mb-3">Payment Summary</h4>
+                    <p class="text-gray-300">Method: ${paymentMethod === 'saved' ? 'Saved Card' : 'New Card'}</p>
+                    <p class="text-gray-300 text-sm">Details: ${cardInfo}</p>
+                </div>
+            `;
+            
+            // --- Totals Section (UPDATED FOR PROFESSIONALISM) ---
+            const totalsHtml = `
+                <div class="space-y-4 pt-4">
+                    <h4 class="text-2xl font-bold text-white mb-4 border-t border-gray-600 pt-3">Final Cost Breakdown</h4>
+
+                    <!-- Fee Item: Mandatory Island Fee -->
+                    <div class="flex justify-between items-center text-lg">
+                        <span class="text-gray-300">Mandatory Island & Facility Fee:</span>
+                        <span class="font-mono font-semibold text-white">${formattedTotals.baseIslandFee}</span>
+                    </div>
+                    
+                    <!-- Fee Item: Activity Cost Block -->
+                    <div class="space-y-2 pb-3 border-b border-gray-600">
+                        <div class="flex justify-between items-center text-lg">
+                            <span class="text-gray-300">Total Activity Cost:</span>
+                            <span class="font-mono font-semibold text-white">${formattedTotals.totalActivityCost}</span>
+                        </div>
+                        <!-- Calculation Detail: Increased visibility and clarity -->
+                        <div class="text-sm text-gray-400 p-3 bg-gray-800 rounded-lg border border-gray-600">
+                            <p class="font-bold text-yellow-300 mb-1">Activity Cost Calculation:</p>
+                            <div class="pl-2 space-y-0.5">
+                                <p class="text-xs">Rate: <span class="font-mono">${formattedTotals.rawActivityPrice.toFixed(2)}</span> per person, per day, per activity</p>
+                                <p class="text-xs">Formula: ${formattedTotals.rawActivities} Activities &times; 2 Guests &times; ${totals.durationDays} Days</p>
+                                <p class="text-xs">Total Days Charged: 10 person-days per activity</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Taxable Subtotal -->
+                    <div class="flex justify-between items-center text-base pt-2">
+                        <span class="text-gray-400 font-medium">Subtotal (Pre-Tax):</span>
+                        <span class="font-mono text-lg text-gray-300">${formattedTotals.totalBeforeTax}</span>
+                    </div>
+                    
+                    <!-- Tax Amount -->
+                    <div class="flex justify-between items-center text-base border-b border-dashed border-gray-500 pb-4">
+                        <span class="text-gray-400 font-medium">Sales Tax (8%):</span>
+                        <span class="font-mono text-lg text-gray-300">${formattedTotals.taxAmount}</span>
+                    </div>
+                    
+                    <!-- GRAND TOTAL (Official-looking block) -->
+                    <div class="flex justify-between items-center text-3xl font-extrabold pt-4 bg-gray-900 p-4 rounded-lg border-2 border-sky-500 shadow-xl">
+                        <span class="text-white"></span>
+                        <span class="text-green-400 font-mono">${formattedTotals.grandTotal}</span>
+                    </div>
+                </div>
+            `;
+
+            reviewContent.innerHTML = activitiesHtml + passengersHtml + paymentHtml + totalsHtml;
+            
+            lucide.createIcons();
+            updateRunningTotal();
+        }
+
+
+        // --- Initialization ---
+
+        function init() {
+            // Set some mock data for dates/passengers for a quick review on first run
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 5);
+            booking.startDate = today;
+            booking.endDate = tomorrow;
+            booking.guests = 2; // Default to 2 for passenger array init
+            booking.passengers = [
+                { firstName: 'Jane', lastName: 'Doe', isPrimary: true },
+                { firstName: 'John', lastName: 'Smith', isPrimary: false }
+            ];
+
+            renderStep();
+            updatePaymentFormState(); 
+            updateRunningTotal();
+        }
+
+        // Run initialization after DOM is loaded
+        window.onload = init;
+
+    </script>
+</body>
+</html>
